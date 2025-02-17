@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "@/app/_styles/globals.css";
+import "@/styles/globals.css";
 import Navigation from "../../components/navigation";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
@@ -11,13 +11,16 @@ export const metadata: Metadata = {
   description: "An awesome ecommerce site built with Next.js",
 };
 
-export default async function RootLayout({
-  children,
-  params: { locale },
-}: {
+interface Props {
   children: React.ReactNode;
-  params: { locale: string };
-}) {
+  params: { locale: string } | Promise<{ locale: string }>;
+}
+
+export default async function RootLayout({ children, params }: Props) {
+  // Wait for the params to resolve
+  const resolvedParams = await params;
+  const { locale } = resolvedParams;
+
   // Ensure that the incoming `locale` is valid
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (!routing.locales.includes(locale as any)) {

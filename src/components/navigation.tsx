@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { Button } from "./ui/button";
 
 const Navigation = () => {
   return (
@@ -6,13 +7,12 @@ const Navigation = () => {
       <nav>
         <ul className="flex items  justify-around">
           <li>
-            <Link href="/">Home</Link>
+            <Button variant="link">
+              <Link href="/">Home</Link>
+            </Button>
           </li>
           <li>
             <Link href="/products">Products</Link>
-          </li>
-          <li>
-            <Link href="/blog">Blog</Link>
           </li>
           <li>
             <Link href="/faq">FAQ</Link>
