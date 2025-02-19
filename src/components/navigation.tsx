@@ -1,22 +1,22 @@
 import { Link } from "@/i18n/routing";
-import { Button } from "./ui/button";
+import Button from "./ui/button";
 
 const Navigation = () => {
   return (
     <nav className="hidden sm:block">
       <ul className="flex h-full items-center lg:gap-12">
         <li>
-          <Button variant="link">
+          <Button variant="link" asChild>
             <Link href="/">Home</Link>
           </Button>
         </li>
         <li>
-          <Button variant="link">
+          <Button variant="link" asChild>
             <Link href="/products">Products</Link>
           </Button>
         </li>
         <li>
-          <Button variant="link">
+          <Button variant="link" asChild>
             <Link href="/faq">FAQ</Link>
           </Button>
         </li>

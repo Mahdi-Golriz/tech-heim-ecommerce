@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-import { notFound } from "next/navigation";
-import { routing } from "@/i18n/routing";
+// import { notFound } from "next/navigation";
+import { redirect, routing } from "@/i18n/routing";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import Header from "@/components/header";
@@ -22,9 +22,11 @@ export default async function RootLayout({ children, params }: Props) {
   const { locale } = resolvedParams;
 
   // Ensure that the incoming `locale` is valid
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if (!routing.locales.includes(locale as any)) {
-    notFound();
+  if (!routing.locales.includes(locale as "en" | "de")) {
+    redirect({
+      href: "/",
+      locale: "en",
+    });
   }
 
   // Providing all messages to the client

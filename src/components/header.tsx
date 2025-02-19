@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/routing";
-import { Button } from "./ui/button";
+import Button from "./ui/button";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaRegUser } from "react-icons/fa";
 import { GrBasket } from "react-icons/gr";
@@ -8,6 +8,17 @@ import { Input } from "./ui/input";
 import Logo from "./logo";
 import Navigation from "./navigation";
 
+// const mobileLinks = [
+//   { child: <GiHamburgerMenu /> },
+//   {
+//     child: (
+//       <Link href="/" className="text-primary-400 text-base">
+//         Tech Heim
+//       </Link>
+//     ),
+//   },
+// ];
+
 const Header = () => {
   return (
     <section className="sm:shadow-sm sm:shadow-blue-300">
@@ -15,6 +26,9 @@ const Header = () => {
         <div className="flex w-full justify-between">
           <Logo />
           <Navigation />
+          {/* {mobileLinks.map((item, i) => (
+            <Button key={i}>{item.child}</Button>
+          ))} */}
           <Button variant="icon" className="block sm:hidden">
             <GiHamburgerMenu />
           </Button>
