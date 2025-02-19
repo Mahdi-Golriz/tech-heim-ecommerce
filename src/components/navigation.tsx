@@ -3,27 +3,30 @@ import { Button } from "./ui/button";
 
 const Navigation = () => {
   return (
-    <header className="container h-24">
-      <nav>
-        <ul className="flex items  justify-around">
-          <li>
-            <Button variant="link">
-              <Link href="/">Home</Link>
-            </Button>
-          </li>
-          <li>
+    <nav className="hidden sm:block">
+      <ul className="flex h-full items-center lg:gap-12">
+        <li>
+          <Button variant="link">
+            <Link href="/">Home</Link>
+          </Button>
+        </li>
+        <li>
+          <Button variant="link">
             <Link href="/products">Products</Link>
-          </li>
-          <li>
+          </Button>
+        </li>
+        <li>
+          <Button variant="link">
             <Link href="/faq">FAQ</Link>
-          </li>
-          <li>
-            <Link href="/contact">Contact Us</Link>
-          </li>
-        </ul>
-      </nav>
-      <div></div>
-    </header>
+          </Button>
+        </li>
+        <li>
+          <Button variant="link">
+            <Link href="/contact-us">Contact Us</Link>
+          </Button>
+        </li>
+      </ul>
+    </nav>
   );
 };
 

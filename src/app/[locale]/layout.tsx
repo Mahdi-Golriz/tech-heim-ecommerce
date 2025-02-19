@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-import Navigation from "../../components/navigation";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import Header from "@/components/header";
 
 export const metadata: Metadata = {
   title: "My Ecommerce Site",
@@ -35,7 +35,7 @@ export default async function RootLayout({ children, params }: Props) {
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <Navigation />
+          <Header />
           {children}
         </NextIntlClientProvider>
       </body>
