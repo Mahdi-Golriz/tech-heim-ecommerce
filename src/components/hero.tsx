@@ -25,7 +25,7 @@ const Hero = () => {
         <Image
           src={heroImage}
           alt="tech heim"
-          className="md:max-w-xl sm:max-w-96 max-w-52"
+          className="md:max-w-xl sm:max-w-96 w-1/2"
         />
       </div>
     </section>

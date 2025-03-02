@@ -25,7 +25,7 @@ export default async function RootLayout({ children, params }: Props) {
   if (!routing.locales.includes(locale as "en" | "de")) {
     redirect({
       href: "/",
-      locale: "en",
+      locale: routing.defaultLocale,
     });
   }
 
