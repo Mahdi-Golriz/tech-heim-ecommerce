@@ -1,1 +1,22 @@
-{}
+{
+  "home": {
+    "header": {
+      "title": "Tech Heim",
+      "navigation": {
+        "home": "Startseite",
+        "products": "Produkte",
+        "faq": "FAQ",
+        "contactUs": "Kontakt"
+      }
+    },
+    "hero": {
+      "title": "Tech Heim",
+      "text": "Begleite die",
+      "subtext": "digitale Revolution",
+      "cta": "Mehr entdecken"
+    }
+  },
+  "contact-us": {},
+  "faq": {},
+  "products": {}
+}

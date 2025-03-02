@@ -1,1 +1,22 @@
-{}
+{
+  "home": {
+    "header": {
+      "title": "Tech Heim",
+      "navigation": {
+        "home": "Home",
+        "products": "Products",
+        "faq": "FAQ",
+        "contactUs": "Contact Us"
+      }
+    },
+    "hero": {
+      "title": "Tech Heim",
+      "text": "Join the",
+      "subtext": "digital revolution",
+      "cta": "Explore More"
+    }
+  },
+  "contact-us": {},
+  "faq": {},
+  "products": {}
+}

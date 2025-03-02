@@ -6,8 +6,11 @@ import {
 } from "react-icons/pi";
 import { Input, Button, Logo, BurgerMenuButton } from "@/components";
 import Navigation from "./navigation";
+import { useTranslations } from "next-intl";
 
 const Header = () => {
+  const t = useTranslations("home.header");
+
   return (
     <section className="sm:shadow-sm sm:shadow-blue-300">
       <header className="container flex flex-wrap items-center justify-between gap-3 sm:h-24">
@@ -17,7 +20,7 @@ const Header = () => {
           <BurgerMenuButton />
           <Button variant="link" className="block sm:hidden" asChild>
             <Link href="/" className="text-primary-400 text-base">
-              Tech Heim
+              {t("title")}
             </Link>
           </Button>
           <div className="flex items-center gap-2">

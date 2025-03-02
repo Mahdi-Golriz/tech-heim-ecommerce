@@ -1,14 +1,16 @@
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components";
-
-const navLinks = [
-  { href: "/", title: "Home" },
-  { href: "/products", title: "Products" },
-  { href: "/faq", title: "FAQ" },
-  { href: "/contact-us", title: "Contact Us" },
-];
+import { useTranslations } from "next-intl";
 
 const Navigation = () => {
+  const t = useTranslations("home.header.navigation");
+
+  const navLinks = [
+    { href: "/", title: t("home") },
+    { href: "/products", title: t("products") },
+    { href: "/faq", title: t("faq") },
+    { href: "/contact-us", title: t("contactUs") },
+  ];
   return (
     <nav className="hidden sm:block">
       <ul className="flex h-full items-center lg:gap-12">
