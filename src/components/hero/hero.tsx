@@ -17,7 +17,7 @@ const Hero = () => {
           <Button
             variant="secondary"
             size="sm"
-            className="mt-auto w-fit sm:text-xl sm:w-full sm:h-12 lg:w-2/3"
+            className="mt-auto w-fit sm:text-xl sm:w-full sm:h-12 lg:w-2/3 font-bold"
           >
             Explore More
           </Button>
