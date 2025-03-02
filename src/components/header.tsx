@@ -1,12 +1,12 @@
 import { Link } from "@/i18n/routing";
 import Button from "./ui/button";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { FaRegUser } from "react-icons/fa";
-import { GrBasket } from "react-icons/gr";
-import { FiSearch } from "react-icons/fi";
+import { PiUserLight } from "react-icons/pi";
+import { PiBasketLight } from "react-icons/pi";
+import { PiMagnifyingGlassLight } from "react-icons/pi";
 import { Input } from "./ui/input";
 import Logo from "./logo";
 import Navigation from "./navigation";
+import NavigationBurgerMenuButton from "./navigationBurgerMenuButton";
 
 // const mobileLinks = [
 //   { child: <GiHamburgerMenu /> },
@@ -29,29 +29,27 @@ const Header = () => {
           {/* {mobileLinks.map((item, i) => (
             <Button key={i}>{item.child}</Button>
           ))} */}
-          <Button variant="icon" className="block sm:hidden">
-            <GiHamburgerMenu />
-          </Button>
+          <NavigationBurgerMenuButton />
           <Button variant="link" className="block sm:hidden">
             <Link href="/" className="text-primary-400 text-base">
               Tech Heim
             </Link>
           </Button>
-          <div className="flex items-center">
-            <Button variant="icon" className="hidden sm:block">
-              <FiSearch />
+          <div className="flex items-center gap-2">
+            <Button variant="icon" size="icon" className="hidden sm:block">
+              <PiMagnifyingGlassLight />
             </Button>
-            <Button variant="icon">
-              <FaRegUser />
+            <Button variant="icon" size="icon">
+              <PiUserLight />
             </Button>
-            <Button variant="icon">
-              <GrBasket />
+            <Button variant="icon" size="icon">
+              <PiBasketLight />
             </Button>
           </div>
         </div>
         <div className="w-full relative sm:hidden">
           <div className="absolute inset-y-0 end-0 flex items-center pointer-events-none px-4">
-            <FiSearch color="grey" />
+            <PiMagnifyingGlassLight color="grey" />
           </div>
           <Input
             className="border-none bg-gray-100"
