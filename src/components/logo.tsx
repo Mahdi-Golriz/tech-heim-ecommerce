@@ -1,9 +1,14 @@
 import LogoImage from "@/assets/logo.svg";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-const Logo = () => {
+interface Props {
+  className?: string;
+}
+
+const Logo = ({ className }: Props) => {
   return (
-    <div className="hidden sm:flex items-center ">
+    <div className={cn("hidden sm:flex items-center", className)}>
       <Image
         src={LogoImage}
         alt="Tech Heim Logo"
