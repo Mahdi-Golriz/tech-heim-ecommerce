@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/routing";
-import Button from "./ui/button";
+import { Button } from "@/components";
 
 const Navigation = () => {
   return (

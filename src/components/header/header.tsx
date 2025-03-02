@@ -1,12 +1,11 @@
 import { Link } from "@/i18n/routing";
-import Button from "./ui/button";
-import { PiUserLight } from "react-icons/pi";
-import { PiBasketLight } from "react-icons/pi";
-import { PiMagnifyingGlassLight } from "react-icons/pi";
-import { Input } from "./ui/input";
-import Logo from "./logo";
+import {
+  PiUserLight,
+  PiBasketLight,
+  PiMagnifyingGlassLight,
+} from "react-icons/pi";
+import { Input, Button, Logo, BurgerMenuButton } from "@/components";
 import Navigation from "./navigation";
-import NavigationBurgerMenuButton from "./navigationBurgerMenuButton";
 
 // const mobileLinks = [
 //   { child: <GiHamburgerMenu /> },
@@ -29,7 +28,7 @@ const Header = () => {
           {/* {mobileLinks.map((item, i) => (
             <Button key={i}>{item.child}</Button>
           ))} */}
-          <NavigationBurgerMenuButton />
+          <BurgerMenuButton />
           <Button variant="link" className="block sm:hidden">
             <Link href="/" className="text-primary-400 text-base">
               Tech Heim

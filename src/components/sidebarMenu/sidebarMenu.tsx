@@ -1,20 +1,22 @@
 import { cn } from "@/lib/utils";
-import Overlay from "./overlay";
-import Logo from "./logo";
-import Button from "./ui/button";
-import { PiXCircleLight } from "react-icons/pi";
-import { PiCaretDown } from "react-icons/pi";
+import Overlay from "../ui/overlay";
+import Logo from "../logo/logo";
+import Button from "../ui/button";
 import { useState } from "react";
 import { Link } from "@/i18n/routing";
-import { PiDeviceMobileCameraThin } from "react-icons/pi";
-import { PiLaptopLight } from "react-icons/pi";
-import { PiDeviceTabletSpeakerThin } from "react-icons/pi";
-import { PiWatchLight } from "react-icons/pi";
-import { PiHeadsetThin } from "react-icons/pi";
-import { PiCameraLight } from "react-icons/pi";
-import { PiGameControllerLight } from "react-icons/pi";
-import { PiPlugsLight } from "react-icons/pi";
-import { PiMouseSimpleLight } from "react-icons/pi";
+import {
+  PiDeviceMobileCameraThin,
+  PiLaptopLight,
+  PiDeviceTabletSpeakerThin,
+  PiWatchLight,
+  PiHeadsetThin,
+  PiCameraLight,
+  PiGameControllerLight,
+  PiPlugsLight,
+  PiMouseSimpleLight,
+  PiCaretDown,
+  PiXCircleLight,
+} from "react-icons/pi";
 
 interface Props {
   onClose: VoidFunction;

@@ -1,11 +1,11 @@
 "use client";
 
 import { PiListLight } from "react-icons/pi";
-import Button from "./ui/button";
+import { Button } from "@/components";
 import { useState } from "react";
 import SideBarMenu from "./sidebarMenu";
 
-const NavigationBurgerMenuButton = () => {
+const BurgerMenuButton = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -22,4 +22,4 @@ const NavigationBurgerMenuButton = () => {
   );
 };
 
-export default NavigationBurgerMenuButton;
+export default BurgerMenuButton;
