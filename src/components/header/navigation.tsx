@@ -11,11 +11,12 @@ const Navigation = () => {
     { href: "/faq", title: t("faq") },
     { href: "/contact-us", title: t("contactUs") },
   ];
+
   return (
     <nav className="hidden sm:block">
       <ul className="flex h-full items-center lg:gap-12">
-        {navLinks.map((item, i) => (
-          <li key={i}>
+        {navLinks.map((item) => (
+          <li key={item.href}>
             <Button variant="link" asChild>
               <Link href={item.href}>{item.title}</Link>
             </Button>

@@ -16,8 +16,10 @@ export default {
         "2xl": "108px",
       },
     },
-
     extend: {
+      boxShadow: {
+        cart: "-2px 2px 15px -1px rgba(113, 113, 113, 0.12)",
+      },
       colors: {
         primary: {
           DEFAULT: "#0C68F4",

@@ -9,17 +9,17 @@ const Hero = () => {
     <section className="container my-6">
       <div className="flex relative justify-end text-primary-700">
         <div className="absolute left-0 flex flex-col h-full">
-          <h2 className="text-2xl font-medium mb-6 lg:text-6xl sm:text-4xl">
+          <h2 className="text-2xl font-medium mb-2 lg:mb-12 lg:text-6xl sm:text-4xl">
             {t("title")}
           </h2>
-          <p className="text-xs font-medium lg:text-4xl sm:text-xl">
+          <p className="text-[9px] font-medium lg:text-4xl sm:text-xl">
             &quot;<span>{t("text")}&nbsp;</span>
             <span className="text-secondary">{t("subtext")}</span>&quot;
           </p>
           <Button
             variant="secondary"
             size="sm"
-            className="mt-auto w-fit sm:text-xl sm:w-full sm:h-12 lg:w-2/3 font-bold"
+            className="mt-auto mb-2 lg:mb-14 w-fit sm:text-xl sm:w-full sm:h-12 lg:w-2/3 font-bold"
           >
             {t("cta")}
           </Button>
@@ -27,7 +27,7 @@ const Hero = () => {
         <Image
           src={heroImage}
           alt="tech heim"
-          className="md:max-w-xl sm:max-w-96 w-1/2"
+          className="md:max-w-xl sm:max-w-96 w-2/3 lg:mr-10"
         />
       </div>
     </section>

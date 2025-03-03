@@ -24,7 +24,7 @@ interface Props {
 }
 
 const SideBarMenu = ({ onClose, isOpen }: Props) => {
-  const [isShowedProducts, setIsShowedProducts] = useState<boolean>(false);
+  const [isShowedProducts, setIsShowedProducts] = useState(false);
 
   return (
     <>
