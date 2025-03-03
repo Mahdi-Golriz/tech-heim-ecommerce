@@ -22,17 +22,24 @@ const categories = [
   { id: 1, name: "Accessories", image: accessory },
   { id: 2, name: "Wearables", image: smartWatch },
   { id: 3, name: "Gaming", image: game },
-  { id: 4, name: "Smartphones", image: mobile },
+  { id: 4, name: "Smart phone", image: mobile },
   { id: 5, name: "Laptops", image: laptops },
   { id: 6, name: "Cameras", image: cameras },
 ];
 
 const CategoryCard = ({ image, name }: Category) => (
-  <Link href="/" className="block">
-    <div className="relative w-auto p-2 shadow-cart rounded-lg">
-      <Image src={image} alt={name} className="h-auto w-full object-cover" />
-      <p className="text-center pb-2 text-xs sm:text-base">{name}</p>
-    </div>
+  <Link
+    href="/"
+    className="block h-28 sm:h-36 lg:h-48 p-2 shadow-cart rounded-lg"
+  >
+    <Image
+      src={image}
+      alt={name}
+      className="mx-auto h-3/4 object-scale-down object-center"
+    />
+    <p className="text-center text-xs my-2 sm:text-base whitespace-nowrap">
+      {name}
+    </p>
   </Link>
 );
 
@@ -46,10 +53,10 @@ const CategorySlider = () => {
         loop
         grabCursor
         breakpoints={{
-          320: { slidesPerView: 3.7, spaceBetween: 0 }, // Mobile
-          640: { slidesPerView: 3, spaceBetween: 12 }, // Tablet
-          1024: { slidesPerView: 5, spaceBetween: 12 }, // Medium screens
-          1280: { slidesPerView: 6, spaceBetween: 12 }, // Large screens
+          320: { slidesPerView: 3.5, spaceBetween: 0 },
+          640: { slidesPerView: 4, spaceBetween: 12 },
+          1024: { slidesPerView: 5, spaceBetween: 12 },
+          1280: { slidesPerView: 6, spaceBetween: 12 },
         }}
       >
         {categories.map((category) => (
