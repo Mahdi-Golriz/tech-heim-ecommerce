@@ -1,11 +1,12 @@
-import { Hero } from "@/components";
-import CategorySlider from "@/components/category-slider/category-slider";
+import { Hero, CategorySlider } from "@/components";
+import SaleSection from "@/components/sale-section/sale-section";
 
 const Page = () => {
   return (
     <div>
       <Hero />
       <CategorySlider />
+      <SaleSection />
     </div>
   );
 };

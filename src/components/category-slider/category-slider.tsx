@@ -48,7 +48,6 @@ const CategorySlider = () => {
     <div className="my-10 pl-4 sm:container ">
       <Swiper
         modules={[Autoplay]}
-        slidesPerView={6}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
         loop
         grabCursor
