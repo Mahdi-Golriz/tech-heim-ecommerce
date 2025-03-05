@@ -3,7 +3,7 @@
 import { PiListLight } from "react-icons/pi";
 import { Button } from "@/components";
 import { useState } from "react";
-import SideBarMenu from "./sidebarMenu";
+import SideBarMenu from "./sidebar-menu";
 
 const BurgerMenuButton = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

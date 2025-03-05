@@ -28,7 +28,14 @@ const SideBarMenu = ({ onClose, isOpen }: Props) => {
 
   return (
     <>
-      {isOpen && <Overlay onClick={onClose} />}
+      {isOpen && (
+        <Overlay
+          onClick={() => {
+            onClose();
+            setIsShowedProducts(false);
+          }}
+        />
+      )}
       <aside
         className={cn(
           "bg-white w-64 absolute h-screen -left-64 z-20 sm:hidden p-4 text-gray-600 transition-all",
@@ -85,7 +92,11 @@ const SideBarMenu = ({ onClose, isOpen }: Props) => {
                   className="[&_svg]:size-4 gap-1 h-fit"
                   asChild
                 >
-                  <Link href="/" className="text-gray-600 text-sm">
+                  <Link
+                    href="/products"
+                    className="text-gray-600 text-sm"
+                    onClick={onClose}
+                  >
                     <PiLaptopLight />
                     Laptops & Computers
                   </Link>
