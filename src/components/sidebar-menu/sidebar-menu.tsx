@@ -1,8 +1,6 @@
 import { cn } from "@/lib/utils";
-import Overlay from "../ui/overlay";
-import Logo from "../logo/logo";
-import Button from "../ui/button";
-import { useState } from "react";
+import { Button, Overlay, Logo } from "@/components";
+import { useMemo, useState } from "react";
 import { Link } from "@/i18n/routing";
 import {
   PiDeviceMobileCameraThin,
@@ -17,6 +15,7 @@ import {
   PiCaretDown,
   PiXCircleLight,
 } from "react-icons/pi";
+import { useTranslations } from "next-intl";
 
 interface Props {
   onClose: VoidFunction;
@@ -24,6 +23,30 @@ interface Props {
 }
 
 const SideBarMenu = ({ onClose, isOpen }: Props) => {
+  const t = useTranslations();
+
+  const productLinks = useMemo(() => {
+    return [
+      { title: t("products.mobilePhones"), icon: PiDeviceMobileCameraThin },
+      { title: t("products.laptopsComputers"), icon: PiLaptopLight },
+      { title: t("products.tabletsEReader"), icon: PiDeviceTabletSpeakerThin },
+      { title: t("products.wearables"), icon: PiWatchLight },
+      { title: t("products.audio"), icon: PiHeadsetThin },
+      { title: t("products.cameras"), icon: PiCameraLight },
+      { title: t("products.gaming"), icon: PiGameControllerLight },
+      { title: t("products.networking"), icon: PiPlugsLight },
+      { title: t("products.accessories"), icon: PiMouseSimpleLight },
+    ];
+  }, [t]);
+
+  const mainLinks = useMemo(() => {
+    return [
+      { title: t("burgerMenu.blog"), href: "/", id: 1 },
+      { title: t("burgerMenu.faq"), href: "/faq", id: 2 },
+      { title: t("burgerMenu.contactUs"), href: "/contact-us", id: 3 },
+    ];
+  }, [t]);
+
   const [isShowedProducts, setIsShowedProducts] = useState(false);
 
   return (
@@ -49,7 +72,10 @@ const SideBarMenu = ({ onClose, isOpen }: Props) => {
           <Button
             variant="icon"
             className="p-0 h-fit hover:text-primary"
-            onClick={onClose}
+            onClick={() => {
+              onClose();
+              setIsShowedProducts(false);
+            }}
           >
             <PiXCircleLight />
           </Button>
@@ -61,7 +87,7 @@ const SideBarMenu = ({ onClose, isOpen }: Props) => {
               className="w-full justify-between px-0 [&_svg]:size-4 text-gray-600 text-base"
               onClick={() => setIsShowedProducts(!isShowedProducts)}
             >
-              Products{" "}
+              {t("burgerMenu.products")}
               <PiCaretDown
                 color="gray"
                 className={cn("transition-transform", {
@@ -74,135 +100,48 @@ const SideBarMenu = ({ onClose, isOpen }: Props) => {
                 "flex flex-col": isShowedProducts,
               })}
             >
-              <li>
-                <Button
-                  variant="link"
-                  asChild
-                  className="[&_svg]:size-4 gap-1 h-fit"
-                >
-                  <Link href="/" className="text-gray-600 text-sm">
-                    <PiDeviceMobileCameraThin />
-                    Mobile Phones
-                  </Link>
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="link"
-                  className="[&_svg]:size-4 gap-1 h-fit"
-                  asChild
-                >
-                  <Link
-                    href="/products"
-                    className="text-gray-600 text-sm"
-                    onClick={onClose}
+              {productLinks.map((item) => (
+                <li key={item.title}>
+                  <Button
+                    variant="link"
+                    asChild
+                    className="[&_svg]:size-4 gap-1 h-fit"
                   >
-                    <PiLaptopLight />
-                    Laptops & Computers
-                  </Link>
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="link"
-                  className="[&_svg]:size-4 gap-1 h-fit"
-                  asChild
-                >
-                  <Link href="/" className="text-gray-600 text-sm">
-                    <PiDeviceTabletSpeakerThin />
-                    Tablets & E-reader
-                  </Link>
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="link"
-                  className="[&_svg]:size-4 gap-1 h-fit"
-                  asChild
-                >
-                  <Link href="/" className="text-gray-600 text-sm">
-                    <PiWatchLight />
-                    Wearables
-                  </Link>
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="link"
-                  className="[&_svg]:size-4 gap-1 h-fit"
-                  asChild
-                >
-                  <Link href="/" className="text-gray-600 text-sm">
-                    <PiHeadsetThin />
-                    Audio
-                  </Link>
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="link"
-                  className="[&_svg]:size-4 gap-1 h-fit"
-                  asChild
-                >
-                  <Link href="/" className="text-gray-600 text-sm">
-                    <PiCameraLight />
-                    Cameras
-                  </Link>
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="link"
-                  className="[&_svg]:size-4 gap-1 h-fit"
-                  asChild
-                >
-                  <Link href="/" className="text-gray-600 text-sm">
-                    <PiGameControllerLight />
-                    Gaming
-                  </Link>
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="link"
-                  className="[&_svg]:size-4 gap-1 h-fit"
-                  asChild
-                >
-                  <Link href="/" className="text-gray-600 text-sm">
-                    <PiPlugsLight />
-                    Networking
-                  </Link>
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="link"
-                  className="[&_svg]:size-4 gap-1 h-fit"
-                  asChild
-                >
-                  <Link href="/" className="text-gray-600 text-sm">
-                    <PiMouseSimpleLight />
-                    Accessories
-                  </Link>
-                </Button>
-              </li>
+                    <Link
+                      href="/"
+                      className="text-gray-600 text-sm"
+                      onClick={() => {
+                        onClose();
+                        setIsShowedProducts(false);
+                      }}
+                    >
+                      <item.icon />
+                      {item.title}
+                    </Link>
+                  </Button>
+                </li>
+              ))}
             </ul>
           </li>
-          <li>
-            <Button variant="link" className="px-0 text-gray-600 text-base">
-              Blog
-            </Button>
-          </li>
-          <li>
-            <Button variant="link" className="px-0 text-gray-600 text-base">
-              FAQ
-            </Button>
-          </li>
-          <li>
-            <Button variant="link" className="px-0 text-gray-600 text-base">
-              Contact Us
-            </Button>
-          </li>
+          {mainLinks.map((item) => (
+            <li key={item.id}>
+              <Button
+                variant="link"
+                className="px-0 text-gray-600 text-base"
+                asChild
+              >
+                <Link
+                  href={item.href}
+                  onClick={() => {
+                    onClose();
+                    setIsShowedProducts(false);
+                  }}
+                >
+                  {item.title}
+                </Link>
+              </Button>
+            </li>
+          ))}
         </ul>
       </aside>
     </>

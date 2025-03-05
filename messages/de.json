@@ -16,7 +16,24 @@
       "cta": "Mehr entdecken"
     }
   },
+  "burgerMenu": {
+    "blog": "Blog",
+    "faq": "FAQ",
+    "contactUs": "Kontakt",
+    "products": "Produkte"
+  },
+
   "contact-us": {},
   "faq": {},
-  "products": {}
+  "products": {
+    "mobilePhones": "Mobiltelefone",
+    "laptopsComputers": "Laptops & Computer",
+    "tabletsEReader": "Tablets & E-Reader",
+    "wearables": "Wearables",
+    "audio": "Audio",
+    "cameras": "Kameras",
+    "gaming": "Gaming",
+    "networking": "Netzwerk",
+    "accessories": "Zubehör"
+  }
 }

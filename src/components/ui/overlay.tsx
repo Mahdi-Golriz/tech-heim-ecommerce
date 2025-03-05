@@ -1,12 +1,12 @@
 import { cn } from "@/lib/utils";
 import { FC } from "react";
 
-interface Props {
+interface OverLayProps {
   onClick: VoidFunction;
   className?: string;
 }
 
-const Overlay: FC<Props> = ({ onClick, className }) => {
+const Overlay: FC<OverLayProps> = ({ onClick, className }) => {
   return (
     <div
       className={cn(
