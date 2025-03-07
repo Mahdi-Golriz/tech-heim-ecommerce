@@ -14,6 +14,21 @@
       "text": "Begleite die",
       "subtext": "digitale Revolution",
       "cta": "Mehr entdecken"
+    },
+    "saleSection": {
+      "title": "Produkte im Angebot",
+      "text": "Jetzt einkaufen!",
+      "cta": "Alle anzeigen"
+    },
+    "categorySlider": {
+      "categories": {
+        "accessories": "Zubehör",
+        "wearables": "Wearables",
+        "gaming": "Gaming",
+        "smartPhone": "Smartphone",
+        "laptops": "Laptops",
+        "cameras": "Kameras"
+      }
     }
   },
   "burgerMenu": {

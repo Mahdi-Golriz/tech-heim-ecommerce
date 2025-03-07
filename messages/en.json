@@ -14,6 +14,21 @@
       "text": "Join the",
       "subtext": "digital revolution",
       "cta": "Explore More"
+    },
+    "saleSection": {
+      "title": "Products On Sale",
+      "text": "Shop Now!",
+      "cta": "View all"
+    },
+    "categorySlider": {
+      "categories": {
+        "accessories": "Accessories",
+        "wearables": "Wearables",
+        "gaming": "Gaming",
+        "smartPhone": "Smart Phone",
+        "laptops": "Laptops",
+        "cameras": "Cameras"
+      }
     }
   },
   "burgerMenu": {

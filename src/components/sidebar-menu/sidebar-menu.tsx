@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Button, Overlay, Logo } from "@/components";
-import { useMemo, useState } from "react";
-import { Link } from "@/i18n/routing";
+import { FC, useMemo, useState } from "react";
 import {
   PiDeviceMobileCameraThin,
   PiLaptopLight,
@@ -16,49 +15,94 @@ import {
   PiXCircleLight,
 } from "react-icons/pi";
 import { useTranslations } from "next-intl";
+import { IconType } from "react-icons";
+import CustomLink from "./custom-link";
 
-interface Props {
+interface SideBarMenuProps {
   onClose: VoidFunction;
   isOpen: boolean;
 }
 
-const SideBarMenu = ({ onClose, isOpen }: Props) => {
+interface DirectLink {
+  title: string;
+  icon: IconType;
+  href: string;
+}
+
+interface ParentLink {
+  title: string;
+  href: string;
+  links?: DirectLink[];
+}
+
+const SideBarMenu: FC<SideBarMenuProps> = ({ onClose, isOpen }) => {
   const t = useTranslations();
 
-  const productLinks = useMemo(() => {
+  const productLinks: DirectLink[] = useMemo(() => {
     return [
-      { title: t("products.mobilePhones"), icon: PiDeviceMobileCameraThin },
-      { title: t("products.laptopsComputers"), icon: PiLaptopLight },
-      { title: t("products.tabletsEReader"), icon: PiDeviceTabletSpeakerThin },
-      { title: t("products.wearables"), icon: PiWatchLight },
-      { title: t("products.audio"), icon: PiHeadsetThin },
-      { title: t("products.cameras"), icon: PiCameraLight },
-      { title: t("products.gaming"), icon: PiGameControllerLight },
-      { title: t("products.networking"), icon: PiPlugsLight },
-      { title: t("products.accessories"), icon: PiMouseSimpleLight },
+      {
+        title: t("products.mobilePhones"),
+        icon: PiDeviceMobileCameraThin,
+        href: "/mobilePhones",
+      },
+      {
+        title: t("products.laptopsComputers"),
+        icon: PiLaptopLight,
+        href: "/laptopsComputers",
+      },
+      {
+        title: t("products.tabletsEReader"),
+        icon: PiDeviceTabletSpeakerThin,
+        href: "/tabletsEReader",
+      },
+      {
+        title: t("products.wearables"),
+        icon: PiWatchLight,
+        href: "/wearables",
+      },
+      { title: t("products.audio"), icon: PiHeadsetThin, href: "/audio" },
+      { title: t("products.cameras"), icon: PiCameraLight, href: "/cameras" },
+      {
+        title: t("products.gaming"),
+        icon: PiGameControllerLight,
+        href: "/gaming",
+      },
+      {
+        title: t("products.networking"),
+        icon: PiPlugsLight,
+        href: "/networking",
+      },
+      {
+        title: t("products.accessories"),
+        icon: PiMouseSimpleLight,
+        href: "/accessories",
+      },
     ];
   }, [t]);
 
-  const mainLinks = useMemo(() => {
+  const mainLinks: ParentLink[] = useMemo(() => {
     return [
-      { title: t("burgerMenu.blog"), href: "/", id: 1 },
-      { title: t("burgerMenu.faq"), href: "/faq", id: 2 },
-      { title: t("burgerMenu.contactUs"), href: "/contact-us", id: 3 },
+      {
+        title: t("burgerMenu.products"),
+        href: "/products",
+        links: productLinks,
+      },
+      { title: t("burgerMenu.blog"), href: "/" },
+      { title: t("burgerMenu.faq"), href: "/faq" },
+      { title: t("burgerMenu.contactUs"), href: "/contact-us" },
     ];
-  }, [t]);
+  }, [t, productLinks]);
 
   const [isShowedProducts, setIsShowedProducts] = useState(false);
 
+  const handleCloseClick = () => {
+    onClose();
+    setIsShowedProducts(false);
+  };
+
   return (
     <>
-      {isOpen && (
-        <Overlay
-          onClick={() => {
-            onClose();
-            setIsShowedProducts(false);
-          }}
-        />
-      )}
+      {isOpen && <Overlay onClick={handleCloseClick} />}
       <aside
         className={cn(
           "bg-white w-64 absolute h-screen -left-64 z-20 sm:hidden p-4 text-gray-600 transition-all",
@@ -72,76 +116,53 @@ const SideBarMenu = ({ onClose, isOpen }: Props) => {
           <Button
             variant="icon"
             className="p-0 h-fit hover:text-primary"
-            onClick={() => {
-              onClose();
-              setIsShowedProducts(false);
-            }}
+            onClick={handleCloseClick}
           >
             <PiXCircleLight />
           </Button>
         </div>
         <ul>
-          <li>
-            <Button
-              variant="link"
-              className="w-full justify-between px-0 [&_svg]:size-4 text-gray-600 text-base"
-              onClick={() => setIsShowedProducts(!isShowedProducts)}
-            >
-              {t("burgerMenu.products")}
-              <PiCaretDown
-                color="gray"
-                className={cn("transition-transform", {
-                  "rotate-180": isShowedProducts,
-                })}
-              />
-            </Button>
-            <ul
-              className={cn("hidden", {
-                "flex flex-col": isShowedProducts,
-              })}
-            >
-              {productLinks.map((item) => (
-                <li key={item.title}>
-                  <Button
-                    variant="link"
-                    asChild
-                    className="[&_svg]:size-4 gap-1 h-fit"
-                  >
-                    <Link
-                      href="/"
-                      className="text-gray-600 text-sm"
-                      onClick={() => {
-                        onClose();
-                        setIsShowedProducts(false);
-                      }}
-                    >
-                      <item.icon />
-                      {item.title}
-                    </Link>
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          </li>
-          {mainLinks.map((item) => (
-            <li key={item.id}>
-              <Button
-                variant="link"
-                className="px-0 text-gray-600 text-base"
-                asChild
-              >
-                <Link
-                  href={item.href}
-                  onClick={() => {
-                    onClose();
-                    setIsShowedProducts(false);
-                  }}
+          {mainLinks.map((item) =>
+            item.links ? (
+              <li key={item.href}>
+                <Button
+                  variant="link"
+                  className="w-full justify-between px-0 [&_svg]:size-4 text-gray-600 text-base"
+                  onClick={() => setIsShowedProducts(!isShowedProducts)}
                 >
                   {item.title}
-                </Link>
-              </Button>
-            </li>
-          ))}
+                  <PiCaretDown
+                    color="gray"
+                    className={cn("transition-transform", {
+                      "rotate-180": isShowedProducts,
+                    })}
+                  />
+                </Button>
+                <ul
+                  className={cn("hidden", {
+                    "flex flex-col": isShowedProducts,
+                  })}
+                >
+                  {item.links.map((item, i) => (
+                    <CustomLink
+                      key={String(i)}
+                      href={item.href}
+                      title={item.title}
+                      Icon={item.icon}
+                      onClick={handleCloseClick}
+                    />
+                  ))}
+                </ul>
+              </li>
+            ) : (
+              <CustomLink
+                href={item.href}
+                onClick={handleCloseClick}
+                key={item.href}
+                title={item.title}
+              />
+            )
+          )}
         </ul>
       </aside>
     </>

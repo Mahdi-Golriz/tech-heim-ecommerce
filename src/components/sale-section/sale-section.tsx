@@ -6,24 +6,11 @@ import { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import { Autoplay, Navigation } from "swiper/modules";
 import image from "@/assets/category-images/laptops.png";
-import Image, { StaticImageData } from "next/image";
-import React, { FC, useRef } from "react";
-import SwiperInstance from "swiper";
-import { PiCaretRight } from "react-icons/pi";
-import { PiCaretLeft } from "react-icons/pi";
+import { useRef } from "react";
 
-interface SaleCardProps {
-  id: number;
-  title: string;
-  image: StaticImageData;
-  discount: number;
-  totalPrice: number;
-  salePrice: number;
-}
-
-interface SwiperButtonProps {
-  swiperRef: React.RefObject<SwiperInstance | null>;
-}
+import SaleCard, { SaleCardProps } from "./sale-card";
+import { NextButton, PrevButton } from "./sale-section-buttons";
+import { useTranslations } from "next-intl";
 
 const saleItems: SaleCardProps[] = [
   {
@@ -34,102 +21,22 @@ const saleItems: SaleCardProps[] = [
     totalPrice: 38.0,
     salePrice: 19,
   },
-  {
-    id: 2,
-    title: "Logitech G502 Gaming Mouse",
-    image: image,
-    discount: 50,
-    totalPrice: 38,
-    salePrice: 19,
-  },
-  {
-    id: 3,
-    title: "Logitech G502 Gaming Mouse",
-    image: image,
-    discount: 50,
-    totalPrice: 38,
-    salePrice: 19,
-  },
-  {
-    id: 4,
-    title:
-      "Logitech G502 Gaming Mouse Logitech G502 Gaming Mouse Logitech G502 Gaming Mouse",
-    image: image,
-    discount: 50,
-    totalPrice: 38,
-    salePrice: 19,
-  },
-  {
-    id: 5,
-    title: "Logitech G502 Gaming Mouse",
-    image: image,
-    discount: 50,
-    totalPrice: 38,
-    salePrice: 19,
-  },
-  {
-    id: 6,
-    title: "Logitech G502 Gaming Mouse",
-    image: image,
-    discount: 50,
-    totalPrice: 38,
-    salePrice: 19,
-  },
-  {
-    id: 7,
-    title: "Logitech G502 Gaming Mouse",
-    image: image,
-    discount: 50,
-    totalPrice: 38,
-    salePrice: 19,
-  },
 ];
-
-const SaleCard: FC<SaleCardProps> = ({
-  title,
-  image,
-  discount,
-  salePrice,
-  totalPrice,
-}) => (
-  <div className="relative h-36 lg:h-60 flex flex-col p-2 justify-between rounded text-xs">
-    <span className="absolute left-0 p-1 bg-secondary-100 text-secondary-400 text-xs rounded-r-lg">
-      -{discount}%
-    </span>
-    <figure className="h-5/6">
-      <Image
-        src={image}
-        alt={title}
-        className="mx-auto h-4/5 object-scale-down object-center"
-      />
-      <figcaption className="truncate lg:line-clamp-2 lg:whitespace-normal">
-        {title}
-      </figcaption>
-    </figure>
-
-    {/* <p className="truncate lg:line-clamp-2 lg:whitespace-normal">{title}</p> */}
-    <div className="flex justify-between">
-      <span className="text-gray-500 line-through">${totalPrice}</span>
-      <span>${salePrice}</span>
-    </div>
-  </div>
-);
 
 const SaleSection = () => {
   const swiperRef = useRef<SwiperType | null>(null);
+  const t = useTranslations("home.saleSection");
 
   return (
     <div className="container my-10">
       <div className="grid grid-cols-3 lg:grid-cols-5 py-4 w-full pl-2 lg:pt-11 lg:pb-0 bg-primary-500 rounded-lg">
         <div className="flex flex-col justify-between items-center text-center min-w-32 text-white">
           <div>
-            <h3 className="text-sm lg:text-2xl font-medium">
-              Products On Sale
-            </h3>
-            <h5 className="text-xs lg:text-xl font-light mt-2">Shop Now!</h5>
+            <h3 className="text-sm lg:text-2xl font-medium">{t("title")}</h3>
+            <h5 className="text-xs lg:text-xl font-light mt-2">{t("text")}</h5>
           </div>
           <Button variant="link" className="text-white lg:text-base" size="sm">
-            View all
+            {t("cta")}
           </Button>
         </div>
         <div className="col-span-2 lg:col-span-4 ml-7">
@@ -139,7 +46,7 @@ const SaleSection = () => {
             modules={[Autoplay, Navigation]}
             autoplay={{ delay: 3000, disableOnInteraction: false }}
             loop
-            navigation={true}
+            navigation
             grabCursor
             breakpoints={{
               320: { slidesPerView: 1.5, spaceBetween: 16 },
@@ -148,11 +55,15 @@ const SaleSection = () => {
               1280: { slidesPerView: 4.5, spaceBetween: 24 },
             }}
           >
-            {saleItems.map((item) => (
-              <SwiperSlide key={item.id} className=" bg-white rounded">
-                <SaleCard {...item} />
-              </SwiperSlide>
-            ))}
+            {Array.from({ length: 7 }, (_, i) =>
+              saleItems.map((elem) => ({ ...elem, id: i }))
+            )
+              .flat()
+              .map((item) => (
+                <SwiperSlide key={item.id} className=" bg-white rounded">
+                  <SaleCard {...item} />
+                </SwiperSlide>
+              ))}
           </Swiper>
         </div>
         <div className="hidden lg:flex lg:justify-end col-start-5 lg:gap-1 p-2">
@@ -161,30 +72,6 @@ const SaleSection = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export const NextButton = ({ swiperRef }: SwiperButtonProps) => {
-  return (
-    <Button
-      variant="icon"
-      onClick={() => swiperRef.current?.slideNext()}
-      className="p-0 rounded-full bg-white size-8 [&_svg]:size-4"
-    >
-      <PiCaretLeft color="darkBlue" strokeWidth={20} />
-    </Button>
-  );
-};
-
-export const PrevButton = ({ swiperRef }: SwiperButtonProps) => {
-  return (
-    <Button
-      variant="icon"
-      onClick={() => swiperRef.current?.slidePrev()}
-      className="p-0 rounded-full bg-white size-8 [&_svg]:size-4"
-    >
-      <PiCaretRight color="darkBlue" strokeWidth={20} />
-    </Button>
   );
 };
 

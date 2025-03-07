@@ -11,21 +11,14 @@ import laptops from "@/assets/category-images/laptops.png";
 import mobile from "@/assets/category-images/mobile.png";
 import smartWatch from "@/assets/category-images/smart-watch.png";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 
 type Category = {
   id: number;
   name: string;
   image: StaticImageData;
 };
-
-const categories = [
-  { id: 1, name: "Accessories", image: accessory },
-  { id: 2, name: "Wearables", image: smartWatch },
-  { id: 3, name: "Gaming", image: game },
-  { id: 4, name: "Smart phone", image: mobile },
-  { id: 5, name: "Laptops", image: laptops },
-  { id: 6, name: "Cameras", image: cameras },
-];
 
 const CategoryCard = ({ image, name }: Category) => (
   <Link
@@ -44,12 +37,25 @@ const CategoryCard = ({ image, name }: Category) => (
 );
 
 const CategorySlider = () => {
+  const t = useTranslations("home.categorySlider.categories");
+
+  const categories = useMemo(
+    () => [
+      { id: 1, name: t("accessories"), image: accessory },
+      { id: 2, name: t("wearables"), image: smartWatch },
+      { id: 3, name: t("gaming"), image: game },
+      { id: 4, name: t("smartPhone"), image: mobile },
+      { id: 5, name: t("laptops"), image: laptops },
+      { id: 6, name: t("cameras"), image: cameras },
+    ],
+    [t]
+  );
+
   return (
     <div className="my-10 pl-4 sm:container ">
       <Swiper
         modules={[Autoplay]}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
-        loop
         grabCursor
         breakpoints={{
           320: { slidesPerView: 3.5, spaceBetween: 0 },
