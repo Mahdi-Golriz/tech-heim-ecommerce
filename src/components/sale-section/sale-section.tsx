@@ -11,6 +11,8 @@ import { useRef } from "react";
 import SaleCard, { SaleCardProps } from "./sale-card";
 import { NextButton, PrevButton } from "./sale-section-buttons";
 import { useTranslations } from "next-intl";
+import randomShape from "@/assets/sale-section/random-shape.png";
+import Image from "next/image";
 
 const saleItems: SaleCardProps[] = [
   {
@@ -29,8 +31,15 @@ const SaleSection = () => {
 
   return (
     <div className="container my-10">
-      <div className="grid grid-cols-3 lg:grid-cols-5 py-4 w-full pl-2 lg:pt-11 lg:pb-0 bg-primary-500 rounded-lg">
+      <div className="relative grid grid-cols-3 lg:grid-cols-5 py-4 w-full pl-2 lg:pt-11 lg:pb-0 bg-primary-500 rounded-lg overflow-hidden">
         <div className="flex flex-col justify-between items-center text-center min-w-32 text-white">
+          <Image
+            src={randomShape}
+            width={270}
+            height={235}
+            alt="shape"
+            className="absolute opacity-15 rotate-[100deg] lg:h-[500px] lg:w-[435px] lg:-top-40 lg:-left-40 -top-20 -left-20"
+          />
           <div>
             <h3 className="text-sm lg:text-2xl font-medium">{t("title")}</h3>
             <h5 className="text-xs lg:text-xl font-light mt-2">{t("text")}</h5>
