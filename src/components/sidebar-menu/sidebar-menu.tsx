@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { Button, Overlay, Logo } from "@/components";
 import { FC, useMemo, useState } from "react";

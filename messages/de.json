@@ -50,5 +50,28 @@
     "gaming": "Gaming",
     "networking": "Netzwerk",
     "accessories": "Zubehör"
+  },
+  "footer": {
+    "mainCategories": {
+      "company": {
+        "title": "Unternehmen",
+        "link-1": "Über uns",
+        "link-2": "Blog",
+        "link-3": "Rückgaben",
+        "link-4": "Bestellstatus"
+      },
+      "info": {
+        "title": "Informationen",
+        "link-1": "Wie funktioniert es?",
+        "link-2": "Unsere Versprechen",
+        "link-3": "FAQ"
+      },
+      "contactUs": {
+        "title": "Kontakt",
+        "link-1": "Hamburg, Deutschland",
+        "link-2": "+49 123-4567",
+        "link-3": "TechHeimSupport@gmail.com"
+      }
+    }
   }
 }

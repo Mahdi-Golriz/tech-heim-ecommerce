@@ -8,18 +8,26 @@ interface CustomLinkProps {
   Icon?: IconType;
   title: string;
   href: string;
-  onClick: VoidFunction;
+  onClick?: VoidFunction;
   key: string;
+  className?: string;
 }
 
-const CustomLink: FC<CustomLinkProps> = ({ Icon, title, href, onClick }) => {
+const CustomLink: FC<CustomLinkProps> = ({
+  Icon,
+  title,
+  href,
+  onClick,
+  className,
+}) => {
   return (
     <li>
       <Button
         variant="link"
         className={cn(
           "text-gray-600",
-          !!Icon ? "[&_svg]:size-4 gap-1 h-fit  text-sm" : "px-0  text-base"
+          !!Icon ? "[&_svg]:size-4 gap-1 h-fit text-sm" : "px-0  text-base",
+          className
         )}
         asChild
         onClick={onClick}

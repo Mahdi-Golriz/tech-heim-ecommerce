@@ -4,6 +4,7 @@ import { redirect, routing } from "@/i18n/routing";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { Header } from "@/components";
+import Footer from "@/components/footer/footer";
 
 export const metadata: Metadata = {
   title: "My Ecommerce Site",
@@ -38,6 +39,7 @@ export default async function RootLayout({ children, params }: Props) {
         <NextIntlClientProvider messages={messages}>
           <Header />
           {children}
+          <Footer />
         </NextIntlClientProvider>
       </body>
     </html>
