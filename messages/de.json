@@ -37,9 +37,6 @@
     "contactUs": "Kontakt",
     "products": "Produkte"
   },
-
-  "contact-us": {},
-  "faq": {},
   "products": {
     "mobilePhones": "Mobiltelefone",
     "laptopsComputers": "Laptops & Computer",
@@ -52,6 +49,10 @@
     "accessories": "Zubehör"
   },
   "footer": {
+    "emailInput": {
+      "label": "Melde dich für Neuigkeiten und Updates an",
+      "placeholder": "E-Mail-Adresse"
+    },
     "mainCategories": {
       "company": {
         "title": "Unternehmen",
@@ -72,6 +73,12 @@
         "link-2": "+49 123-4567",
         "link-3": "TechHeimSupport@gmail.com"
       }
+    },
+    "secondaryLinks": {
+      "cookieSettings": "Cookie-Einstellungen",
+      "privacyPolicy": "Datenschutzerklärung",
+      "termsAndConditions": "Allgemeine Geschäftsbedingungen",
+      "imprint": "Impressum"
     }
   }
 }

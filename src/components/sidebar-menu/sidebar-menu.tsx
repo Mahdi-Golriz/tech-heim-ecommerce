@@ -147,7 +147,8 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onClose, isOpen }) => {
                 >
                   {item.links.map((item, i) => (
                     <CustomLink
-                      key={String(i)}
+                      //TODO: USE HREF INSTEAD OF I
+                      key={i}
                       href={item.href}
                       title={item.title}
                       Icon={item.icon}

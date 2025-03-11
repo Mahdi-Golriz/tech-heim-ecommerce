@@ -9,7 +9,6 @@ interface CustomLinkProps {
   title: string;
   href: string;
   onClick?: VoidFunction;
-  key: string;
   className?: string;
 }
 

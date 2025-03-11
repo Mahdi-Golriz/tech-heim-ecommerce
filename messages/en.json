@@ -37,9 +37,6 @@
     "contactUs": "Contact Us",
     "products": "Products"
   },
-
-  "contactUs": {},
-  "faq": {},
   "products": {
     "mobilePhones": "Mobile Phones",
     "laptopsComputers": "Laptops & Computers",
@@ -52,6 +49,10 @@
     "accessories": "Accessories"
   },
   "footer": {
+    "emailInput": {
+      "label": "Sign up for News and updates",
+      "placeholder": "E-mail Address"
+    },
     "mainCategories": {
       "company": {
         "title": "Company",
@@ -67,11 +68,17 @@
         "link-3": "FAQ"
       },
       "contactUs": {
-        "title": "Info",
+        "title": "Contact Us",
         "link-1": "Hamburg,Germany",
         "link-2": "+49 123-4567",
         "link-3": "TechHeimSupport@gmail.com"
       }
+    },
+    "secondaryLinks": {
+      "cookieSettings": "Cookie Settings",
+      "privacyPolicy": "Privacy Policy",
+      "termsAndConditions": "Terms and Conditions",
+      "imprint": "Imprint"
     }
   }
 }
