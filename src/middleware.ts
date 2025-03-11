@@ -4,11 +4,16 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
   const locale = request.nextUrl.pathname.split("/")[1];
+  const secondPart = request.nextUrl.pathname.split("/").slice(2).join("/");
 
   //TODO: refactor redirect
   // If the locale is not one of the allowed locales, redirect to the default locale (en)
   if (!routing.locales.includes(locale as "en" | "de")) {
-    return NextResponse.redirect(new URL(routing.defaultLocale, request.url));
+    console.log(request.nextUrl);
+    return NextResponse.redirect(
+      // new URL(routing.defaultLocale, request.nextUrl.origin)
+      new URL(`${routing.defaultLocale}/${secondPart}`, request.nextUrl.origin)
+    );
   }
 
   // Otherwise, continue with next-intl middleware
