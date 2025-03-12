@@ -94,6 +94,10 @@ const Footer = () => {
     { title: t("secondaryLinks.imprint"), href: "" },
   ];
 
+  const handleClick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <footer className="bg-primary-800 text-white">
       <div className="bg-radial-blue">
@@ -128,6 +132,7 @@ const Footer = () => {
             <Button
               variant="icon"
               className="border rounded-full p-2 bg-primary-50 [&_svg]:size-4 size-10"
+              onClick={handleClick}
             >
               <PiCaretUp strokeWidth={10} />
             </Button>
@@ -186,7 +191,7 @@ const Footer = () => {
                 >
                   {item.links.map((item, i) => (
                     <CustomLink
-                      key={String(i)}
+                      key={i}
                       href={item.href}
                       title={item.title}
                       Icon={item.icon}
