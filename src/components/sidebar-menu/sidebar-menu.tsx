@@ -104,10 +104,10 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onClose, isOpen }) => {
 
   return (
     <>
-      {isOpen && <Overlay onClick={handleCloseClick} />}
+      {isOpen && <Overlay onClick={handleCloseClick} className="overlay" />}
       <aside
         className={cn(
-          "bg-white w-64 absolute h-screen -left-64 z-20 sm:hidden p-4 text-gray-600 transition-all",
+          "bg-white w-64 fixed h-full inset-y-0 -left-64 z-50 sm:hidden p-4 text-gray-600 transition-all overflow-y-auto",
           {
             "left-0": isOpen,
           }

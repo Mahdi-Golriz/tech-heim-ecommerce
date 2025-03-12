@@ -10,10 +10,11 @@ const Overlay: FC<OverLayProps> = ({ onClick, className }) => {
   return (
     <div
       className={cn(
-        "fixed inset-0 size-full z-10 bg-black/50 sm:hidden backdrop-blur-sm",
+        "fixed inset-0 size-full z-20 bg-black/50 sm:hidden backdrop-blur-sm",
         className
       )}
       aria-hidden="true"
+      aria-expanded="true"
       onClick={onClick}
     />
   );

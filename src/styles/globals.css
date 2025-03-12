@@ -8,3 +8,7 @@
   --swiper-navigation-sides-offset: 10px;
   --swiper-navigation-color: var(--swiper-theme-color);
 }
+
+body:has(.overlay[aria-expanded="true"]) {
+  overflow: hidden;
+}
