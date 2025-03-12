@@ -3,8 +3,8 @@ import { routing } from "./i18n/routing";
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const locale = request.nextUrl.pathname.split("/")[1];
-  const secondPart = request.nextUrl.pathname.split("/").slice(2).join("/");
+  const [, locale, ...secondPartArray] = request.nextUrl.pathname.split("/");
+  const secondPart = secondPartArray.join("/");
 
   //TODO: refactor redirect
   // If the locale is not one of the allowed locales, redirect to the default locale (en)
