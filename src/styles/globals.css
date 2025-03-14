@@ -2,13 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-.swiper-button-next {
-  --swiper-navigation-size: 44px;
-  --swiper-navigation-top-offset: 50%;
-  --swiper-navigation-sides-offset: 10px;
-  --swiper-navigation-color: var(--swiper-theme-color);
-}
-
 body:has(.overlay[aria-expanded="true"]) {
   overflow: hidden;
+}
+
+@layer components {
+  .custom-border-bottom {
+    position: relative;
+  }
+
+  .custom-border-bottom::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 5%;
+    width: 90%;
+    height: 2px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      currentColor 50%,
+      transparent
+    );
+    mask-image: radial-gradient(ellipse at center, black 0%, transparent 80%);
+    -webkit-mask-image: radial-gradient(
+      ellipse at center,
+      black 0%,
+      transparent 80%
+    );
+  }
 }

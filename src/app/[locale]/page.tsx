@@ -1,4 +1,5 @@
 import { Hero, CategorySlider } from "@/components";
+import NewProducts from "@/components/new-products/new-products";
 import SaleSection from "@/components/sale-section/sale-section";
 
 const Page = () => {
@@ -7,6 +8,7 @@ const Page = () => {
       <Hero />
       <CategorySlider />
       <SaleSection />
+      <NewProducts />
     </div>
   );
 };
