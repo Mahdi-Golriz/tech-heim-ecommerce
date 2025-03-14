@@ -8,13 +8,13 @@ import { Autoplay, Navigation } from "swiper/modules";
 import image from "@/assets/category-images/laptops.png";
 import { useRef } from "react";
 
-import SaleCard, { SaleCardProps } from "./sale-card";
+import SaleCard, { SaleCartProps } from "./sale-cart";
 import { NextButton, PrevButton } from "./sale-section-buttons";
 import { useTranslations } from "next-intl";
 import randomShape from "@/assets/sale-section/random-shape.png";
 import Image from "next/image";
 
-const saleItems: SaleCardProps[] = [
+const saleItems: SaleCartProps[] = [
   {
     id: 1,
     title: "Logitech G502 Gaming Mouse",

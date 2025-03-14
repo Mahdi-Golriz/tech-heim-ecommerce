@@ -1,7 +1,7 @@
 import Image, { StaticImageData } from "next/image";
 import { FC } from "react";
 
-export interface SaleCardProps {
+export interface SaleCartProps {
   id: number;
   title: string;
   image: StaticImageData;
@@ -10,7 +10,7 @@ export interface SaleCardProps {
   salePrice: number;
 }
 
-const SaleCard: FC<SaleCardProps> = ({
+const SaleCart: FC<SaleCartProps> = ({
   title,
   image,
   discount,
@@ -38,4 +38,4 @@ const SaleCard: FC<SaleCardProps> = ({
   </div>
 );
 
-export default SaleCard;
+export default SaleCart;
