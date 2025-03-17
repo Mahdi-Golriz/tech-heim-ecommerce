@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-import { Header } from "@/components";
-import Footer from "@/components/footer/footer";
+import { Header, Footer } from "@/components";
 
 export const metadata: Metadata = {
   title: "My Ecommerce Site",

@@ -6,3 +6,4 @@ export { default as Hero } from "@/components/hero/hero";
 export { default as BurgerMenuButton } from "@/components/sidebar-menu/burger-menu-button";
 export { default as CategorySlider } from "@/components/category-slider/category-slider";
 export { default as Overlay } from "@/components/ui/overlay";
+export { default as Footer } from "@/components/footer";
