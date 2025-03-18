@@ -1,5 +1,8 @@
 export interface Category {
   title: string;
+  documentId: string;
+  id: number;
+  locale: "en" | "de";
   description: string;
-  thumbnail: string;
+  thumbnail: { url: string };
 }

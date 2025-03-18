@@ -9,7 +9,6 @@ export function middleware(request: NextRequest) {
   //TODO: refactor redirect
   // If the locale is not one of the allowed locales, redirect to the default locale (en)
   if (!routing.locales.includes(locale as "en" | "de")) {
-    console.log(request.nextUrl);
     return NextResponse.redirect(
       // new URL(routing.defaultLocale, request.nextUrl.origin)
       new URL(`${routing.defaultLocale}/${secondPart}`, request.nextUrl.origin)

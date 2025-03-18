@@ -27,7 +27,7 @@ interface CategoryResponse {
 
 export const getCategories = async ({ params }: GetCategoriesParams) => {
   return fetcher<CategoriesResponse>({
-    path: "/api/categories",
+    path: "/api/categories?populate=*",
     method: "GET",
     params,
   });

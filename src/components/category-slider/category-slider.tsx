@@ -3,53 +3,32 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Autoplay } from "swiper/modules";
-import Image, { StaticImageData } from "next/image";
-import accessory from "@/assets/category-images/accessory.png";
-import cameras from "@/assets/category-images/cameras.png";
-import game from "@/assets/category-images/game.png";
-import laptops from "@/assets/category-images/laptops.png";
-import mobile from "@/assets/category-images/mobile.png";
-import smartWatch from "@/assets/category-images/smart-watch.png";
+import Image from "next/image";
 import { Link } from "@/i18n/routing";
-import { useTranslations } from "next-intl";
-import { useMemo } from "react";
+import useCategories from "@/hooks/useCategories";
+import { Category } from "@/models/categories-model";
 
-type Category = {
-  id: number;
-  name: string;
-  image: StaticImageData;
-};
-
-const CategoryCard = ({ image, name }: Category) => (
+const CategoryCard = ({ title, thumbnail }: Category) => (
   <Link
     href="/"
     className="block h-28 sm:h-36 lg:h-48 p-2 shadow-cart rounded-lg"
   >
     <Image
-      src={image}
-      alt={name}
+      src={process.env.NEXT_PUBLIC_API_URL + thumbnail.url}
+      alt={process.env.NEXT_PUBLIC_API_URL + title}
+      width={300}
+      height={300}
       className="mx-auto h-3/4 object-scale-down object-center"
     />
-    <p className="text-center text-xs my-2 sm:text-base whitespace-nowrap">
-      {name}
+    <p className="text-center text-xs my-2 sm:text-base whitespace-nowrap truncate">
+      {title}
     </p>
   </Link>
 );
 
 const CategorySlider = () => {
-  const t = useTranslations("home.categorySlider.categories");
-
-  const categories = useMemo(
-    () => [
-      { id: 1, name: t("accessories"), image: accessory },
-      { id: 2, name: t("wearables"), image: smartWatch },
-      { id: 3, name: t("gaming"), image: game },
-      { id: 4, name: t("smartPhone"), image: mobile },
-      { id: 5, name: t("laptops"), image: laptops },
-      { id: 6, name: t("cameras"), image: cameras },
-    ],
-    [t]
-  );
+  const { categories } = useCategories({});
+  console.log(categories);
 
   return (
     <div className="my-10 pl-4 sm:container ">

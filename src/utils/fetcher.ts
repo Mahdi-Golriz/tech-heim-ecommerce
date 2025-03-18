@@ -17,7 +17,7 @@ type FetcherConfig = FetcherConfigBase | FetcherConfigWithBody;
 
 class FetcherError extends Error {
   status: number;
-  data: unknown;
+  data?: unknown;
 
   constructor(message: string, status: number, data?: unknown) {
     super(message);
@@ -35,14 +35,22 @@ class FetcherError extends Error {
 
 const fetcher = async <T>(config: FetcherConfig): Promise<T> => {
   const { path, method, headers: customHeaders = {}, params, token } = config;
-  let url = `${process.env.NEXT_APP_API_URL}${path}`;
+  const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}${path}`);
 
-  if (params && Object.keys(params).length > 0) {
-    const searchParams = new URLSearchParams();
+  const locale = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("NEXT_LOCALE="))
+    ?.split("=")[1];
+
+  if (locale && method !== "POST") {
+    url.searchParams.append("locale", locale);
+  }
+
+  // Append additional query params if present
+  if (params) {
     Object.entries(params).forEach(([key, value]) => {
-      searchParams.append(key, value);
+      url.searchParams.append(key, value);
     });
-    url += `?${searchParams.toString()}`;
   }
 
   const headers: HeadersInit = {
@@ -62,13 +70,12 @@ const fetcher = async <T>(config: FetcherConfig): Promise<T> => {
     next: method === "GET" ? { revalidate: 3600 } : undefined,
   };
 
-  if (method === "POST" || method === "PUT") {
-    const { body } = config as FetcherConfigWithBody;
-    options.body = JSON.stringify(body);
+  if ("body" in config) {
+    options.body = JSON.stringify(config.body);
   }
 
   try {
-    const res = await fetch(url, options);
+    const res = await fetch(url.toString(), options);
 
     const contentType = res.headers.get("content-type");
 
