@@ -5,29 +5,24 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import { Autoplay, Navigation } from "swiper/modules";
-import image from "@/assets/category-images/laptops.png";
 import { useRef } from "react";
 
-import SaleCard, { SaleCartProps } from "./sale-cart";
+import SaleCard from "./sale-cart";
 import { NextButton, PrevButton } from "./sale-section-buttons";
 import { useTranslations } from "next-intl";
 import randomShape from "@/assets/sale-section/random-shape.png";
 import Image from "next/image";
-
-const saleItems: SaleCartProps[] = [
-  {
-    id: 1,
-    title: "Logitech G502 Gaming Mouse",
-    image: image,
-    discount: 50,
-    totalPrice: 38.0,
-    salePrice: 19,
-  },
-];
+import useProducts from "@/hooks/products/useProducts";
+// import { getAllProducts } from "@/api/products";
 
 const SaleSection = () => {
   const swiperRef = useRef<SwiperType | null>(null);
   const t = useTranslations("home.saleSection");
+  const { products: saleProducts } = useProducts({
+    params: {
+      "filters[on_sale][$eq]": "true",
+    },
+  });
 
   return (
     <div className="container my-10">
@@ -64,15 +59,11 @@ const SaleSection = () => {
               1280: { slidesPerView: 4.5, spaceBetween: 24 },
             }}
           >
-            {Array.from({ length: 7 }, (_, i) =>
-              saleItems.map((elem) => ({ ...elem, id: i }))
-            )
-              .flat()
-              .map((item) => (
-                <SwiperSlide key={item.id} className=" bg-white rounded">
-                  <SaleCard {...item} />
-                </SwiperSlide>
-              ))}
+            {saleProducts.map((item) => (
+              <SwiperSlide key={item.id} className=" bg-white rounded">
+                <SaleCard {...item} />
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
         <div className="hidden lg:flex lg:justify-end col-start-5 lg:gap-1 p-2">

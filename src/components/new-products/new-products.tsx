@@ -1,6 +1,9 @@
+"use client";
+
 import macImage from "@/assets/new-products/apple-macbook.png";
 import ProductCard, { NewProduct } from "./product-cart";
 import SectionHeader from "../section-header/section-header";
+import useProducts from "@/hooks/products/useProducts";
 
 const newProductsItem: NewProduct = {
   id: 1,
@@ -18,6 +21,14 @@ const newProductsItems: NewProduct[] = Array.from({ length: 4 }, (_, i) => ({
 }));
 
 const NewProducts = () => {
+  const { products: newProducts } = useProducts({
+    params: {
+      "filters[new_collection][$eq]": "true",
+    },
+  });
+
+  console.log(newProducts);
+
   return (
     <>
       <SectionHeader title="New Products" cta={{ text: "View all", url: "" }} />

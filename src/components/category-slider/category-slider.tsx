@@ -5,7 +5,7 @@ import "swiper/css";
 import { Autoplay } from "swiper/modules";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
-import useCategories from "@/hooks/useCategories";
+import useCategories from "@/hooks/categories/useCategories";
 import { Category } from "@/models/categories-model";
 
 const CategoryCard = ({ title, thumbnail }: Category) => (
@@ -15,7 +15,7 @@ const CategoryCard = ({ title, thumbnail }: Category) => (
   >
     <Image
       src={process.env.NEXT_PUBLIC_API_URL + thumbnail.url}
-      alt={process.env.NEXT_PUBLIC_API_URL + title}
+      alt={title}
       width={300}
       height={300}
       className="mx-auto h-3/4 object-scale-down object-center"
