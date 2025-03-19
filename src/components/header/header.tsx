@@ -7,6 +7,7 @@ import {
 import { Input, Button, Logo, BurgerMenuButton } from "@/components";
 import Navigation from "./navigation";
 import { useTranslations } from "next-intl";
+import SwitchLang from "./switch-lang";
 
 const Header = () => {
   const t = useTranslations("home.header");
@@ -24,6 +25,7 @@ const Header = () => {
             </Link>
           </Button>
           <div className="flex items-center gap-2">
+            <SwitchLang />
             <Button variant="icon" size="icon" className="hidden sm:block">
               <PiMagnifyingGlassLight />
             </Button>

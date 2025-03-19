@@ -28,7 +28,6 @@ const CategoryCard = ({ title, thumbnail }: Category) => (
 
 const CategorySlider = () => {
   const { categories } = useCategories({});
-  console.log(categories);
 
   return (
     <div className="my-10 pl-4 sm:container ">
