@@ -20,7 +20,7 @@ const NewProducts = () => {
       <div className="container mb-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {newProducts.map((item) => (
-            <ProductCard {...item} key={item.id} />
+            <ProductCard {...item} key={item.id} hasCartButton />
           ))}
         </div>
       </div>

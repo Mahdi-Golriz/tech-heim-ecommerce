@@ -46,7 +46,10 @@
     "cameras": "Kameras",
     "gaming": "Gaming",
     "networking": "Netzwerk",
-    "accessories": "Zubehör"
+    "accessories": "Zubehör",
+    "cta": {
+      "addToCart": "In den Warenkorb"
+    }
   },
   "footer": {
     "emailInput": {

@@ -1,8 +1,15 @@
 import Image from "next/image";
 import { FC } from "react";
 import Button from "../ui/button";
-import { PiHeartLight, PiPlusBold, PiStarFill } from "react-icons/pi";
+import {
+  PiHeartLight,
+  PiPlusBold,
+  PiStarFill,
+  PiShoppingCartSimpleLight,
+} from "react-icons/pi";
 import { Product } from "@/models/product-model";
+import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 const ProductCard: FC<Product> = ({
   product_images: productImages,
@@ -11,16 +18,17 @@ const ProductCard: FC<Product> = ({
   price: totalPrice,
   discount_percentage: discountPercentage,
   rate,
+  hasCartButton,
 }) => {
+  const t = useTranslations("products");
   const salePrice = discountPercentage
     ? totalPrice - (discountPercentage / 100) * totalPrice
     : null;
 
   const colorVariantArray = colorVariant?.split(" ");
-  console.log(colorVariantArray);
 
   return (
-    <div className="group flex flex-col gap-2 h-52 lg:h-80 px-2 pb-2 shadow-cart rounded">
+    <div className="relative group flex flex-col gap-2 h-52 lg:h-80 px-2 pb-2 shadow-cart rounded">
       <figure className="custom-border-bottom h-2/3 shad py-3">
         <Image
           src={
@@ -54,17 +62,20 @@ const ProductCard: FC<Product> = ({
             </>
           ) : null}
         </div>
-        <Button
-          variant="icon"
-          className="absolute top-1 p-0 [&_svg]:size-5 [&_svg]:text-blue-600 group-hover:opacity-100 h-fit opacity-0 transition-all"
-        >
-          <PiHeartLight />
-        </Button>
       </figure>
+      {discountPercentage ? (
+        <span className="absolute left-0 top-2 p-1 bg-secondary-100 text-secondary-400 text-xs rounded-r-lg group-hover:opacity-0 transition-all">
+          -{discountPercentage}%
+        </span>
+      ) : null}
       <p className="text-xs lg:text-base truncate lg:line-clamp-2 lg:whitespace-normal group-hover:text-primary-500">
         {title}
       </p>
-      <div className="flex justify-between items-center mt-auto">
+      <div
+        className={cn("flex justify-between items-center mt-auto", {
+          "group-hover:hidden": hasCartButton,
+        })}
+      >
         <div>
           {salePrice ? (
             <>
@@ -74,14 +85,35 @@ const ProductCard: FC<Product> = ({
               <p className="text-xs lg:text-lg">$ {salePrice}</p>
             </>
           ) : (
-            <span className="text-xs lg:text-lg">{totalPrice}</span>
+            <span className="text-xs lg:text-lg">$ {totalPrice}</span>
           )}
         </div>
-        <div className="h-full text-primary-500 font-medium flex gap-1 mb-0 items-end ">
+        <div className="h-full text-primary-500 font-medium flex gap-1 mb-0 items-end pb-1">
           <PiStarFill className="lg:size-4" />
-          <span className="h-5 ">{rate}</span>
+          <span className="h-5">{rate}</span>
         </div>
       </div>
+      <Button
+        variant="outline"
+        className={cn(
+          "hidden w-fit mt-auto p-1 text-xs [&_svg]:size-4 lg:[&_svg]:size-6 lg:text-sm h-fit",
+          {
+            "group-hover:flex": hasCartButton,
+          }
+        )}
+      >
+        <PiShoppingCartSimpleLight />
+        {t("cta.addToCart")}
+      </Button>
+      <Button
+        variant="icon"
+        className={cn(
+          "absolute p-0 [&_svg]:size-5 [&_svg]:text-blue-600 group-hover:opacity-100 h-fit opacity-0",
+          hasCartButton ? "bottom-4 right-3" : "top-1"
+        )}
+      >
+        <PiHeartLight />
+      </Button>
     </div>
   );
 };

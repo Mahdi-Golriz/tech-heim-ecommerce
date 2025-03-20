@@ -13,4 +13,5 @@ export interface Product {
   colors?: string;
   new_collection?: boolean;
   rate?: number;
+  hasCartButton: boolean;
 }
