@@ -96,13 +96,13 @@ const ProductCard: FC<Product> = ({
       <Button
         variant="outline"
         className={cn(
-          "hidden w-fit mt-auto p-1 text-xs [&_svg]:size-4 lg:[&_svg]:size-6 lg:text-sm h-fit",
+          "hidden w-fit mt-auto px-2 text-xs [&_svg]:size-4 lg:[&_svg]:size-6 lg:text-sm h-fit font-medium ",
           {
             "group-hover:flex": hasCartButton,
           }
         )}
       >
-        <PiShoppingCartSimpleLight />
+        <PiShoppingCartSimpleLight strokeWidth={8} />
         {t("cta.addToCart")}
       </Button>
       <Button
