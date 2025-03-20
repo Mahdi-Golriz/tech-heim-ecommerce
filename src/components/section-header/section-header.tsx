@@ -23,7 +23,7 @@ const SectionHeader: FC<SectionHeaderProps> = ({ title, cta, className }) => {
         )}
       >
         <h2 className="text-base font-medium lg:text-3xl">{title}</h2>
-        {cta && (
+        {cta ? (
           <Button
             variant="link"
             className="p-0 h-fit [&_svg]:size-3 text-sm lg:text-base"
@@ -31,7 +31,7 @@ const SectionHeader: FC<SectionHeaderProps> = ({ title, cta, className }) => {
             <Link href={cta.url}>{cta.text}</Link>
             <PiCaretRight strokeWidth={10} />
           </Button>
-        )}
+        ) : null}
       </div>
     </header>
   );

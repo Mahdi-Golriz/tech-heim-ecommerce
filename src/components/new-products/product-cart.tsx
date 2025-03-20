@@ -1,53 +1,49 @@
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { FC } from "react";
 import Button from "../ui/button";
 import { PiHeartLight, PiPlusBold, PiStarFill } from "react-icons/pi";
+import { Product } from "@/models/product-model";
 
-export interface NewProduct {
-  id: number;
-  image: StaticImageData;
-  title: string;
-  colorVariant?: string[];
-  totalPrice: number;
-  salePrice?: number;
-  rate?: number;
-}
-
-const ProductCard: FC<NewProduct> = ({
-  image,
+const ProductCard: FC<Product> = ({
+  product_images: productImages,
   title,
-  colorVariant,
-  totalPrice,
-  salePrice,
+  colors: colorVariant,
+  price: totalPrice,
+  discount_percentage: discountPercentage,
   rate,
 }) => {
-  // const colorVariants = cva("block size-3 rounded-full border mb-1", {
-  //   variants: {
-  //     color: {
-  //       white: "bg-white",
-  //     },
-  //   },
-  // });
+  const salePrice = discountPercentage
+    ? totalPrice - (discountPercentage / 100) * totalPrice
+    : null;
+
+  const colorVariantArray = colorVariant?.split(" ");
+  console.log(colorVariantArray);
 
   return (
     <div className="group flex flex-col gap-2 h-52 lg:h-80 px-2 pb-2 shadow-cart rounded">
       <figure className="custom-border-bottom h-2/3 shad py-3">
         <Image
-          src={image}
+          src={
+            productImages
+              ? process.env.NEXT_PUBLIC_API_URL + productImages[0].url
+              : ""
+          }
           alt={title}
           className="object-contain h-full mx-auto group-hover:scale-105 transition-all"
+          width={300}
+          height={300}
         />
         <div className="absolute -right-1 top-1/3 group-hover:opacity-0">
-          {colorVariant ? (
+          {colorVariantArray ? (
             <>
-              {colorVariant.slice(0, 3).map((color) => (
+              {colorVariantArray.map((color) => (
                 <span
                   key={color}
                   className="block size-3 rounded-full border mb-1"
                   style={{ backgroundColor: color }}
                 />
               ))}
-              {colorVariant.length > 3 && (
+              {colorVariantArray.length > 3 && (
                 <PiPlusBold
                   size={9}
                   className="mx-auto"

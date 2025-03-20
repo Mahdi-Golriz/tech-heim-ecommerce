@@ -35,11 +35,15 @@ const SaleSection = () => {
             alt="shape"
             className="absolute opacity-15 rotate-[100deg] lg:h-[500px] lg:w-[435px] lg:-top-40 lg:-left-40 -top-20 -left-20"
           />
-          <div>
+          <div className="z-10">
             <h3 className="text-sm lg:text-2xl font-medium">{t("title")}</h3>
             <h5 className="text-xs lg:text-xl font-light mt-2">{t("text")}</h5>
           </div>
-          <Button variant="link" className="text-white lg:text-base" size="sm">
+          <Button
+            variant="link"
+            className="text-white lg:text-base z-10"
+            size="sm"
+          >
             {t("cta")}
           </Button>
         </div>

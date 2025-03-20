@@ -37,14 +37,14 @@ const fetcher = async <T>(config: FetcherConfig): Promise<T> => {
   const { path, method, headers: customHeaders = {}, params, token } = config;
   const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}${path}`);
 
-  const locale = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("NEXT_LOCALE="))
-    ?.split("=")[1];
+  // const locale = document.cookie
+  //   .split("; ")
+  //   .find((row) => row.startsWith("NEXT_LOCALE="))
+  //   ?.split("=")[1];
 
-  if (locale && method !== "POST") {
-    url.searchParams.append("locale", locale);
-  }
+  // if (locale && method !== "POST") {
+  //   url.searchParams.append("locale", locale);
+  // }
 
   // Append additional query params if present
   if (params) {
@@ -66,8 +66,8 @@ const fetcher = async <T>(config: FetcherConfig): Promise<T> => {
   const options: RequestInit = {
     method,
     headers,
-    cache: method === "GET" ? "force-cache" : "no-store",
-    next: method === "GET" ? { revalidate: 3600 } : undefined,
+    // cache: method === "GET" ? "force-cache" : "no-store",
+    next: method === "GET" ? { revalidate: 360 } : undefined,
   };
 
   if ("body" in config) {
