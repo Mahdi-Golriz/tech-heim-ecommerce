@@ -10,6 +10,7 @@ const useProducts = ({ params }: UseProductsParams) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const [totalPages, setTotalPages] = useState(10);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -17,6 +18,7 @@ const useProducts = ({ params }: UseProductsParams) => {
         setIsLoading(true);
         const response = await getProducts({ params });
         setProducts(response.data);
+        setTotalPages(response.meta.pagination.pageCount);
       } catch (err) {
         setError(
           err instanceof Error ? err : new Error("Failed to fetch categories")
@@ -27,9 +29,9 @@ const useProducts = ({ params }: UseProductsParams) => {
     };
 
     fetchProducts();
-  }, []);
+  }, [JSON.stringify(params)]);
 
-  return { products, isLoading, error };
+  return { products, isLoading, error, totalPages };
 };
 
 export default useProducts;

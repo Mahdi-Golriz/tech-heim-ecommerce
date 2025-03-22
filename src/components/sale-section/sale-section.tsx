@@ -21,6 +21,7 @@ const SaleSection = () => {
   const { products: saleProducts } = useProducts({
     params: {
       "filters[on_sale][$eq]": "true",
+      "pagination[pageSize]": "8",
     },
   });
 

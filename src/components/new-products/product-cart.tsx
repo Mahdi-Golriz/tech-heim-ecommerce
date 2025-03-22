@@ -68,7 +68,7 @@ const ProductCard: FC<Product> = ({
           -{discountPercentage}%
         </span>
       ) : null}
-      <p className="text-xs lg:text-base truncate lg:line-clamp-2 lg:whitespace-normal group-hover:text-primary-500">
+      <p className="text-xs lg:text-base truncate lg:line-clamp-2 lg:whitespace-normal group-hover:text-primary-500 lg:leading-tight">
         {title}
       </p>
       <div
@@ -76,7 +76,7 @@ const ProductCard: FC<Product> = ({
           "group-hover:hidden": hasCartButton,
         })}
       >
-        <div>
+        <div className="">
           {salePrice ? (
             <>
               <p className="text-[10px] lg:text-sm line-through font-normal text-gray-600">

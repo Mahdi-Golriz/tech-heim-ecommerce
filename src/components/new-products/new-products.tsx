@@ -9,6 +9,7 @@ const NewProducts = () => {
   const { products: newProducts }: { products: Product[] } = useProducts({
     params: {
       "filters[new_collection][$eq]": "true",
+      "pagination[pageSize]": "4",
     },
   });
 
