@@ -2,7 +2,7 @@
 
 import ProductCard from "@/components/new-products/product-cart";
 import useProducts from "@/hooks/products/useProducts";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 
 import {
   Pagination,
@@ -21,15 +21,52 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { useRouter } from "@/i18n/routing";
+import { useSearchParams } from "next/navigation";
+
+type UrlParams = {
+  [key: string]: string | number | null | undefined;
+};
+
 const ProductsList = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState("");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const currentPage = Number(searchParams.get("page") || 1);
+  const sortBy = searchParams.get("sort") || "";
+
+  // console.log(window.location.pathname);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [sortBy, setSortBy] = useState("");
+
+  const updateUrlParams = (params: UrlParams) => {
+    const urlSearchParams = new URLSearchParams(searchParams.toString());
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (value) {
+        urlSearchParams.set(key, String(value));
+      } else {
+        urlSearchParams.delete(key);
+      }
+    });
+
+    // const newUrl = `products?${urlSearchParams.toString()}`;
+    router.push(`?${urlSearchParams.toString()}`, { scroll: false });
+
+    // // Get query string
+    // const queryString = urlSearchParams.toString();
+    // const query = queryString ? `?${queryString}` : "";
+
+    // // Use router.replace instead of constructing URL manually
+    // // This avoids locale duplication issues
+    // router.push(query, { scroll: false });
+  };
 
   const queryParams = useMemo(
     () => ({
       "pagination[page]": `${currentPage}`,
       "pagination[pageSize]": "10",
-      sort: `${sortBy}`,
+      ...(sortBy ? { sort: sortBy } : {}),
     }),
     [currentPage, sortBy]
   );
@@ -40,13 +77,13 @@ const ProductsList = () => {
 
   console.log(totalPages, products);
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const handlePageChange = (e: React.MouseEvent, page: number) => {
+    e.preventDefault();
+    updateUrlParams({ page });
   };
 
   const handleSortChange = (field: string) => {
-    setSortBy(field);
-    setCurrentPage(1);
+    updateUrlParams({ sort: field, page: 1 });
   };
 
   const renderPaginationItems = () => {
@@ -57,8 +94,7 @@ const ProductsList = () => {
         <PaginationLink
           href="#"
           onClick={(e) => {
-            e.preventDefault();
-            handlePageChange(1);
+            handlePageChange(e, 1);
           }}
           isActive={currentPage === 1}
         >
@@ -88,8 +124,7 @@ const ProductsList = () => {
           <PaginationLink
             href="#"
             onClick={(e) => {
-              e.preventDefault();
-              handlePageChange(i);
+              handlePageChange(e, i);
             }}
             isActive={currentPage === i}
           >
@@ -115,8 +150,7 @@ const ProductsList = () => {
           <PaginationLink
             href="#"
             onClick={(e) => {
-              e.preventDefault();
-              handlePageChange(totalPages);
+              handlePageChange(e, totalPages);
             }}
             isActive={currentPage === totalPages}
           >
@@ -141,7 +175,7 @@ const ProductsList = () => {
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
 
-            <SelectContent>
+            <SelectContent className="bg-white">
               <SelectItem value="price:asc">Price: ascending</SelectItem>
               <SelectItem value="price:desc">Price: descending </SelectItem>
               <SelectItem value="createdAt:desc">New Arrivals</SelectItem>
@@ -157,46 +191,46 @@ const ProductsList = () => {
       </div>
 
       {/* Pagination */}
-      <Pagination>
-        <PaginationContent>
-          {/* Previous button */}
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                if (currentPage > 1) {
-                  handlePageChange(currentPage - 1);
+      {totalPages > 1 ? (
+        <Pagination>
+          <PaginationContent>
+            {/* Previous button */}
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={(e) => {
+                  if (currentPage > 1) {
+                    handlePageChange(e, currentPage - 1);
+                  }
+                }}
+                className={
+                  currentPage === 1 ? "pointer-events-none opacity-50" : ""
                 }
-              }}
-              className={
-                currentPage === 1 ? "pointer-events-none opacity-50" : ""
-              }
-            />
-          </PaginationItem>
+              />
+            </PaginationItem>
 
-          {/* Pagination numbers */}
-          {renderPaginationItems()}
+            {/* Pagination numbers */}
+            {renderPaginationItems()}
 
-          {/* Next button */}
-          <PaginationItem>
-            <PaginationNext
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                if (currentPage < totalPages) {
-                  handlePageChange(currentPage + 1);
+            {/* Next button */}
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={(e) => {
+                  if (currentPage < totalPages) {
+                    handlePageChange(e, currentPage + 1);
+                  }
+                }}
+                className={
+                  currentPage === totalPages
+                    ? "pointer-events-none opacity-50"
+                    : ""
                 }
-              }}
-              className={
-                currentPage === totalPages
-                  ? "pointer-events-none opacity-50"
-                  : ""
-              }
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      ) : null}
     </div>
   );
 };
