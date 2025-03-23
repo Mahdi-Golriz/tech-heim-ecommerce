@@ -4,32 +4,11 @@ import ProductCard from "@/components/new-products/product-cart";
 import useProducts from "@/hooks/products/useProducts";
 import React, { useMemo } from "react";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-  PaginationEllipsis,
-} from "@/components/ui/pagination";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-import { Link, useRouter } from "@/i18n/routing";
+import { useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import ProductsBreadcrumb from "./products-breadcrumb";
+import ProductSorting from "./products-sorting";
+import ProductsPagination from "./products-pagination";
 
 type UrlParams = {
   [key: string]: string | number | null | undefined;
@@ -82,8 +61,7 @@ const ProductsList = () => {
     params: queryParams,
   });
 
-  const handlePageChange = (e: React.MouseEvent, page: number) => {
-    e.preventDefault();
+  const handlePageChange = (page: number) => {
     updateUrlParams({ page });
   };
 
@@ -91,162 +69,24 @@ const ProductsList = () => {
     updateUrlParams({ sort: field, page: 1 });
   };
 
-  const renderPaginationItems = () => {
-    const items = [];
-
-    items.push(
-      <PaginationItem key="first">
-        <PaginationLink
-          href="#"
-          onClick={(e) => {
-            handlePageChange(e, 1);
-          }}
-          isActive={currentPage === 1}
-        >
-          1
-        </PaginationLink>
-      </PaginationItem>
-    );
-
-    if (currentPage > 3) {
-      items.push(
-        <PaginationItem key="ellipsis-1">
-          <PaginationEllipsis />
-        </PaginationItem>
-      );
-    }
-
-    // Add pages around current page
-    for (
-      let i = Math.max(2, currentPage - 1);
-      i <= Math.min(totalPages - 1, currentPage + 1);
-      i++
-    ) {
-      if (i === 1 || i === totalPages) continue; // Skip first and last page as they're added separately
-
-      items.push(
-        <PaginationItem key={i}>
-          <PaginationLink
-            href="#"
-            onClick={(e) => {
-              handlePageChange(e, i);
-            }}
-            isActive={currentPage === i}
-          >
-            {i}
-          </PaginationLink>
-        </PaginationItem>
-      );
-    }
-
-    // Add ellipsis if needed
-    if (currentPage < totalPages - 2) {
-      items.push(
-        <PaginationItem key="ellipsis-2">
-          <PaginationEllipsis />
-        </PaginationItem>
-      );
-    }
-
-    // Add last page if not the same as first page
-    if (totalPages > 1) {
-      items.push(
-        <PaginationItem key="last">
-          <PaginationLink
-            href="#"
-            onClick={(e) => {
-              handlePageChange(e, totalPages);
-            }}
-            isActive={currentPage === totalPages}
-          >
-            {totalPages}
-          </PaginationLink>
-        </PaginationItem>
-      );
-    }
-    return items;
-  };
-
   return (
     <div className="container">
-      <Breadcrumb className="my-5">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/">Home</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/products">Products</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-      {/* Sorting Controls */}
-      <div className="flex flex-wrap gap-4 mb-6">
-        <div>
-          <Select value={sortBy} onValueChange={handleSortChange}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
+      <ProductsBreadcrumb />
 
-            <SelectContent className="bg-white">
-              <SelectItem value="price:asc">Price: ascending</SelectItem>
-              <SelectItem value="price:desc">Price: descending </SelectItem>
-              <SelectItem value="createdAt:desc">New Arrivals</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      {/* Products Grid with loading state */}
+      <ProductSorting sortBy={sortBy} onSortChange={handleSortChange} />
+
       <div className="grid grid-cols-2 my-4 lg:grid-cols-4 lg:gap-6">
         {products.map((product) => (
           <ProductCard key={product.id} {...product} hasCartButton />
         ))}
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 ? (
-        <Pagination>
-          <PaginationContent>
-            {/* Previous button */}
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={(e) => {
-                  if (currentPage > 1) {
-                    handlePageChange(e, currentPage - 1);
-                  }
-                }}
-                className={
-                  currentPage === 1 ? "pointer-events-none opacity-50" : ""
-                }
-              />
-            </PaginationItem>
-
-            {/* Pagination numbers */}
-            {renderPaginationItems()}
-
-            {/* Next button */}
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={(e) => {
-                  if (currentPage < totalPages) {
-                    handlePageChange(e, currentPage + 1);
-                  }
-                }}
-                className={
-                  currentPage === totalPages
-                    ? "pointer-events-none opacity-50"
-                    : ""
-                }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <ProductsPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       ) : null}
     </div>
   );
