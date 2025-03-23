@@ -21,8 +21,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useRouter } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 type UrlParams = {
   [key: string]: string | number | null | undefined;
@@ -74,8 +81,6 @@ const ProductsList = () => {
   const { products, totalPages } = useProducts({
     params: queryParams,
   });
-
-  console.log(totalPages, products);
 
   const handlePageChange = (e: React.MouseEvent, page: number) => {
     e.preventDefault();
@@ -159,14 +164,26 @@ const ProductsList = () => {
         </PaginationItem>
       );
     }
-
-    console.log(items);
     return items;
   };
 
   return (
     <div className="container">
-      <h1 className="text-2xl font-bold mb-6">Products</h1>
+      <Breadcrumb className="my-5">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">Home</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/products">Products</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       {/* Sorting Controls */}
       <div className="flex flex-wrap gap-4 mb-6">
         <div>

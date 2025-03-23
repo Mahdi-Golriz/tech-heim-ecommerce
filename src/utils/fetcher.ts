@@ -13,18 +13,33 @@ interface FetcherConfigWithBody extends FetcherConfigBase {
   body: Record<string, unknown>;
 }
 
-type FetcherConfig = FetcherConfigBase | FetcherConfigWithBody;
-
-class FetcherError extends Error {
+interface FetcherErrorType extends Error {
+  name: string;
   status: number;
   data?: unknown;
+}
 
-  constructor(message: string, status: number, data?: unknown) {
-    super(message);
-    this.name = "FetcherError";
-    this.status = status;
-    this.data = data;
+type FetcherConfig = FetcherConfigBase | FetcherConfigWithBody;
+
+function createFetcherError(
+  message: string,
+  status: number,
+  data?: unknown
+): FetcherErrorType {
+  const error = new Error(message) as FetcherErrorType;
+  error.name = "FetcherError";
+  error.status = status;
+  if (data !== undefined) {
+    error.data = data;
   }
+  return error;
+}
+
+// Type guard to check if an error is a FetcherError
+function isFetcherError(error: unknown): error is FetcherErrorType {
+  return (
+    error instanceof Error && error.name === "FetcherError" && "status" in error
+  );
 }
 
 /**
@@ -67,7 +82,7 @@ const fetcher = async <T>(config: FetcherConfig): Promise<T> => {
     method,
     headers,
     // cache: method === "GET" ? "force-cache" : "no-store",
-    next: method === "GET" ? { revalidate: 360 } : undefined,
+    // next: method === "GET" ? { revalidate: 360 } : undefined,
   };
 
   if ("body" in config) {
@@ -76,13 +91,12 @@ const fetcher = async <T>(config: FetcherConfig): Promise<T> => {
 
   try {
     const res = await fetch(url.toString(), options);
-
     const contentType = res.headers.get("content-type");
 
     if (contentType && contentType.includes("application/json")) {
       const data = await res.json();
       if (!res.ok) {
-        throw new FetcherError(
+        throw createFetcherError(
           data.error?.message || data.message || res.statusText,
           res.status,
           data
@@ -93,24 +107,29 @@ const fetcher = async <T>(config: FetcherConfig): Promise<T> => {
     } else {
       // Handle non-JSON responses (like file downloads)
       if (!res.ok) {
-        throw new FetcherError(res.statusText, res.status);
+        throw createFetcherError(res.statusText, res.status);
       }
 
       // For non-JSON responses, return the raw response
       return res as unknown as T;
     }
   } catch (error) {
-    if (error instanceof FetcherError) {
+    if (isFetcherError(error)) {
       throw error;
     }
 
     // Handle other errors
     console.error("Fetch error:", error);
-    throw new FetcherError(
+    throw createFetcherError(
       error instanceof Error ? error.message : "Unknown fetch error",
       500
     );
   }
 };
 
-export default fetcher;
+export {
+  fetcher as default,
+  createFetcherError,
+  isFetcherError,
+  type FetcherErrorType,
+};
