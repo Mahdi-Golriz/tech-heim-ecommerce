@@ -6,7 +6,7 @@ import React, { useMemo } from "react";
 
 import { useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
-import ProductsBreadcrumb from "./products-breadcrumb";
+import { CustomBreadcrumb } from "@/components";
 import ProductSorting from "./products-sorting";
 import ProductsPagination from "./products-pagination";
 
@@ -21,10 +21,6 @@ const ProductsList = () => {
   const currentPage = Number(searchParams.get("page") || 1);
   const sortBy = searchParams.get("sort") || "";
 
-  // console.log(window.location.pathname);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [sortBy, setSortBy] = useState("");
-
   const updateUrlParams = (params: UrlParams) => {
     const urlSearchParams = new URLSearchParams(searchParams.toString());
 
@@ -36,22 +32,13 @@ const ProductsList = () => {
       }
     });
 
-    // const newUrl = `products?${urlSearchParams.toString()}`;
     router.push(`?${urlSearchParams.toString()}`, { scroll: false });
-
-    // // Get query string
-    // const queryString = urlSearchParams.toString();
-    // const query = queryString ? `?${queryString}` : "";
-
-    // // Use router.replace instead of constructing URL manually
-    // // This avoids locale duplication issues
-    // router.push(query, { scroll: false });
   };
 
   const queryParams = useMemo(
     () => ({
       "pagination[page]": `${currentPage}`,
-      "pagination[pageSize]": "10",
+      "pagination[pageSize]": "12",
       ...(sortBy ? { sort: sortBy } : {}),
     }),
     [currentPage, sortBy]
@@ -71,7 +58,12 @@ const ProductsList = () => {
 
   return (
     <div className="container">
-      <ProductsBreadcrumb />
+      <CustomBreadcrumb
+        links={[
+          { href: "/", title: "Home" },
+          { href: "/products", title: "Products" },
+        ]}
+      />
 
       <ProductSorting sortBy={sortBy} onSortChange={handleSortChange} />
 

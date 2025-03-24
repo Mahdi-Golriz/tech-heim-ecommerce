@@ -3,7 +3,8 @@ import { Product } from "@/models/product-model";
 import { useEffect, useState } from "react";
 
 interface UseProductsParams {
-  params?: Record<string, string>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  params?: Record<string, any>;
 }
 
 const useProducts = ({ params }: UseProductsParams) => {

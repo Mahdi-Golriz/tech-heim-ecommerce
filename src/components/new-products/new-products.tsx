@@ -13,8 +13,6 @@ const NewProducts = () => {
     },
   });
 
-  console.log(newProducts);
-
   return (
     <>
       <SectionHeader title="New Products" cta={{ text: "View all", url: "" }} />

@@ -101,7 +101,7 @@ const ProductsPagination = ({
   };
 
   return (
-    <Pagination>
+    <Pagination className="py-5">
       <PaginationContent>
         {/* Previous button */}
         <PaginationItem>
