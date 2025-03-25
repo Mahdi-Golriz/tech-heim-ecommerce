@@ -7,4 +7,5 @@ export { default as BurgerMenuButton } from "@/components/sidebar-menu/burger-me
 export { default as CategorySlider } from "@/components/category-slider/category-slider";
 export { default as Overlay } from "@/components/ui/overlay";
 export { default as Footer } from "@/components/footer";
-export { default as CustomBreadcrumb } from "@/components/custom-breadcrumb/products-breadcrumb";
+export { default as CustomBreadcrumb } from "@/components/custom-breadcrumb/custom-breadcrumb";
+export { default as Checkbox } from "@/components/ui/checkbox";

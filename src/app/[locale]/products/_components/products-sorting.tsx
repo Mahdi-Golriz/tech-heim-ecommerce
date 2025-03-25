@@ -13,10 +13,10 @@ type ProductSortingProps = {
 
 const ProductsSorting = ({ sortBy, onSortChange }: ProductSortingProps) => {
   return (
-    <div className="flex flex-wrap gap-4 mb-6">
+    <div className="mb-3">
       <div>
         <Select value={sortBy} onValueChange={onSortChange}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px] border-none shadow-custom">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
 

@@ -28,7 +28,7 @@ const ProductCard: FC<Product> = ({
   const colorVariantArray = colorVariant?.split(" ");
 
   return (
-    <div className="relative group flex flex-col gap-2 h-52 lg:h-80 px-2 pb-2 shadow-cart rounded">
+    <div className="relative group flex flex-col gap-2 h-52 lg:h-80 px-2 pb-2 shadow-custom rounded">
       <figure className="custom-border-bottom h-2/3 shad py-3">
         <Image
           src={
