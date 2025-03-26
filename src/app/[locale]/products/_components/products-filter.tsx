@@ -11,90 +11,145 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import useCategories from "@/hooks/categories/useCategories";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FilterValues } from "./products-list";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 interface ProductsFilterProps {
   isVisible: boolean;
   onClose: () => void;
+  initialFilters: FilterValues;
+  onFilterChange: (filters: FilterValues) => void;
 }
 
-const ProductsFilter = ({ isVisible, onClose }: ProductsFilterProps) => {
+const PRICE_RANGE = { min: 0, max: 2000 };
+
+const ProductsFilter = ({
+  isVisible,
+  onClose,
+  initialFilters,
+  onFilterChange,
+}: ProductsFilterProps) => {
   const { categories } = useCategories({});
-  const minLimitPrice = 0;
-  const maxLimitPrice = 2000;
+  const isMobile = useMediaQuery("(max-width: 640px)");
+  const [filters, setFilters] = useState(initialFilters);
+  const [minPrice, setMinPrice] = useState(initialFilters.priceRange[0]);
+  const [maxPrice, setMaxPrice] = useState(initialFilters.priceRange[1]);
+  const [hasChanges, setHasChanges] = useState(false);
 
-  const [priceRange, setPriceRange] = useState<[number, number]>([
-    minLimitPrice,
-    maxLimitPrice,
-  ]);
-  const [minPrice, setMinPrice] = useState<number>(priceRange[0]);
-  const [maxPrice, setMaxPrice] = useState<number>(priceRange[1]);
+  useEffect(() => {
+    setFilters(initialFilters);
+    setMinPrice(initialFilters.priceRange[0]);
+    setMaxPrice(initialFilters.priceRange[1]);
+    setHasChanges(false);
+  }, [initialFilters]);
 
-  const handleSliderChange = (values: [number, number]) => {
-    const newMin = values[0];
-    const newMax = values[1];
-
-    setPriceRange([newMin, newMax]);
-    setMinPrice(newMin);
-    setMaxPrice(newMax);
+  const updateFilters = (updates: Partial<FilterValues>) => {
+    setFilters((prev) => ({ ...prev, ...updates }));
+    setHasChanges(true);
   };
 
-  const handleMinInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    const newMinPrice =
-      inputValue === ""
-        ? minLimitPrice
-        : Math.max(minLimitPrice, Math.min(parseInt(inputValue), maxPrice));
-
-    setMinPrice(newMinPrice);
-    setPriceRange((prev) => [newMinPrice, prev[1]]);
-  };
-  const handleMaxInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    const newMaxPrice =
-      inputValue === ""
-        ? maxLimitPrice
-        : Math.min(maxLimitPrice, Math.max(parseInt(inputValue), minPrice));
-
-    setMaxPrice(newMaxPrice);
-    setPriceRange((prev) => [prev[0], newMaxPrice]);
+  const applyFilters = () => {
+    // if (!hasChanges) return;
+    onFilterChange(filters);
+    setHasChanges(false);
+    if (isMobile) onClose();
   };
 
-  const handleClearAll = () => {
-    // Reset all values to defaults
-    setPriceRange([minLimitPrice, maxLimitPrice]);
-    setMinPrice(minLimitPrice);
-    setMaxPrice(maxLimitPrice);
-    // Add other filter clearing logic here
+  useEffect(() => {
+    if (!isMobile && hasChanges) {
+      const timer = setTimeout(applyFilters, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [filters, isMobile, hasChanges]);
+
+  const handlePriceRangeChange = (values: [number, number]) => {
+    setMinPrice(values[0]);
+    setMaxPrice(values[1]);
+    updateFilters({ priceRange: values });
+  };
+
+  const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value =
+      e.target.value === ""
+        ? PRICE_RANGE.min
+        : Math.max(
+            PRICE_RANGE.min,
+            Math.min(parseInt(e.target.value), maxPrice)
+          );
+    setMinPrice(value);
+    updateFilters({ priceRange: [value, maxPrice] });
+  };
+
+  const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value =
+      e.target.value === ""
+        ? PRICE_RANGE.max
+        : Math.min(
+            PRICE_RANGE.max,
+            Math.max(parseInt(e.target.value), minPrice)
+          );
+    setMaxPrice(value);
+    updateFilters({ priceRange: [minPrice, value] });
+  };
+
+  const handleCategoryToggle = (categoryId: string, checked: boolean) => {
+    updateFilters({
+      categories: checked
+        ? [...filters.categories, categoryId]
+        : filters.categories.filter((id) => id !== categoryId),
+    });
+    console.log(filters.categories);
+  };
+
+  const resetFilters = () => {
+    const defaultFilters: FilterValues = {
+      categories: [],
+      priceRange: [PRICE_RANGE.min, PRICE_RANGE.max],
+      hasDiscount: false,
+    };
+    setFilters(defaultFilters);
+    setMinPrice(PRICE_RANGE.min);
+    setMaxPrice(PRICE_RANGE.max);
+    setHasChanges(true);
+    if (!isMobile) onFilterChange(defaultFilters);
   };
 
   return (
     <div
       className={cn(
-        "fixed w-full inset-0 -left-full sm:left-0 sm:relative bg-white z-50 px-6 sm:px-0 overflow-y-auto transition-all",
-        isVisible ? "left-0" : ""
+        "fixed inset-0 w-full -left-full sm:left-0 sm:relative bg-white z-50 px-6 sm:px-0 overflow-y-auto transition-all",
+        { "left-0": isVisible }
       )}
-      aria-expanded="true"
     >
       <div className="flex items-center justify-between p-4">
         <h3 className="text-xl font-medium">Filters</h3>
         <Button
           variant="outline"
           className="p-0 border-none h-fit"
-          onClick={handleClearAll}
+          onClick={resetFilters}
         >
           Clear all
         </Button>
       </div>
 
       <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-1">
+        <AccordionItem value="categories">
           <AccordionTrigger>Category</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-4">
               {categories.map((category) => (
                 <div key={category.id} className="flex gap-4">
-                  <Checkbox id={category.title} />
+                  <Checkbox
+                    id={category.title}
+                    checked={filters.categories.includes(String(category.id))}
+                    onCheckedChange={(checked) =>
+                      handleCategoryToggle(
+                        String(category.id),
+                        checked === true
+                      )
+                    }
+                  />
                   <label htmlFor={category.title}>{category.title}</label>
                 </div>
               ))}
@@ -105,46 +160,51 @@ const ProductsFilter = ({ isVisible, onClose }: ProductsFilterProps) => {
 
       <div className="flex items-center justify-between border-b p-4">
         <label htmlFor="discount">Discount</label>
-        <Switch id="discount" />
+        <Switch
+          id="discount"
+          checked={filters.hasDiscount}
+          onCheckedChange={(checked) => updateFilters({ hasDiscount: checked })}
+        />
       </div>
       <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-2">
+        <AccordionItem value="price">
           <AccordionTrigger>Price</AccordionTrigger>
           <AccordionContent className="pt-2 mb-5">
             <div className="flex mb-6 justify-center gap-5 px-5">
               <Input
                 type="number"
-                min={minLimitPrice}
-                max={priceRange[1]}
-                placeholder="min."
-                className="border-gray-500 w-20 placeholder:text-center placeholder:text-lg text-center"
+                min={PRICE_RANGE.min}
+                max={maxPrice}
+                placeholder="min"
+                className="border-gray-500 w-20 text-center"
                 value={minPrice}
-                onChange={handleMinInputChange}
+                onChange={handleMinPriceChange}
               />
               <Input
                 type="number"
-                min={priceRange[0]}
-                max={maxLimitPrice}
-                placeholder="max."
-                className="border-gray-500 w-20 placeholder:text-center placeholder:text-lg text-center"
+                min={minPrice}
+                max={PRICE_RANGE.max}
+                placeholder="max"
+                className="border-gray-500 w-20 text-center"
                 value={maxPrice}
-                onChange={handleMaxInputChange}
+                onChange={handleMaxPriceChange}
               />
             </div>
             <Slider
               step={1}
-              defaultValue={priceRange}
-              onValueChange={handleSliderChange}
-              value={priceRange}
-              max={maxLimitPrice}
-              min={minLimitPrice}
+              onValueChange={handlePriceRangeChange}
+              value={filters.priceRange}
+              max={PRICE_RANGE.max}
+              min={PRICE_RANGE.min}
             />
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-      <Button className="block my-5 mx-auto" onClick={onClose}>
-        Apply Filters
-      </Button>
+      {isMobile && (
+        <Button className="block my-5 mx-auto" onClick={applyFilters}>
+          Apply Filters
+        </Button>
+      )}
     </div>
   );
 };
