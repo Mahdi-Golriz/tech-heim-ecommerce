@@ -43,10 +43,9 @@ const ProductsList = () => {
     const page = Number(searchParams.get("page") || 1);
     const sortBy = searchParams.get("sort") || "";
     const categories = searchParams.get("categories")?.split(",") || [];
-    const minPrice = Number(searchParams.get("price[$gt]") || 0);
-    const maxPrice = Number(searchParams.get("price[$lt]") || 2000);
-    const hasDiscount =
-      searchParams.get("discount_percentage[$notNull]") === "true";
+    const minPrice = Number(searchParams.get("minPrice") || 0);
+    const maxPrice = Number(searchParams.get("maxPrice") || 2000);
+    const hasDiscount = searchParams.get("hasDiscount") === "true";
 
     console.log(searchParams.get("categories")?.split(","));
 
@@ -109,11 +108,10 @@ const ProductsList = () => {
       categories: newFilters.categories.length
         ? newFilters.categories.join(",")
         : null,
-      "price[$gt]":
-        newFilters.priceRange[0] > 0 ? newFilters.priceRange[0] : null,
-      "price[$lt]":
+      minPrice: newFilters.priceRange[0] > 0 ? newFilters.priceRange[0] : null,
+      maxPrice:
         newFilters.priceRange[1] < 2000 ? newFilters.priceRange[1] : null,
-      "discount_percentage[$notNull]": newFilters.hasDiscount ? "true" : "",
+      hasDiscount: newFilters.hasDiscount ? "true" : "",
     });
 
   const handlePageChange = (newPage: number) => {
@@ -144,6 +142,9 @@ const ProductsList = () => {
             { href: "/products", title: "Products" },
           ]}
         />
+        <div className="w-full min-h-10">
+          {hasActiveFilters && <ActiveFiltersDisplay filters={filters} />}
+        </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 my-4 lg:grid-cols-4 lg:gap-6 gap-4">
           <ProductsFilter
@@ -164,8 +165,6 @@ const ProductsList = () => {
                 <span>Filters</span>
               </Button>
             </div>
-
-            {hasActiveFilters && <ActiveFiltersDisplay filters={filters} />}
 
             {isLoading ? (
               <div className="flex justify-center items-center min-h-[300px]">
