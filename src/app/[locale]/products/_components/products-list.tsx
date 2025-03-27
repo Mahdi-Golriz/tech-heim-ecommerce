@@ -1,7 +1,6 @@
 "use client";
 
 import ProductCard from "@/components/new-products/product-cart";
-import useProducts from "@/hooks/products/useProducts";
 import React, { useMemo, useState } from "react";
 
 import { useRouter } from "@/i18n/routing";
@@ -12,6 +11,8 @@ import ProductsPagination from "./products-pagination";
 import ProductsFilter from "./products-filter";
 import { PiSlidersHorizontalLight } from "react-icons/pi";
 import ActiveFiltersDisplay from "./active-filters-display";
+import useFetch from "@/hooks/useFetch";
+import { Product } from "@/models/product-model";
 
 type UrlParams = {
   [key: string]: string | number | null | undefined | boolean;
@@ -22,12 +23,6 @@ export interface FilterValues {
   priceRange: [number, number];
   hasDiscount: boolean;
 }
-
-// const DEFAULT_FILTERS: FilterValues = {
-//   categories: [],
-//   priceRange: [0, 2000],
-//   hasDiscount: false,
-// };
 
 const ProductsList = () => {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
@@ -46,8 +41,6 @@ const ProductsList = () => {
     const minPrice = Number(searchParams.get("minPrice") || 0);
     const maxPrice = Number(searchParams.get("maxPrice") || 2000);
     const hasDiscount = searchParams.get("hasDiscount") === "true";
-
-    console.log(searchParams.get("categories")?.split(","));
 
     return {
       page,
@@ -98,8 +91,13 @@ const ProductsList = () => {
     return params;
   }, [page, sortBy, filters]);
 
-  const { products, totalPages, isLoading } = useProducts({
-    params: queryParams,
+  const {
+    data: products,
+    totalPages,
+    isLoading,
+  } = useFetch<Product[]>({
+    params: { populate: "*", ...queryParams },
+    path: "/api/products",
   });
 
   const handleFilterChange = (newFilters: FilterValues) =>
@@ -166,11 +164,13 @@ const ProductsList = () => {
               </Button>
             </div>
 
-            {isLoading ? (
+            {isLoading && (
               <div className="flex justify-center items-center min-h-[300px]">
                 <div className="animate-spin h-8 w-8 border-4 border-gray-300 rounded-full border-t-blue-600" />
               </div>
-            ) : products.length > 0 ? (
+            )}
+
+            {products && products.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {products.map((product) => (
                   <ProductCard key={product.id} {...product} hasCartButton />

@@ -1,16 +1,12 @@
 type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE";
 
-interface FetcherConfigBase {
+export interface FetcherConfig {
   path: string;
-  method: HTTPMethod;
+  method?: HTTPMethod;
   headers?: Record<string, string>;
   params?: Record<string, string>;
   token?: string;
-}
-
-interface FetcherConfigWithBody extends FetcherConfigBase {
-  method: "POST" | "PUT";
-  body: Record<string, unknown>;
+  body?: Record<string, unknown>;
 }
 
 interface FetcherErrorType extends Error {
@@ -18,8 +14,6 @@ interface FetcherErrorType extends Error {
   status: number;
   data?: unknown;
 }
-
-type FetcherConfig = FetcherConfigBase | FetcherConfigWithBody;
 
 function createFetcherError(
   message: string,

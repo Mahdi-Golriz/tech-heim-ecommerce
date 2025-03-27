@@ -9,11 +9,12 @@ import {
 } from "@/components/ui/accordion";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import useCategories from "@/hooks/categories/useCategories";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { FilterValues } from "./products-list";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import useFetch from "@/hooks/useFetch";
+import { Category } from "@/models/categories-model";
 
 interface ProductsFilterProps {
   isVisible: boolean;
@@ -30,7 +31,9 @@ const ProductsFilter = ({
   initialFilters,
   onFilterChange,
 }: ProductsFilterProps) => {
-  const { categories } = useCategories({});
+  const { data: categories } = useFetch<Category[]>({
+    path: "/api/categories",
+  });
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [filters, setFilters] = useState(initialFilters);
   const [minPrice, setMinPrice] = useState(initialFilters.priceRange[0]);
@@ -138,7 +141,7 @@ const ProductsFilter = ({
           <AccordionTrigger>Category</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-4">
-              {categories.map((category) => (
+              {categories?.map((category) => (
                 <div key={category.id} className="flex gap-4">
                   <Checkbox
                     id={category.title}

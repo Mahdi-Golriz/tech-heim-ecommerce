@@ -2,12 +2,15 @@
 
 import ProductCard from "./product-cart";
 import SectionHeader from "../section-header/section-header";
-import useProducts from "@/hooks/products/useProducts";
+
 import { Product } from "@/models/product-model";
+import useFetch from "@/hooks/useFetch";
 
 const NewProducts = () => {
-  const { products: newProducts }: { products: Product[] } = useProducts({
+  const { data: newProducts } = useFetch<Product[]>({
+    path: "/api/products",
     params: {
+      populate: "*",
       "filters[new_collection][$eq]": "true",
       "pagination[pageSize]": "4",
     },
@@ -18,7 +21,7 @@ const NewProducts = () => {
       <SectionHeader title="New Products" cta={{ text: "View all", url: "" }} />
       <div className="container mb-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {newProducts.map((item) => (
+          {newProducts?.map((item) => (
             <ProductCard {...item} key={item.id} />
           ))}
         </div>

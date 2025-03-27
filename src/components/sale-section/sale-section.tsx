@@ -12,16 +12,19 @@ import { NextButton, PrevButton } from "./sale-section-buttons";
 import { useTranslations } from "next-intl";
 import randomShape from "@/assets/sale-section/random-shape.png";
 import Image from "next/image";
-import useProducts from "@/hooks/products/useProducts";
-// import { getAllProducts } from "@/api/products";
+
+import useFetch from "@/hooks/useFetch";
+import { Product } from "@/models/product-model";
 
 const SaleSection = () => {
   const swiperRef = useRef<SwiperType | null>(null);
   const t = useTranslations("home.saleSection");
-  const { products: saleProducts } = useProducts({
+  const { data: saleProducts } = useFetch<Product[]>({
+    path: "/api/products",
     params: {
       "filters[on_sale][$eq]": "true",
       "pagination[pageSize]": "8",
+      populate: "*",
     },
   });
 
@@ -64,7 +67,7 @@ const SaleSection = () => {
               1280: { slidesPerView: 4.5, spaceBetween: 24 },
             }}
           >
-            {saleProducts.map((item) => (
+            {saleProducts?.map((item) => (
               <SwiperSlide key={item.id} className=" bg-white rounded">
                 <SaleCard {...item} />
               </SwiperSlide>
