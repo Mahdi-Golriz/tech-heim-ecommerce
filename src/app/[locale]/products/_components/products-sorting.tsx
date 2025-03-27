@@ -17,10 +17,11 @@ const ProductsSorting = ({ sortBy, onSortChange }: ProductSortingProps) => {
       <div>
         <Select value={sortBy} onValueChange={onSortChange}>
           <SelectTrigger className="w-[180px] border-none shadow-custom">
-            <SelectValue placeholder="Sort by" />
+            <SelectValue placeholder="Default Sort" />
           </SelectTrigger>
 
           <SelectContent className="bg-white">
+            <SelectItem value="default">Default Sort</SelectItem>
             <SelectItem value="price:asc">Price: ascending</SelectItem>
             <SelectItem value="price:desc">Price: descending </SelectItem>
             <SelectItem value="createdAt:desc">New Arrivals</SelectItem>

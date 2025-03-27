@@ -117,7 +117,11 @@ const ProductsList = () => {
   };
 
   const handleSortChange = (field: string) => {
-    updateUrl({ sort: field, page: 1 });
+    if (field === "default") {
+      updateUrl({ page: "", sort: "" });
+    } else {
+      updateUrl({ sort: field, page: 1 });
+    }
   };
 
   const toggleFilter = () => {
