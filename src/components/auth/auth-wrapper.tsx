@@ -1,0 +1,121 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+
+import { ReactNode, useEffect, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { PiArrowLeftLight } from "react-icons/pi";
+import { useRouter } from "@/i18n/routing";
+import Button from "../ui/button";
+
+interface AuthWrapperProps {
+  children: ReactNode;
+}
+
+const AuthWrapper = ({ children }: AuthWrapperProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const isSignup = pathname.includes("signup");
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  // Create a state to control the tabs
+  const [activeTab, setActiveTab] = useState(isSignup ? "signup" : "signin");
+
+  // Update the active tab when the pathname changes
+  useEffect(() => {
+    setActiveTab(isSignup ? "signup" : "signin");
+  }, [isSignup]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleClose = () => {
+    router.back();
+  };
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    router.replace(`/${value}`);
+  };
+
+  // Handle the switch between signin and signup
+  const handleSwitchTab = () => {
+    const newTab = isSignup ? "signin" : "signup";
+    handleTabChange(newTab);
+  };
+
+  const tabContent = (
+    <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+      <TabsList className="grid w-full grid-cols-2 ">
+        <TabsTrigger value="signin">Log in</TabsTrigger>
+        <TabsTrigger value="signup">Create account</TabsTrigger>
+      </TabsList>
+      <h3 className="text-xl font-medium mt-10 mb-6">
+        {isSignup ? "Create your account" : "Log in to Tech Heim"}
+      </h3>
+      <TabsContent value="signin" className="mt-4">
+        {pathname.includes("signin") && children}
+      </TabsContent>
+      <TabsContent value="signup" className="mt-4">
+        {pathname.includes("signup") && children}
+      </TabsContent>
+    </Tabs>
+  );
+
+  const changeTabButton = (
+    <div className="mb-6">
+      <span className="text-gray-500">
+        {isSignup ? "Already have an account ?" : "Don’t have an account ?"}
+      </span>
+      <Button variant="link" onClick={handleSwitchTab}>
+        {isSignup ? "Sign Up" : "Sign In"}
+      </Button>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <div className="fixed inset-0 z-50 bg-white flex flex-col text-center px-6 overflow-y-auto">
+        <h2 className="text-2xl font-medium text-primary mt-14 mb-6">
+          Tech Heim
+        </h2>
+        <Button
+          onClick={handleClose}
+          variant="icon"
+          className="absolute top-4 left-4 p-0 size-fit"
+          aria-label="Close"
+        >
+          <PiArrowLeftLight className="w-6 h-6" />
+        </Button>
+
+        <div className="flex-1">{tabContent}</div>
+        <div>{changeTabButton}</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center text-center">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 relative min-h-[600px]">
+        <div className="p-6">{tabContent}</div>
+        <div>{changeTabButton}</div>
+        <Button
+          onClick={handleClose}
+          variant="icon"
+          className="absolute top-4 left-4 p-0 size-fit"
+          aria-label="Close"
+        >
+          <PiArrowLeftLight className="w-6 h-6" />
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default AuthWrapper;
