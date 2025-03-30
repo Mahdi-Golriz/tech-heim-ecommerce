@@ -41,45 +41,48 @@ const SignInForm = () => {
   // const onSubmit = (values: z.infer<typeof SignInSchema>) => {
   //   // Do something with the form values.
   //   // ✅ This will be type-safe and validated.
+  //   registerUserAction(values);
   // };
 
   return (
     <Form {...form}>
-      <FormField
-        control={form.control}
-        name="email"
-        render={({ field }) => (
-          <FormItem className="mb-4">
-            <FormControl>
-              <InputIcon
-                {...field}
-                placeholder="E-mail"
-                startIcon={IoMailOutline}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="password"
-        render={({ field }) => (
-          <FormItem>
-            <FormControl>
-              <InputIcon
-                {...field}
-                placeholder="Password"
-                startIcon={GoKey}
-                type="password"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <form>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem className="mb-4">
+              <FormControl>
+                <InputIcon
+                  {...field}
+                  placeholder="E-mail"
+                  startIcon={IoMailOutline}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <InputIcon
+                  {...field}
+                  placeholder="Password"
+                  startIcon={GoKey}
+                  type="password"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <Button className="my-6 w-full">Log In</Button>
+        <Button className="my-6 w-full">Log In</Button>
+      </form>
     </Form>
   );
 };

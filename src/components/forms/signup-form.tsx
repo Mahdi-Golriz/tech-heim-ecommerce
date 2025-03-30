@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import Button from "../ui/button";
 import {
   Form,
   FormControl,
@@ -16,6 +15,9 @@ import InputIcon from "../input-with-icon/icon-input";
 import { GoKey } from "react-icons/go";
 import { IoMailOutline } from "react-icons/io5";
 import { PiUserLight } from "react-icons/pi";
+import { registerUserAction } from "@/app/data/actions/auth-actions";
+import { startTransition, useActionState, useEffect, useState } from "react";
+import { SubmitButton } from "./submit-button";
 
 const SignUpSchema = z.object({
   username: z.string().min(3).max(20, {
@@ -29,75 +31,133 @@ const SignUpSchema = z.object({
   }),
 });
 
+// Initial state for server action
+const INITIAL_STATE = {
+  data: null,
+};
+
 const SignUpForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  // Server action state
+  const [formState, formAction] = useActionState(
+    registerUserAction,
+    INITIAL_STATE
+  );
   // 1. Define your form.
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
+      username: "",
       email: "",
       password: "",
     },
   });
 
-  // // 2. Define a submit handler.
-  // const onSubmit = (values: z.infer<typeof SignInSchema>) => {
-  //   // Do something with the form values.
-  //   // ✅ This will be type-safe and validated.
-  // };
+  // 2. Define a submit handler.
+  const onSubmit = (data: z.infer<typeof SignUpSchema>) => {
+    setIsSubmitting(true);
+    // This function calls the bound formAction with the form data
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    // Wrap the action call inside startTransition
+    startTransition(() => {
+      formAction(formData);
+    });
+  };
+
+  const { setError } = form;
+
+  useEffect(() => {
+    setIsSubmitting(false);
+
+    if (formState?.zodErrors) {
+      Object.entries(formState.zodErrors).forEach(([key, value]) => {
+        if (Array.isArray(value) && value.length > 0) {
+          setError(key as keyof z.infer<typeof SignUpSchema>, {
+            type: "server",
+            message: value[0],
+          });
+        }
+      });
+    }
+
+    // Handle Strapi Errors (display them in a general error message)
+    if (formState?.strapiErrors) {
+      setError("root", {
+        type: "server",
+        message: formState.strapiErrors,
+      });
+    }
+  }, [formState, setError]);
 
   return (
     <Form {...form}>
-      <FormField
-        control={form.control}
-        name="username"
-        render={({ field }) => (
-          <FormItem className="mb-4">
-            <FormControl>
-              <InputIcon
-                {...field}
-                placeholder="Full Name"
-                startIcon={PiUserLight}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="email"
-        render={({ field }) => (
-          <FormItem className="mb-4">
-            <FormControl>
-              <InputIcon
-                {...field}
-                placeholder="E-mail"
-                startIcon={IoMailOutline}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="password"
-        render={({ field }) => (
-          <FormItem>
-            <FormControl>
-              <InputIcon
-                {...field}
-                placeholder="Password"
-                startIcon={GoKey}
-                type="password"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem className="mb-4">
+              <FormControl>
+                <InputIcon
+                  {...field}
+                  placeholder="Full Name"
+                  startIcon={PiUserLight}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem className="mb-4">
+              <FormControl>
+                <InputIcon
+                  {...field}
+                  placeholder="E-mail"
+                  startIcon={IoMailOutline}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <InputIcon
+                  {...field}
+                  placeholder="Password"
+                  startIcon={GoKey}
+                  type="password"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <Button className="my-6 w-full">Create Account</Button>
+        <SubmitButton
+          text="Create Account"
+          loadingText="Loading"
+          className="w-full my-6"
+          loading={isSubmitting}
+        />
+        {formState?.strapiErrors && (
+          <p className="text-red-500 text-sm pb-4">
+            {formState.strapiErrors.message}
+          </p>
+        )}
+      </form>
     </Form>
   );
 };

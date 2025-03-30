@@ -16,24 +16,28 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const isSignup = pathname.includes("signup");
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   // Create a state to control the tabs
   const [activeTab, setActiveTab] = useState(isSignup ? "signup" : "signin");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsMobile(window.innerWidth < 768);
+
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, []);
 
   // Update the active tab when the pathname changes
   useEffect(() => {
     setActiveTab(isSignup ? "signup" : "signin");
   }, [isSignup]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const handleClose = () => {
     router.back();
@@ -78,6 +82,9 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
       </Button>
     </div>
   );
+
+  // Prevent rendering until `isMobile` is determined
+  if (isMobile === null) return null;
 
   if (isMobile) {
     return (
