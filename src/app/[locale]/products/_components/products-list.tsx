@@ -1,7 +1,7 @@
 "use client";
 
 import ProductCard from "@/components/new-products/product-cart";
-import React, { useMemo, useState } from "react";
+import { useState } from "react";
 
 import { useRouter } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
@@ -13,6 +13,7 @@ import { PiSlidersHorizontalLight } from "react-icons/pi";
 import ActiveFiltersDisplay from "./active-filters-display";
 import useFetch from "@/hooks/useFetch";
 import { Product } from "@/models/product-model";
+import useProductsSearchParams from "@/hooks/useProductsSearchParams";
 
 type UrlParams = {
   [key: string]: string | number | null | undefined | boolean;
@@ -24,72 +25,16 @@ export interface FilterValues {
   hasDiscount: boolean;
 }
 
+const breadcrumbLinks = [
+  { href: "/", title: "Home" },
+  { href: "/products", title: "Products" },
+];
+
 const ProductsList = () => {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
-
-  // Parse URL parameters
-  const getUrlParams = (): {
-    page: number;
-    sortBy: string;
-    filters: FilterValues;
-  } => {
-    const page = Number(searchParams.get("page") || 1);
-    const sortBy = searchParams.get("sort") || "";
-    const categories = searchParams.get("categories")?.split(",") || [];
-    const minPrice = Number(searchParams.get("minPrice") || 0);
-    const maxPrice = Number(searchParams.get("maxPrice") || 2000);
-    const hasDiscount = searchParams.get("hasDiscount") === "true";
-
-    return {
-      page,
-      sortBy,
-      filters: { categories, priceRange: [minPrice, maxPrice], hasDiscount },
-    };
-  };
-
-  const { page, sortBy, filters } = getUrlParams();
-
-  // Update URL parameters
-  const updateUrl = (params: UrlParams) => {
-    const urlParams = new URLSearchParams(searchParams.toString());
-
-    Object.entries(params).forEach(([key, value]) => {
-      if (value) {
-        urlParams.set(key, String(value));
-      } else {
-        urlParams.delete(key);
-      }
-    });
-
-    router.push(`?${urlParams.toString()}`, { scroll: false });
-  };
-
-  // API query parameters
-  const queryParams = useMemo(() => {
-    const params: { [key: string]: string } = {
-      "pagination[page]": `${page}`,
-      "pagination[pageSize]": "12",
-      ...(sortBy && { sort: sortBy }),
-      ...(filters.priceRange[0] > 0 && {
-        "filters[price][$gt]": String(filters.priceRange[0]),
-      }),
-      ...(filters.priceRange[1] < 2000 && {
-        "filters[price][$lt]": String(filters.priceRange[1]),
-      }),
-      ...(filters.hasDiscount && {
-        "filters[discount_percentage][$notNull]": "null",
-      }),
-    };
-
-    // Add each category as filters[categories][index]
-    filters.categories.forEach((categoryId, index) => {
-      params[`filters[categories][${index}]`] = categoryId;
-    });
-
-    return params;
-  }, [page, sortBy, filters]);
+  const { page, sortBy, filters, queryParams } = useProductsSearchParams();
 
   const {
     data: products,
@@ -109,11 +54,26 @@ const ProductsList = () => {
       minPrice: newFilters.priceRange[0] > 0 ? newFilters.priceRange[0] : null,
       maxPrice:
         newFilters.priceRange[1] < 2000 ? newFilters.priceRange[1] : null,
-      hasDiscount: newFilters.hasDiscount ? "true" : "",
+      hasDiscount: newFilters.hasDiscount ? true : "",
     });
 
   const handlePageChange = (newPage: number) => {
     updateUrl({ page: newPage });
+  };
+
+  // Update URL parameters
+  const updateUrl = (params: UrlParams) => {
+    const urlParams = new URLSearchParams(searchParams.toString());
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (value) {
+        urlParams.set(key, String(value));
+      } else {
+        urlParams.delete(key);
+      }
+    });
+
+    router.push(`?${urlParams.toString()}`, { scroll: false });
   };
 
   const handleSortChange = (field: string) => {
@@ -138,12 +98,7 @@ const ProductsList = () => {
   return (
     <>
       <div className="container">
-        <CustomBreadcrumb
-          links={[
-            { href: "/", title: "Home" },
-            { href: "/products", title: "Products" },
-          ]}
-        />
+        <CustomBreadcrumb links={breadcrumbLinks} />
         <div className="w-full min-h-10">
           {hasActiveFilters && <ActiveFiltersDisplay filters={filters} />}
         </div>

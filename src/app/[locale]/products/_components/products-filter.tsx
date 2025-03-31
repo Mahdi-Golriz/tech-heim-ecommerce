@@ -102,7 +102,6 @@ const ProductsFilter = ({
         ? [...filters.categories, categoryId]
         : filters.categories.filter((id) => id !== categoryId),
     });
-    console.log(filters.categories);
   };
 
   const resetFilters = () => {

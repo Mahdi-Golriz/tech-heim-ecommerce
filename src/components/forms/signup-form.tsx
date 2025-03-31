@@ -18,6 +18,7 @@ import { PiUserLight } from "react-icons/pi";
 import { registerUserAction } from "@/app/data/actions/auth-actions";
 import { startTransition, useActionState, useEffect, useState } from "react";
 import { SubmitButton } from "./submit-button";
+import { useRouter } from "@/i18n/routing";
 
 const SignUpSchema = z.object({
   username: z.string().min(3).max(20, {
@@ -33,11 +34,16 @@ const SignUpSchema = z.object({
 
 // Initial state for server action
 const INITIAL_STATE = {
+  zodErrors: null,
+  strapiErrors: null,
   data: null,
+  message: null,
 };
 
 const SignUpForm = () => {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   // Server action state
   const [formState, formAction] = useActionState(
     registerUserAction,
@@ -72,6 +78,16 @@ const SignUpForm = () => {
 
   useEffect(() => {
     setIsSubmitting(false);
+
+    // Handle success case
+    if (formState?.data && !formState.zodErrors && !formState.strapiErrors) {
+      // Reset form fields on success
+      form.reset();
+      // Show success message
+      setSuccessMessage("Account created successfully!");
+
+      router.push("/signin");
+    }
 
     if (formState?.zodErrors) {
       Object.entries(formState.zodErrors).forEach(([key, value]) => {
@@ -152,6 +168,10 @@ const SignUpForm = () => {
           className="w-full my-6"
           loading={isSubmitting}
         />
+        {successMessage && (
+          <p className="text-green-500 text-sm pb-4">{successMessage}</p>
+        )}
+
         {formState?.strapiErrors && (
           <p className="text-red-500 text-sm pb-4">
             {formState.strapiErrors.message}
