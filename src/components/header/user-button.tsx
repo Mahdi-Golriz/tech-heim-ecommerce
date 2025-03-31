@@ -15,14 +15,19 @@ const UserButton = () => {
     setActiveTab(() => (activeTab === "signin" ? "signup" : "signin"));
   };
 
+  const toggleShowModal = () => {
+    setIsOpen((prev) => !prev);
+    document.body.classList.toggle("overflow-hidden");
+  };
+
   return (
     <>
-      <Button variant="icon" size="icon" onClick={() => setIsOpen(true)}>
+      <Button variant="icon" size="icon" onClick={toggleShowModal}>
         <PiUserLight />
       </Button>
       {isOpen && (
         <AuthWrapper
-          onClose={() => setIsOpen(false)}
+          onClose={toggleShowModal}
           activeTab={activeTab}
           handleChangeTabs={handleChangeTabs}
         >
