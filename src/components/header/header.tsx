@@ -1,13 +1,10 @@
 import { Link } from "@/i18n/routing";
-import {
-  PiUserLight,
-  PiBasketLight,
-  PiMagnifyingGlassLight,
-} from "react-icons/pi";
+import { PiBasketLight, PiMagnifyingGlassLight } from "react-icons/pi";
 import { Input, Button, Logo, BurgerMenuButton } from "@/components";
 import Navigation from "./navigation";
 import { useTranslations } from "next-intl";
 import SwitchLang from "./switch-lang";
+import UserButton from "./user-button";
 
 const Header = () => {
   const t = useTranslations("home.header");
@@ -29,9 +26,7 @@ const Header = () => {
             <Button variant="icon" size="icon" className="hidden sm:block">
               <PiMagnifyingGlassLight />
             </Button>
-            <Button variant="icon" size="icon">
-              <PiUserLight />
-            </Button>
+            <UserButton />
             <Button variant="icon" size="icon">
               <PiBasketLight />
             </Button>

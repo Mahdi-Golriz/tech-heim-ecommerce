@@ -1,25 +1,29 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-
 import { ReactNode, useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { PiArrowLeftLight } from "react-icons/pi";
-import { useRouter } from "@/i18n/routing";
 import Button from "../ui/button";
+import GoogleProviderButton from "./google-provider-button";
+
+export type AuthTabs = "signin" | "signup";
 
 interface AuthWrapperProps {
   children: ReactNode;
+  onClose: VoidFunction;
+  activeTab: AuthTabs;
+  handleChangeTabs: VoidFunction;
 }
 
-const AuthWrapper = ({ children }: AuthWrapperProps) => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const isSignup = pathname.includes("signup");
+const AuthWrapper = ({
+  children,
+  onClose,
+  activeTab,
+  handleChangeTabs,
+}: AuthWrapperProps) => {
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
-  // Create a state to control the tabs
-  const [activeTab, setActiveTab] = useState(isSignup ? "signup" : "signin");
+  const isSignup = activeTab === "signup";
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -34,28 +38,8 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
     }
   }, []);
 
-  // Update the active tab when the pathname changes
-  useEffect(() => {
-    setActiveTab(isSignup ? "signup" : "signin");
-  }, [isSignup]);
-
-  const handleClose = () => {
-    router.back();
-  };
-
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-    router.replace(`/${value}`);
-  };
-
-  // Handle the switch between signin and signup
-  const handleSwitchTab = () => {
-    const newTab = isSignup ? "signin" : "signup";
-    handleTabChange(newTab);
-  };
-
   const tabContent = (
-    <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+    <Tabs value={activeTab} onValueChange={handleChangeTabs} className="w-full">
       <TabsList className="grid w-full grid-cols-2 ">
         <TabsTrigger value="signin">Log in</TabsTrigger>
         <TabsTrigger value="signup">Create account</TabsTrigger>
@@ -64,10 +48,10 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
         {isSignup ? "Create your account" : "Log in to Tech Heim"}
       </h3>
       <TabsContent value="signin" className="mt-4">
-        {pathname.includes("signin") && children}
+        {!isSignup && children}
       </TabsContent>
       <TabsContent value="signup" className="mt-4">
-        {pathname.includes("signup") && children}
+        {isSignup && children}
       </TabsContent>
     </Tabs>
   );
@@ -77,7 +61,7 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
       <span className="text-gray-500">
         {isSignup ? "Already have an account ?" : "Don’t have an account ?"}
       </span>
-      <Button variant="link" onClick={handleSwitchTab}>
+      <Button variant="link" onClick={handleChangeTabs}>
         {isSignup ? "Sign Up" : "Sign In"}
       </Button>
     </div>
@@ -93,7 +77,7 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
           Tech Heim
         </h2>
         <Button
-          onClick={handleClose}
+          onClick={onClose}
           variant="icon"
           className="absolute top-4 left-4 p-0 size-fit"
           aria-label="Close"
@@ -102,6 +86,12 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
         </Button>
 
         <div className="flex-1">{tabContent}</div>
+        <div className="flex items-center">
+          <div className="flex-grow border-t border-gray-400"></div>
+          <span className="px-4 text-gray-600">Or Log In with</span>
+          <div className="flex-grow border-t border-gray-400"></div>
+        </div>
+        <GoogleProviderButton />
         <div>{changeTabButton}</div>
       </div>
     );
@@ -111,9 +101,17 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center text-center">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 relative min-h-[600px]">
         <div className="p-6">{tabContent}</div>
+        <div className="flex items-center px-6">
+          <div className="flex-grow border-t border-gray-400"></div>
+          <span className="px-4 text-gray-600">Or Log In with</span>
+          <div className="flex-grow border-t border-gray-400"></div>
+        </div>
+        <div className="px-6">
+          <GoogleProviderButton />
+        </div>
         <div>{changeTabButton}</div>
         <Button
-          onClick={handleClose}
+          onClick={onClose}
           variant="icon"
           className="absolute top-4 left-4 p-0 size-fit"
           aria-label="Close"
