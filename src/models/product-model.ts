@@ -15,3 +15,7 @@ export interface Product {
   rate?: number;
   hasCartButton: boolean;
 }
+
+export interface ProductResponse {
+  data: Product[];
+}

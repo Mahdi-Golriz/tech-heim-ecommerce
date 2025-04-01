@@ -12,7 +12,7 @@ import ProductsFilter from "./products-filter";
 import { PiSlidersHorizontalLight } from "react-icons/pi";
 import ActiveFiltersDisplay from "./active-filters-display";
 import useFetch from "@/hooks/useFetch";
-import { Product } from "@/models/product-model";
+import { ProductResponse } from "@/models/product-model";
 import useProductsSearchParams from "@/hooks/useProductsSearchParams";
 
 type UrlParams = {
@@ -40,7 +40,7 @@ const ProductsList = () => {
     data: products,
     totalPages,
     isLoading,
-  } = useFetch<Product[]>({
+  } = useFetch<ProductResponse>({
     params: { populate: "*", ...queryParams },
     path: "/api/products",
   });
@@ -129,9 +129,9 @@ const ProductsList = () => {
               </div>
             )}
 
-            {products && products.length > 0 ? (
+            {products && products.data.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {products.map((product) => (
+                {products?.data?.map((product) => (
                   <ProductCard key={product.id} {...product} hasCartButton />
                 ))}
               </div>

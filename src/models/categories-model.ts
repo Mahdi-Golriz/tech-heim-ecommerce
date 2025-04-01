@@ -6,3 +6,7 @@ export interface Category {
   description: string;
   thumbnail: { url: string };
 }
+
+export interface CategoryResponse {
+  data: Category[];
+}

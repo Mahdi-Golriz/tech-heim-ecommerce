@@ -41,7 +41,6 @@ const INITIAL_STATE = {
 };
 
 const SignUpForm = () => {
-  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   // Server action state
@@ -85,8 +84,6 @@ const SignUpForm = () => {
       form.reset();
       // Show success message
       setSuccessMessage("Account created successfully!");
-
-      router.push("/signin");
     }
 
     if (formState?.zodErrors) {

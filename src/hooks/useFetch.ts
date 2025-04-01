@@ -12,18 +12,6 @@ interface UseFetchParams<T> extends FetcherConfig {
   dependencies?: any[];
 }
 
-interface ResponseWithPagination<T> {
-  data: T;
-  meta: {
-    pagination?: {
-      page: number;
-      pageSize: number;
-      pageCount: number;
-      total: number;
-    };
-  };
-}
-
 function useFetch<T>({
   path,
   method = "GET",
@@ -53,11 +41,10 @@ function useFetch<T>({
           ...(["POST", "PUT"].includes(method) && body ? { body } : {}),
         };
 
-        const response = await fetcher<ResponseWithPagination<T>>(
-          fetcherParams
-        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const response = await fetcher<any>(fetcherParams);
 
-        setData(response.data);
+        setData(response);
 
         // Set pagination if available
         if (response.meta?.pagination) {

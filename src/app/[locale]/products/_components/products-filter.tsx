@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { FilterValues } from "./products-list";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import useFetch from "@/hooks/useFetch";
-import { Category } from "@/models/categories-model";
+import { CategoryResponse } from "@/models/categories-model";
 
 interface ProductsFilterProps {
   isVisible: boolean;
@@ -31,7 +31,7 @@ const ProductsFilter = ({
   initialFilters,
   onFilterChange,
 }: ProductsFilterProps) => {
-  const { data: categories } = useFetch<Category[]>({
+  const { data: categories } = useFetch<CategoryResponse>({
     path: "/api/categories",
   });
   const isMobile = useMediaQuery("(max-width: 640px)");
@@ -140,7 +140,7 @@ const ProductsFilter = ({
           <AccordionTrigger>Category</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-4">
-              {categories?.map((category) => (
+              {categories?.data?.map((category) => (
                 <div key={category.id} className="flex gap-4">
                   <Checkbox
                     id={category.title}
@@ -202,11 +202,10 @@ const ProductsFilter = ({
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-      {isMobile && (
-        <Button className="block my-5 mx-auto" onClick={applyFilters}>
-          Apply Filters
-        </Button>
-      )}
+
+      <Button className="block my-5 mx-auto sm:hidden" onClick={applyFilters}>
+        Apply Filters
+      </Button>
     </div>
   );
 };

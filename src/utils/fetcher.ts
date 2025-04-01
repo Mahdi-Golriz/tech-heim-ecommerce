@@ -6,7 +6,8 @@ export interface FetcherConfig {
   headers?: Record<string, string>;
   params?: Record<string, string>;
   token?: string;
-  body?: Record<string, unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  body?: Record<string, any>;
 }
 
 interface FetcherErrorType extends Error {
