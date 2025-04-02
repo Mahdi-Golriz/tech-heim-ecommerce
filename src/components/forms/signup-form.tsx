@@ -3,6 +3,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { TiTick } from "react-icons/ti";
+import { IoClose } from "react-icons/io5";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 import {
   Form,
@@ -15,10 +24,12 @@ import InputIcon from "../input-with-icon/icon-input";
 import { GoKey } from "react-icons/go";
 import { IoMailOutline } from "react-icons/io5";
 import { PiUserLight } from "react-icons/pi";
-import { registerUserAction } from "@/app/data/actions/auth-actions";
-import { startTransition, useActionState, useEffect, useState } from "react";
+// import { registerUserAction } from "@/app/data/actions/auth-actions";
+// import { startTransition, useActionState, useEffect, useState } from "react";
 import { SubmitButton } from "./submit-button";
-import { useRouter } from "@/i18n/routing";
+import useSignup from "@/hooks/useSignup";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 const SignUpSchema = z.object({
   username: z.string().min(3).max(20, {
@@ -32,23 +43,16 @@ const SignUpSchema = z.object({
   }),
 });
 
-// Initial state for server action
-const INITIAL_STATE = {
-  zodErrors: null,
-  strapiErrors: null,
-  data: null,
-  message: null,
-};
+interface SignUpFormProps {
+  onClose: VoidFunction;
+}
 
-const SignUpForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const SignUpForm = ({ onClose }: SignUpFormProps) => {
   const [successMessage, setSuccessMessage] = useState("");
-  // Server action state
-  const [formState, formAction] = useActionState(
-    registerUserAction,
-    INITIAL_STATE
-  );
-  // 1. Define your form.
+  const [errorMessage, setErrorMessage] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const { signup, isSubmitting, data, error, strapiError } = useSignup();
+
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
@@ -58,124 +62,128 @@ const SignUpForm = () => {
     },
   });
 
-  // 2. Define a submit handler.
   const onSubmit = (data: z.infer<typeof SignUpSchema>) => {
-    setIsSubmitting(true);
-    // This function calls the bound formAction with the form data
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
-    // Wrap the action call inside startTransition
-    startTransition(() => {
-      formAction(formData);
-    });
+    signup(data);
   };
 
-  const { setError } = form;
+  // const { setError } = form;
 
   useEffect(() => {
-    setIsSubmitting(false);
-
-    // Handle success case
-    if (formState?.data && !formState.zodErrors && !formState.strapiErrors) {
-      // Reset form fields on success
+    if (data?.user && !strapiError && !error) {
       form.reset();
-      // Show success message
-      setSuccessMessage("Account created successfully!");
+      setSuccessMessage(
+        "Congratulation your account has been successfully created."
+      );
+      setOpenModal(true);
+      setTimeout(() => {
+        setOpenModal(false);
+        onClose();
+        setSuccessMessage("");
+      }, 1000);
     }
 
-    if (formState?.zodErrors) {
-      Object.entries(formState.zodErrors).forEach(([key, value]) => {
-        if (Array.isArray(value) && value.length > 0) {
-          setError(key as keyof z.infer<typeof SignUpSchema>, {
-            type: "server",
-            message: value[0],
-          });
-        }
-      });
+    if (error) {
+      setErrorMessage(error.message);
+      setOpenModal(true);
+      setTimeout(() => {
+        setOpenModal(false);
+        setErrorMessage("");
+      }, 1500);
     }
-
-    // Handle Strapi Errors (display them in a general error message)
-    if (formState?.strapiErrors) {
-      setError("root", {
-        type: "server",
-        message: formState.strapiErrors,
-      });
-    }
-  }, [formState, setError]);
+  }, [data, strapiError, error, form]);
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem className="mb-4">
-              <FormControl>
-                <InputIcon
-                  {...field}
-                  placeholder="Full Name"
-                  startIcon={PiUserLight}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem className="mb-4">
-              <FormControl>
-                <InputIcon
-                  {...field}
-                  placeholder="E-mail"
-                  startIcon={IoMailOutline}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <InputIcon
-                  {...field}
-                  placeholder="Password"
-                  startIcon={GoKey}
-                  type="password"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem className="mb-4">
+                <FormControl>
+                  <InputIcon
+                    {...field}
+                    placeholder="Full Name"
+                    startIcon={PiUserLight}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="mb-4">
+                <FormControl>
+                  <InputIcon
+                    {...field}
+                    placeholder="E-mail"
+                    startIcon={IoMailOutline}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <InputIcon
+                    {...field}
+                    placeholder="Password"
+                    startIcon={GoKey}
+                    type="password"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <SubmitButton
-          text="Create Account"
-          loadingText="Loading"
-          className="w-full my-6"
-          loading={isSubmitting}
-        />
-        {successMessage && (
-          <p className="text-green-500 text-sm pb-4">{successMessage}</p>
-        )}
-
-        {formState?.strapiErrors && (
-          <p className="text-red-500 text-sm pb-4">
-            {formState.strapiErrors.message}
+          <SubmitButton
+            text="Create Account"
+            loadingText="Loading"
+            className="w-full my-6"
+            loading={isSubmitting}
+          />
+          {strapiError && (
+            <p className="text-red-500 text-sm pb-4">{strapiError}</p>
+          )}
+        </form>
+      </Form>
+      <Dialog open={openModal} onOpenChange={setOpenModal}>
+        <DialogContent className="w-[442px]">
+          <div className="size-28 shadow-custom rounded-full bg-white mx-auto flex items-center justify-center">
+            {successMessage ? (
+              <TiTick color="darkGreen" size={50} />
+            ) : (
+              <IoClose color="red" size={50} />
+            )}
+          </div>
+          <DialogHeader>
+            <DialogTitle
+              className={cn(
+                "text-center  text-2xl font-medium",
+                successMessage ? "text-success" : "text-error"
+              )}
+            >
+              {successMessage ? "Well done" : "Oops."}
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-center text-gray-500">
+            {successMessage
+              ? "Congratulation your account has been successfully created."
+              : errorMessage}
           </p>
-        )}
-      </form>
-    </Form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

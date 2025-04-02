@@ -31,7 +31,11 @@ const UserButton = () => {
           activeTab={activeTab}
           handleChangeTabs={handleChangeTabs}
         >
-          {activeTab === "signin" ? <SignInForm /> : <SignUpForm />}
+          {activeTab === "signin" ? (
+            <SignInForm />
+          ) : (
+            <SignUpForm onClose={toggleShowModal} />
+          )}
         </AuthWrapper>
       )}
     </>
