@@ -1,62 +1,70 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import useFetch from "./useFetch";
-import { setCookie } from "cookies-next";
 
-type StrapiError = { status: number; name: string; message: string };
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { setStrapiCookie } from "@/utils/cookie";
 
 interface StrapiResponse {
-  error?: StrapiError;
-  data?: any;
-  user?: any;
-  jwt?: string;
+  user: any;
+  jwt: string;
 }
 
-interface RegisterUserProps {
-  username: string;
-  password: string;
-  email: string;
+export const SignUpSchema = z.object({
+  username: z.string().min(3).max(20, {
+    message: "Username must be between 3 and 20 characters",
+  }),
+  email: z.string().email({
+    message: "Please enter a valid email address",
+  }),
+  password: z.string().min(6).max(100, {
+    message: "Password must be between 6 and 100 characters",
+  }),
+});
+
+interface SignUpProps {
+  onClose: VoidFunction;
 }
 
-const cookieConfig = {
-  maxAge: 60 * 60 * 24 * 7, // 1 week
-  path: "/",
-  domain:
-    typeof window !== "undefined" ? window.location.hostname : "localhost",
-  // httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-};
+const useSignup = ({ onClose }: SignUpProps) => {
+  const [openModal, setOpenModal] = useState(false);
 
-const useSignup = () => {
-  const [formData, setFormDta] = useState<RegisterUserProps | null>(null);
-  const [strapiError, setStrapiError] = useState("");
+  const form = useForm<z.infer<typeof SignUpSchema>>({
+    resolver: zodResolver(SignUpSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+    },
+  });
+
+  const handleSuccessSignUp = (response: StrapiResponse) => {
+    form.reset();
+    setOpenModal(true);
+    setTimeout(() => {
+      setOpenModal(false);
+      onClose();
+    }, 1000);
+
+    setStrapiCookie(response?.jwt);
+  };
 
   const {
     data,
     isLoading: isSubmitting,
     error,
-    refetch,
+    fetchData,
   } = useFetch<StrapiResponse>({
     path: "/api/auth/local/register",
     method: "POST",
-    body: formData,
     autoFetch: false,
+    onSuccess: handleSuccessSignUp,
   });
 
-  if (data?.error) {
-    setStrapiError(data.error.message);
-  }
-
-  if (data?.jwt) {
-    // Use cookies-next package for client-side cookie handling
-    setCookie("jwt", data.jwt, cookieConfig);
-    console.log(data.jwt);
-  }
-
-  const signup = (userData: RegisterUserProps) => {
-    setFormDta(userData);
-    setStrapiError("");
-    refetch();
+  const signup = (userData: z.infer<typeof SignUpSchema>) => {
+    fetchData({ body: userData });
   };
 
   return {
@@ -64,7 +72,9 @@ const useSignup = () => {
     isSubmitting,
     data,
     error,
-    strapiError,
+    form,
+    openModal,
+    setOpenModal,
   };
 };
 

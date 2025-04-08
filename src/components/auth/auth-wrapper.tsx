@@ -47,7 +47,7 @@ const AuthWrapper = ({
         {isSignup ? "Already have an account ?" : "Don’t have an account ?"}
       </span>
       <Button variant="link" onClick={handleChangeTabs}>
-        {isSignup ? "Sign Up" : "Sign In"}
+        {isSignup ? "Sign In" : "Sign Up"}
       </Button>
     </div>
   );
