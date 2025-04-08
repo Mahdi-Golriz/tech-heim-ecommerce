@@ -1,13 +1,14 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { TiTick } from "react-icons/ti";
 
-import { IoMailOutline } from "react-icons/io5";
-import { GoKey } from "react-icons/go";
-
-import Button from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 import {
   Form,
@@ -17,73 +18,93 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import InputIcon from "../input-with-icon/icon-input";
+import { GoKey } from "react-icons/go";
+import { PiUserLight } from "react-icons/pi";
+import { SubmitButton } from "./submit-button";
+import useSignin, { SignInSchema } from "@/hooks/useSignin";
 
-const SignInSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address",
-  }),
-  password: z.string().min(6).max(100, {
-    message: "Password must be between 6 and 100 characters",
-  }),
-});
+interface SignInFormProps {
+  onClose: VoidFunction;
+}
 
-const SignInForm = () => {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof SignInSchema>>({
-    resolver: zodResolver(SignInSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+const SignInForm = ({ onClose }: SignInFormProps) => {
+  const { signin, isLoading, error, form, openModal, setOpenModal } = useSignin(
+    {
+      onClose,
+    }
+  );
 
-  // // 2. Define a submit handler.
-  // const onSubmit = (values: z.infer<typeof SignInSchema>) => {
-  //   // Do something with the form values.
-  //   // ✅ This will be type-safe and validated.
-  //   registerUserAction(values);
-  // };
+  const onSubmit = (data: z.infer<typeof SignInSchema>) => {
+    signin(data);
+  };
 
   return (
-    <Form {...form}>
-      <form>
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem className="mb-4">
-              <FormControl>
-                <InputIcon
-                  {...field}
-                  placeholder="E-mail"
-                  startIcon={IoMailOutline}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <InputIcon
-                  {...field}
-                  placeholder="Password"
-                  startIcon={GoKey}
-                  type="password"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="identifier"
+            render={({ field }) => (
+              <FormItem className="mb-4">
+                <FormControl>
+                  <InputIcon
+                    {...field}
+                    placeholder="Email or Username"
+                    startIcon={PiUserLight}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <InputIcon
+                    {...field}
+                    placeholder="Password"
+                    startIcon={GoKey}
+                    type="password"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Button className="my-6 w-full">Log In</Button>
-      </form>
-    </Form>
+          <SubmitButton
+            text="Sign In"
+            loadingText="Loading"
+            className="w-full my-6"
+            loading={isLoading}
+          />
+          {error ? (
+            <p className="text-red-500 text-sm pb-4">{error.message}</p>
+          ) : (
+            <p className="h-9 pb-4"></p>
+          )}
+        </form>
+      </Form>
+      <Dialog open={openModal} onOpenChange={setOpenModal}>
+        <DialogContent className="w-[442px]">
+          <div className="size-28 shadow-custom rounded-full bg-white mx-auto flex items-center justify-center">
+            <TiTick color="darkGreen" size={50} />
+          </div>
+          <DialogHeader>
+            <DialogTitle className="text-center  text-2xl font-medium text-success">
+              Well done
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-center text-gray-500">
+            You has been successfully logged in.
+          </p>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

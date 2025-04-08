@@ -6,8 +6,11 @@ import AuthWrapper, { AuthTabs } from "../auth/auth-wrapper";
 import SignInForm from "../forms/signin-form";
 import { useState } from "react";
 import SignUpForm from "../forms/signup-form";
+import { getStrapiCookie } from "@/utils/cookie";
 
 const UserButton = () => {
+  const authToken = getStrapiCookie();
+  console.log(authToken);
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<AuthTabs>("signin");
 
@@ -20,26 +23,27 @@ const UserButton = () => {
     document.body.classList.toggle("overflow-hidden");
   };
 
-  return (
-    <>
-      <Button variant="icon" size="icon" onClick={toggleShowModal}>
-        <PiUserLight />
-      </Button>
-      {isOpen && (
-        <AuthWrapper
-          onClose={toggleShowModal}
-          activeTab={activeTab}
-          handleChangeTabs={handleChangeTabs}
-        >
-          {activeTab === "signin" ? (
-            <SignInForm />
-          ) : (
-            <SignUpForm onClose={toggleShowModal} />
-          )}
-        </AuthWrapper>
-      )}
-    </>
-  );
+  if (authToken)
+    return (
+      <>
+        <Button variant="icon" size="icon" onClick={toggleShowModal}>
+          <PiUserLight />
+        </Button>
+        {isOpen && (
+          <AuthWrapper
+            onClose={toggleShowModal}
+            activeTab={activeTab}
+            handleChangeTabs={handleChangeTabs}
+          >
+            {activeTab === "signin" ? (
+              <SignInForm onClose={toggleShowModal} />
+            ) : (
+              <SignUpForm onClose={toggleShowModal} />
+            )}
+          </AuthWrapper>
+        )}
+      </>
+    );
 };
 
 export default UserButton;
