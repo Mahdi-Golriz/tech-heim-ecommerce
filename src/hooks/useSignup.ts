@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { setStrapiCookie } from "@/utils/cookie";
+import { useUserStore } from "@/store/user-store";
 
 interface StrapiResponse {
   user: any;
@@ -30,6 +31,7 @@ interface SignUpProps {
 
 const useSignup = ({ onClose }: SignUpProps) => {
   const [openModal, setOpenModal] = useState(false);
+  const setUser = useUserStore((state) => state.setUser);
 
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
@@ -47,8 +49,9 @@ const useSignup = ({ onClose }: SignUpProps) => {
       setOpenModal(false);
       onClose();
     }, 1000);
-
+    console.log(response);
     setStrapiCookie(response?.jwt);
+    setUser(response?.user);
   };
 
   const {

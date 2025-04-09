@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { setStrapiCookie } from "@/utils/cookie";
+import { useUserStore } from "@/store/user-store";
 
 interface SignInProps {
   onClose: VoidFunction;
@@ -37,6 +38,8 @@ export const SignInSchema = z.object({
 const useSignin = ({ onClose }: SignInProps) => {
   const [openModal, setOpenModal] = useState(false);
 
+  const setUser = useUserStore((state) => state.setUser);
+
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
     defaultValues: {
@@ -53,6 +56,7 @@ const useSignin = ({ onClose }: SignInProps) => {
       onClose();
     }, 1000);
 
+    setUser(response.user);
     setStrapiCookie(response?.jwt);
   };
 
