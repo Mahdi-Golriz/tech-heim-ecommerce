@@ -4,8 +4,9 @@ import useFetch from "./useFetch";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { setStrapiCookie } from "@/utils/cookie";
+
 import { useUserStore } from "@/store/user-store";
+import { setCookie } from "@/utils/cookie";
 
 interface SignInProps {
   onClose: VoidFunction;
@@ -57,7 +58,7 @@ const useSignin = ({ onClose }: SignInProps) => {
     }, 1000);
 
     setUser(response.user);
-    setStrapiCookie(response?.jwt);
+    setCookie({ key: "jwt", value: response?.jwt });
   };
 
   const { data, error, fetchData, isLoading } = useFetch({

@@ -5,8 +5,9 @@ import useFetch from "./useFetch";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { setStrapiCookie } from "@/utils/cookie";
+
 import { useUserStore } from "@/store/user-store";
+import { setCookie } from "@/utils/cookie";
 
 interface StrapiResponse {
   user: any;
@@ -49,8 +50,7 @@ const useSignup = ({ onClose }: SignUpProps) => {
       setOpenModal(false);
       onClose();
     }, 1000);
-    console.log(response);
-    setStrapiCookie(response?.jwt);
+    setCookie({ key: "jwt", value: response?.jwt });
     setUser(response?.user);
   };
 

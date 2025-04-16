@@ -5,7 +5,7 @@ export interface FetcherConfig {
   method?: HTTPMethod;
   headers?: Record<string, string>;
   params?: Record<string, string>;
-  token?: string;
+  token?: string | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: Record<string, any> | null;
 }
