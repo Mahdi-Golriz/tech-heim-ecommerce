@@ -1,25 +1,42 @@
-import { getCookie, setCookie } from "cookies-next";
-import { deleteCookie } from "cookies-next/client";
+import Cookies from "universal-cookie";
+
+interface CookieConfig {
+  maxAge: number;
+  path: string;
+  domain?: string;
+  secure: boolean;
+}
+
+interface CookieParams {
+  key: string;
+  value?: string;
+  config?: Partial<CookieConfig>;
+}
 
 const cookieDomain =
   typeof window !== "undefined" ? window.location.hostname : undefined;
 
-const cookieConfig = {
+const defaultCookieConfig: CookieConfig = {
   maxAge: 60 * 60 * 24 * 7, // 1 week
   path: "/",
   ...(cookieDomain && { domain: cookieDomain }),
-  // httpOnly: true,
   secure: process.env.NODE_ENV === "production",
 };
 
-export const setStrapiCookie = (jwt: string) => {
-  setCookie("jwt", jwt, cookieConfig);
+const cookies = new Cookies(null, { path: "/" });
+
+export const setCookie = ({
+  key,
+  value,
+  config = defaultCookieConfig,
+}: CookieParams) => {
+  cookies.set(key, value, { ...defaultCookieConfig, ...config });
 };
 
-export const getStrapiCookie = () => {
-  return getCookie("jwt");
+export const getCookie = ({ key }: CookieParams) => {
+  return cookies.get(key);
 };
 
-export const deleteStrapiCookie = () => {
-  deleteCookie("jwt");
+export const removeCookie = ({ key }: CookieParams) => {
+  cookies.remove(key);
 };
