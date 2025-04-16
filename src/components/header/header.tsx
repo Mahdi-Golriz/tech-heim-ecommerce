@@ -21,7 +21,7 @@ const Header = () => {
               {t("title")}
             </Link>
           </Button>
-          <div className="flex items-center gap-2 h-24">
+          <div className="flex items-center gap-2 sm:h-24">
             <SwitchLang />
             <Button variant="icon" size="icon" className="hidden sm:block">
               <PiMagnifyingGlassLight />

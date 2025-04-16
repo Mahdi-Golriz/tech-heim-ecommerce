@@ -16,6 +16,19 @@ interface UseFetchParams<T> extends FetcherConfig {
   onError?: (error: string) => void;
 }
 
+interface StrapiResponse<T> {
+  data: T;
+
+  meta?: {
+    pagination: {
+      page: number;
+      pageCount: number;
+      pageSize: number;
+      total: number;
+    } | null;
+  };
+}
+
 function useFetch<T>({
   path,
   method = "GET",
@@ -33,7 +46,6 @@ function useFetch<T>({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<FetcherErrorType | null>(null);
   const [totalPages, setTotalPages] = useState(0);
-  // const [shouldFetch, setShouldFetch] = useState(autoFetch); // Control API execution
 
   const fetchData = async (overrideConfig?: Partial<FetcherConfig>) => {
     try {
@@ -52,10 +64,9 @@ function useFetch<T>({
         ...overrideConfig,
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const response = await fetcher<any>(fetcherParams);
+      const response = await fetcher<StrapiResponse<T>>(fetcherParams);
 
-      setData(response);
+      setData(response.data);
       onSuccess?.(response);
       // Set pagination if available
       if (response.meta?.pagination) {

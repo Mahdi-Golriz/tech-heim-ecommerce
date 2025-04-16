@@ -3,11 +3,11 @@
 import ProductCard from "./product-cart";
 import SectionHeader from "../section-header/section-header";
 
-import { ProductResponse } from "@/models/product-model";
+import { Product } from "@/models/product-model";
 import useFetch from "@/hooks/useFetch";
 
 const NewProducts = () => {
-  const { data: newProducts } = useFetch<ProductResponse>({
+  const { data: newProducts } = useFetch<Product[]>({
     path: "/api/products",
     params: {
       populate: "*",
@@ -21,7 +21,7 @@ const NewProducts = () => {
       <SectionHeader title="New Products" cta={{ text: "View all", url: "" }} />
       <div className="container mb-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {newProducts?.data?.map((item) => (
+          {newProducts?.map((item) => (
             <ProductCard {...item} key={item.id} />
           ))}
         </div>

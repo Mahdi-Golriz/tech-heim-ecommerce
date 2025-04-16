@@ -1,10 +1,14 @@
 interface ProductImage {
   url: string;
+  caption: string | null;
+  documentId: string;
+  name: string;
 }
 
 export interface Product {
   title: string;
   id: number;
+  documentId: string;
   description?: string;
   on_sale?: boolean;
   discount_percentage?: number;
@@ -13,9 +17,10 @@ export interface Product {
   colors?: string;
   new_collection?: boolean;
   rate?: number;
-  hasCartButton: boolean;
-}
-
-export interface ProductResponse {
-  data: Product[];
+  slug: string;
+  category?: {
+    title: string;
+    id: number;
+    documentId: string;
+  };
 }

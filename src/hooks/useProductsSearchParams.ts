@@ -49,7 +49,7 @@ const useProductsSearchParams = () => {
 
     // Add each category as filters[categories][index]
     filters.categories.forEach((categoryId, index) => {
-      params[`filters[categories][${index}]`] = categoryId;
+      params[`filters[category][${index}]`] = categoryId;
     });
 
     return params;

@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { FilterValues } from "./products-list";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import useFetch from "@/hooks/useFetch";
-import { CategoryResponse } from "@/models/categories-model";
+import { Category } from "@/models/categories-model";
 
 interface ProductsFilterProps {
   isVisible: boolean;
@@ -31,14 +31,18 @@ const ProductsFilter = ({
   initialFilters,
   onFilterChange,
 }: ProductsFilterProps) => {
-  const { data: categories } = useFetch<CategoryResponse>({
+  const { data: categories } = useFetch<Category[]>({
     path: "/api/categories",
   });
+
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [filters, setFilters] = useState(initialFilters);
   const [minPrice, setMinPrice] = useState(initialFilters.priceRange[0]);
   const [maxPrice, setMaxPrice] = useState(initialFilters.priceRange[1]);
   const [hasChanges, setHasChanges] = useState(false);
+
+  //TODO
+  // const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     setFilters(initialFilters);
@@ -120,7 +124,7 @@ const ProductsFilter = ({
   return (
     <div
       className={cn(
-        "fixed inset-0 w-full -left-full sm:left-0 sm:relative bg-white z-50 px-6 sm:px-0 overflow-y-auto transition-all",
+        "fixed inset-0 w-full -left-full sm:left-0 sm:relative bg-white z-40 px-6 sm:px-0 overflow-y-auto transition-all",
         { "left-0": isVisible }
       )}
     >
@@ -140,7 +144,7 @@ const ProductsFilter = ({
           <AccordionTrigger>Category</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-4">
-              {categories?.data?.map((category) => (
+              {categories?.map((category) => (
                 <div key={category.id} className="flex gap-4">
                   <Checkbox
                     id={category.title}

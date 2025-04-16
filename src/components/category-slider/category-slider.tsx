@@ -5,7 +5,7 @@ import "swiper/css";
 import { Autoplay } from "swiper/modules";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
-import { Category, CategoryResponse } from "@/models/categories-model";
+import { Category } from "@/models/categories-model";
 import useFetch from "@/hooks/useFetch";
 
 const CategoryCard = ({ title, thumbnail }: Category) => (
@@ -27,7 +27,7 @@ const CategoryCard = ({ title, thumbnail }: Category) => (
 );
 
 const CategorySlider = () => {
-  const { data: categories } = useFetch<CategoryResponse>({
+  const { data: categories } = useFetch<Category[]>({
     path: "/api/categories",
     params: {
       populate: "*",
@@ -47,7 +47,7 @@ const CategorySlider = () => {
           1280: { slidesPerView: 6, spaceBetween: 12 },
         }}
       >
-        {categories?.data?.map((category) => (
+        {categories?.map((category) => (
           <SwiperSlide key={category.id} className="p-2">
             <CategoryCard {...category} />
           </SwiperSlide>
