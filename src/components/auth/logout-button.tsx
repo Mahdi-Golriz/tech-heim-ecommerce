@@ -2,16 +2,15 @@
 
 import { LogOut } from "lucide-react";
 import Button from "../ui/button";
-import { deleteStrapiCookie } from "@/utils/cookie";
+import { removeCookie } from "@/utils/cookie";
+import { useUserStore } from "@/store/user-store";
 
-interface LogoutButtonProps {
-  handleAuthTokenState: VoidFunction;
-}
+const LogoutButton = () => {
+  const setUser = useUserStore((state) => state.setUser);
 
-const LogoutButton = ({ handleAuthTokenState }: LogoutButtonProps) => {
   const handleClick = () => {
-    deleteStrapiCookie();
-    handleAuthTokenState();
+    removeCookie({ key: "jwt" });
+    setUser(null);
   };
 
   return (
