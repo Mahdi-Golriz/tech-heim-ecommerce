@@ -31,7 +31,7 @@ const ProductDetails = () => {
   const breadcrumbLinks = [
     { href: "/", title: "Home" },
     { href: "/products", title: "Products" },
-    { href: "", title: product?.category?.title ?? "" },
+    { href: "", title: product?.title ?? "" },
   ];
 
   return (

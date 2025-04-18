@@ -25,11 +25,7 @@ const defaultCookieConfig: CookieConfig = {
 
 const cookies = new Cookies(null, { path: "/" });
 
-export const setCookie = ({
-  key,
-  value,
-  config = defaultCookieConfig,
-}: CookieParams) => {
+export const setCookie = ({ key, value, config }: CookieParams) => {
   cookies.set(key, value, { ...defaultCookieConfig, ...config });
 };
 

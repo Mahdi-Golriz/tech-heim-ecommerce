@@ -5,6 +5,7 @@ import fetcher, {
   createFetcherError,
   isFetcherError,
 } from "@/utils/fetcher";
+import { getCookie } from "@/utils/cookie";
 
 interface UseFetchParams<T> extends FetcherConfig {
   initialData?: T;
@@ -35,7 +36,6 @@ function useFetch<T>({
   params,
   body: initialBody,
   headers,
-  token,
   initialData,
   dependencies = [],
   autoFetch = true, // Default: fetch on mount
@@ -51,7 +51,7 @@ function useFetch<T>({
     try {
       setIsLoading(true);
       setError(null);
-
+      const token = await getCookie({ key: "jwt" });
       const fetcherParams = {
         path,
         method,
@@ -98,7 +98,6 @@ function useFetch<T>({
     JSON.stringify(params),
     JSON.stringify(initialBody),
     JSON.stringify(headers),
-    token,
     ...dependencies,
   ]);
 
