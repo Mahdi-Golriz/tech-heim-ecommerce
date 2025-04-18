@@ -1,11 +1,11 @@
-import ProductsList from "./_components/products-list";
+import Products from "@/components/PLP";
 
-const Page = () => {
+const PLPPage = () => {
   return (
     <div>
-      <ProductsList />
+      <Products />
     </div>
   );
 };
 
-export default Page;
+export default PLPPage;

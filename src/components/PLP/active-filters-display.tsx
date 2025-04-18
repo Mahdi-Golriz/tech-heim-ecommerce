@@ -1,4 +1,4 @@
-import { FilterValues } from "./products-list";
+import { FilterValues } from ".";
 
 interface ActiveFiltersDisplayProps {
   filters: FilterValues;

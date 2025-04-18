@@ -1,6 +1,6 @@
-import ProductDetails from "./_components/product-details";
+import ProductDetails from "@/components/PDP";
 
-const Page = () => {
+const PDPPage = () => {
   return (
     <div className="container">
       <ProductDetails />
@@ -8,4 +8,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default PDPPage;

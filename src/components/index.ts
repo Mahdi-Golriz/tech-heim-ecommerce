@@ -9,3 +9,5 @@ export { default as Overlay } from "@/components/ui/overlay";
 export { default as Footer } from "@/components/footer";
 export { default as CustomBreadcrumb } from "@/components/custom-breadcrumb/custom-breadcrumb";
 export { default as Checkbox } from "@/components/ui/checkbox";
+export { default as Products } from "@/components/PLP";
+export { default as ProductDetails } from "@/components/PDP";

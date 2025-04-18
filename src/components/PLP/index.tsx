@@ -30,7 +30,7 @@ const breadcrumbLinks = [
   { href: "/products", title: "Products" },
 ];
 
-const ProductsList = () => {
+const Products = () => {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -155,4 +155,4 @@ const ProductsList = () => {
   );
 };
 
-export default ProductsList;
+export default Products;

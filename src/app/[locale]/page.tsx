@@ -2,7 +2,7 @@ import { Hero, CategorySlider } from "@/components";
 import NewProducts from "@/components/new-products/new-products";
 import SaleSection from "@/components/sale-section/sale-section";
 
-const Page = () => {
+const HomePage = () => {
   return (
     <div>
       <Hero />
@@ -13,4 +13,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default HomePage;

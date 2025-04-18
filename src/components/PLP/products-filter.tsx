@@ -11,7 +11,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { FilterValues } from "./products-list";
+import { FilterValues } from ".";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import useFetch from "@/hooks/useFetch";
 import { Category } from "@/models/categories-model";
