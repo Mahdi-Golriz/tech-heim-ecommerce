@@ -1,8 +1,10 @@
+import { Product } from "./product-model";
+
 export interface Category {
   title: string;
   documentId: string;
   id: number;
-  locale: "en" | "de";
   description: string;
   thumbnail: { url: string };
+  products?: Product[];
 }

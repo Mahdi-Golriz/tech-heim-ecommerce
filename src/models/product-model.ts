@@ -15,6 +15,7 @@ export interface Product {
   price: number;
   product_images?: ProductImage[];
   colors?: string;
+  color?: string[];
   new_collection?: boolean;
   rate?: number;
   slug: string;
@@ -23,4 +24,5 @@ export interface Product {
     id: number;
     documentId: string;
   };
+  details: Record<string, string>;
 }
