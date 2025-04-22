@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { Category } from "@/models/categories-model";
 import useFetch from "@/hooks/useFetch";
+import { DataResponse } from "@/models/response-model";
 
 const CategoryCard = ({ title, thumbnail }: Category) => (
   <Link
@@ -27,7 +28,7 @@ const CategoryCard = ({ title, thumbnail }: Category) => (
 );
 
 const CategorySlider = () => {
-  const { data: categories } = useFetch<Category[]>({
+  const { data: categories } = useFetch<DataResponse<Category[]>>({
     path: "/api/categories",
     params: {
       populate: "*",
@@ -47,7 +48,7 @@ const CategorySlider = () => {
           1280: { slidesPerView: 6, spaceBetween: 12 },
         }}
       >
-        {categories?.map((category) => (
+        {categories?.data.map((category) => (
           <SwiperSlide key={category.id} className="p-2">
             <CategoryCard {...category} />
           </SwiperSlide>

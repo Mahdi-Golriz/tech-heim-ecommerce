@@ -5,9 +5,10 @@ import SectionHeader from "../section-header/section-header";
 
 import { Product } from "@/models/product-model";
 import useFetch from "@/hooks/useFetch";
+import { DataResponse } from "@/models/response-model";
 
 const NewProducts = () => {
-  const { data: newProducts } = useFetch<Product[]>({
+  const { data: newProducts } = useFetch<DataResponse<Product[]>>({
     path: "/api/products",
     params: {
       populate: "*",
@@ -21,7 +22,7 @@ const NewProducts = () => {
       <SectionHeader title="New Products" cta={{ text: "View all", url: "" }} />
       <div className="container mb-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {newProducts?.map((item) => (
+          {newProducts?.data.map((item) => (
             <ProductCard {...item} key={item.id} />
           ))}
         </div>

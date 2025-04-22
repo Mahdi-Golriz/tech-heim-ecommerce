@@ -7,14 +7,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useUserStore } from "@/store/user-store";
 import { setCookie } from "@/utils/cookie";
+import { SigninResponse } from "@/models/response-model";
 
 interface SignInProps {
   onClose: VoidFunction;
-}
-
-interface StrapiResponse {
-  user: any;
-  jwt: string;
 }
 
 export const SignInSchema = z.object({
@@ -49,7 +45,7 @@ const useSignin = ({ onClose }: SignInProps) => {
     },
   });
 
-  const handleSuccessSignUp = (response: StrapiResponse) => {
+  const handleSuccessSignUp = (response: SigninResponse) => {
     form.reset();
     setOpenModal(true);
     setTimeout(() => {
@@ -62,14 +58,16 @@ const useSignin = ({ onClose }: SignInProps) => {
   };
 
   const { data, error, fetchData, isLoading } = useFetch({
+    needToken: false,
     path: "/api/auth/local",
     method: "POST",
     autoFetch: false,
+
     onSuccess: handleSuccessSignUp,
   });
 
-  const signin = (userData: z.infer<typeof SignInSchema>) => {
-    fetchData({ body: userData });
+  const signin = async (userData: z.infer<typeof SignInSchema>) => {
+    await fetchData({ body: userData });
   };
 
   return {

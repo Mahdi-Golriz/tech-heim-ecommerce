@@ -1,6 +1,22 @@
+// export interface User {
+//   username: string;
+//   email: string;
+// }
+
 export interface User {
+  id: number;
+  documentId: string;
   username: string;
   email: string;
+  provider: string;
+  confirmed: boolean;
+  blocked: boolean;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  firstName: string | null;
+  lastName: string | null;
+  phoneNumber: string | null;
 }
 
 export type UserStore = {

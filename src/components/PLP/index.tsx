@@ -14,6 +14,7 @@ import ActiveFiltersDisplay from "./active-filters-display";
 import useFetch from "@/hooks/useFetch";
 import { Product } from "@/models/product-model";
 import useProductsSearchParams from "@/hooks/useProductsSearchParams";
+import { DataResponse } from "@/models/response-model";
 
 type UrlParams = {
   [key: string]: string | number | null | undefined | boolean;
@@ -38,12 +39,14 @@ const Products = () => {
 
   const {
     data: products,
-    totalPages,
+
     isLoading,
-  } = useFetch<Product[]>({
+  } = useFetch<DataResponse<Product[]>>({
     params: { populate: "*", ...queryParams },
     path: "/api/products",
   });
+
+  const totalPages = products?.meta?.pagination?.pageCount || 1;
 
   const handleFilterChange = (newFilters: FilterValues) =>
     updateUrl({
@@ -129,9 +132,9 @@ const Products = () => {
               </div>
             )}
 
-            {products && products.length > 0 ? (
+            {products && products.data.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {products?.map((product) => (
+                {products?.data.map((product) => (
                   <ProductCard key={product.id} {...product} hasCartButton />
                 ))}
               </div>

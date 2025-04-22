@@ -15,6 +15,7 @@ import { FilterValues } from ".";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import useFetch from "@/hooks/useFetch";
 import { Category } from "@/models/categories-model";
+import { DataResponse } from "@/models/response-model";
 
 interface ProductsFilterProps {
   isVisible: boolean;
@@ -31,7 +32,7 @@ const ProductsFilter = ({
   initialFilters,
   onFilterChange,
 }: ProductsFilterProps) => {
-  const { data: categories } = useFetch<Category[]>({
+  const { data: categories } = useFetch<DataResponse<Category[]>>({
     path: "/api/categories",
   });
 
@@ -144,7 +145,7 @@ const ProductsFilter = ({
           <AccordionTrigger>Category</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-4">
-              {categories?.map((category) => (
+              {categories?.data.map((category) => (
                 <div key={category.id} className="flex gap-4">
                   <Checkbox
                     id={category.title}

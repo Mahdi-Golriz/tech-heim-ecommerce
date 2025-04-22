@@ -1,10 +1,11 @@
 import { Link } from "@/i18n/routing";
-import { PiBasketLight, PiMagnifyingGlassLight } from "react-icons/pi";
+import { PiMagnifyingGlassLight } from "react-icons/pi";
 import { Input, Button, Logo, BurgerMenuButton } from "@/components";
 import Navigation from "./navigation";
 import { useTranslations } from "next-intl";
 import SwitchLang from "./switch-lang";
 import UserButton from "./user-button";
+import ShoppingCartButton from "./shopping-cart-button";
 
 const Header = () => {
   const t = useTranslations("home.header");
@@ -27,9 +28,7 @@ const Header = () => {
               <PiMagnifyingGlassLight />
             </Button>
             <UserButton />
-            <Button variant="icon" size="icon">
-              <PiBasketLight />
-            </Button>
+            <ShoppingCartButton />
           </div>
         </div>
         <div className="w-full relative sm:hidden">

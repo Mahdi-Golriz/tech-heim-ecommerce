@@ -8,11 +8,7 @@ import { z } from "zod";
 
 import { useUserStore } from "@/store/user-store";
 import { setCookie } from "@/utils/cookie";
-
-interface StrapiResponse {
-  user: any;
-  jwt: string;
-}
+import { SigninResponse } from "@/models/response-model";
 
 export const SignUpSchema = z.object({
   username: z.string().min(3).max(20, {
@@ -43,15 +39,16 @@ const useSignup = ({ onClose }: SignUpProps) => {
     },
   });
 
-  const handleSuccessSignUp = (response: StrapiResponse) => {
+  const handleSuccessSignUp = (response: SigninResponse) => {
     form.reset();
     setOpenModal(true);
     setTimeout(() => {
       setOpenModal(false);
       onClose();
     }, 1000);
+
+    setUser(response.user);
     setCookie({ key: "jwt", value: response?.jwt });
-    setUser(response?.user);
   };
 
   const {
@@ -59,15 +56,16 @@ const useSignup = ({ onClose }: SignUpProps) => {
     isLoading: isSubmitting,
     error,
     fetchData,
-  } = useFetch<StrapiResponse>({
+  } = useFetch<SigninResponse>({
+    needToken: false,
     path: "/api/auth/local/register",
     method: "POST",
     autoFetch: false,
     onSuccess: handleSuccessSignUp,
   });
 
-  const signup = (userData: z.infer<typeof SignUpSchema>) => {
-    fetchData({ body: userData });
+  const signup = async (userData: z.infer<typeof SignUpSchema>) => {
+    await fetchData({ body: userData });
   };
 
   return {

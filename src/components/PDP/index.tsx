@@ -5,7 +5,7 @@ import useFetch from "@/hooks/useFetch";
 import { Product } from "@/models/product-model";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { Pagination } from "swiper/modules";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
   PiStarFill,
@@ -17,6 +17,9 @@ import {
 import "swiper/css";
 import "swiper/css/pagination";
 import { Category } from "@/models/categories-model";
+import SectionHeader from "../section-header/section-header";
+import ProductCard from "../new-products/product-cart";
+import { DataResponse } from "@/models/response-model";
 
 interface Params {
   id: string;
@@ -28,21 +31,24 @@ const ProductDetails = () => {
   const params = useParams<Params>();
 
   const productId = params.id;
-  const { data: product } = useFetch<Product>({
+  const { data: productResponse } = useFetch<DataResponse<Product>>({
     path: `/api/products/${productId}`,
     params: { populate: "*" },
   });
 
-  console.log(product?.category?.documentId);
+  const product = productResponse?.data;
+
   const categoryId = product?.category?.documentId;
 
-  const { data: similarProducts } = useFetch<Category>({
+  const { data } = useFetch<DataResponse<Category>>({
     path: `/api/categories/${categoryId}`,
     autoFetch: !!categoryId,
-    params: { populate: "*" },
+    params: { "populate[products][populate][0]": "product_images" },
   });
 
-  console.log(similarProducts?.products);
+  const similarProducts = data?.data.products?.filter(
+    (item) => item.documentId !== productId
+  );
 
   const productImages = product?.product_images;
 
@@ -54,9 +60,11 @@ const ProductDetails = () => {
 
   return (
     <>
-      <CustomBreadcrumb links={breadcrumbLinks} />
+      <div className="container">
+        <CustomBreadcrumb links={breadcrumbLinks} />
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-3 ">
+      <div className="container grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-3 ">
         <div className="p-2 ">
           <Swiper
             modules={[Pagination]}
@@ -144,7 +152,7 @@ const ProductDetails = () => {
               Add to Cart
             </Button>
             {product?.discount_percentage ? (
-              <div className="w-1/2 flex flex-wrap justify-between px-10 lg:w-full lg:px-5">
+              <div className="w-1/2 flex flex-wrap justify-around lg:w-full">
                 <span className="line-through text-gray-500 h-fit font-light">
                   $ {product?.price}
                 </span>
@@ -154,17 +162,39 @@ const ProductDetails = () => {
                     -{product?.discount_percentage}%
                   </span>
                 </span>
-                <p className="w-full text-center sm:text-start text-xl font-medium h-fit">
+                <p className="w-full text-center sm:text-start text-xl font-medium h-fit sm:px-5 lg:my-5">
                   last price: $ {product?.price}
                 </p>
               </div>
             ) : (
-              <p className="w-full text-center text-xl font-medium h-fit">
+              <p className="w-full text-center text-xl font-medium h-fit sm:px-5 lg:my-5">
                 last price: $ {product?.price}
               </p>
             )}
           </div>
         </div>
+      </div>
+      <SectionHeader title="Similar Products" />
+      <div className="container py-10">
+        <Swiper
+          modules={[Autoplay, Navigation]}
+          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          loop
+          navigation
+          grabCursor
+          breakpoints={{
+            320: { slidesPerView: 1, spaceBetween: 12 },
+            640: { slidesPerView: 2, spaceBetween: 12 },
+            1024: { slidesPerView: 4, spaceBetween: 10 },
+            1280: { slidesPerView: 5, spaceBetween: 10 },
+          }}
+        >
+          {similarProducts?.slice(0, 6).map((product) => (
+            <SwiperSlide key={product.id} className="p-2">
+              <ProductCard {...product} hasCartButton />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </>
   );

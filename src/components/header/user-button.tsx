@@ -4,7 +4,7 @@ import { PiUserLight } from "react-icons/pi";
 import Button from "../ui/button";
 import AuthWrapper, { AuthTabs } from "../auth/auth-wrapper";
 import SignInForm from "../forms/signin-form";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SignUpForm from "../forms/signup-form";
 import { useShallow } from "zustand/react/shallow";
 import {
@@ -24,6 +24,14 @@ const UserButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<AuthTabs>("signin");
 
+  const handleAuthenticatedUserData = (userData: IUser) => {
+    setUser(userData);
+  };
+
+  const handleUnauthenticatedUser = () => {
+    setUser(null);
+  };
+
   const [user, setUser] = useUserStore(
     useShallow((state) => [state.user, state.setUser])
   );
@@ -31,13 +39,9 @@ const UserButton = () => {
   const { data: userData } = useFetch<IUser>({
     path: "/api/users/me",
     autoFetch: !!user,
+    onSuccess: handleAuthenticatedUserData,
+    onError: handleUnauthenticatedUser,
   });
-
-  useEffect(() => {
-    if (userData && !user) {
-      setUser(userData);
-    }
-  }, [userData, user, setUser]);
 
   const handleChangeTabs = () => {
     setActiveTab(() => (activeTab === "signin" ? "signup" : "signin"));

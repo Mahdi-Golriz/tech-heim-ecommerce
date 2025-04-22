@@ -15,11 +15,12 @@ import Image from "next/image";
 
 import useFetch from "@/hooks/useFetch";
 import { Product } from "@/models/product-model";
+import { DataResponse } from "@/models/response-model";
 
 const SaleSection = () => {
   const swiperRef = useRef<SwiperType | null>(null);
   const t = useTranslations("home.saleSection");
-  const { data: saleProducts } = useFetch<Product[]>({
+  const { data: saleProducts } = useFetch<DataResponse<Product[]>>({
     path: "/api/products",
     params: {
       "filters[on_sale][$eq]": "true",
@@ -67,7 +68,7 @@ const SaleSection = () => {
               1280: { slidesPerView: 4.5, spaceBetween: 24 },
             }}
           >
-            {saleProducts?.map((item) => (
+            {saleProducts?.data.map((item) => (
               <SwiperSlide key={item.id} className=" bg-white rounded">
                 <SaleCard {...item} />
               </SwiperSlide>
