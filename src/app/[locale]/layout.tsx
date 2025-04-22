@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { Header, Footer } from "@/components";
+import UserInitializer from "@/components/user-initializer/userInitializer";
 
 export const metadata: Metadata = {
   title: "My Ecommerce Site",
@@ -27,6 +28,7 @@ export default async function RootLayout({ children, params }: Props) {
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
+          <UserInitializer />
           <Header />
           {children}
           <Footer />
