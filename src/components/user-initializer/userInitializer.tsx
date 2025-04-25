@@ -22,6 +22,7 @@ const UserInitializer = () => {
     autoFetch: shouldFetch,
     onSuccess: handleAuthenticatedUserData,
     onError: handleUnauthenticatedUser,
+    skipRequestIfNoToken: true,
   });
 
   return null;

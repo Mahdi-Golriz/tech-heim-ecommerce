@@ -16,6 +16,7 @@ interface UseFetchParams<T> extends FetcherConfig {
   onSuccess?: (data: any) => void;
   onError?: (error: string) => void;
   needToken?: boolean;
+  skipRequestIfNoToken?: boolean;
 }
 
 function useFetch<T>({
@@ -27,6 +28,7 @@ function useFetch<T>({
   initialData,
   dependencies = [],
   autoFetch = true, // Default: fetch on mount
+  skipRequestIfNoToken = false,
   onError,
   onSuccess,
   needToken = true,
@@ -40,6 +42,12 @@ function useFetch<T>({
       setIsLoading(true);
       setError(null);
       const token = await getCookie({ key: "jwt" });
+
+      if (skipRequestIfNoToken && !token) {
+        setIsLoading(false);
+        return;
+      }
+
       const fetcherParams = {
         path,
         method,

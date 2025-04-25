@@ -1,8 +1,3 @@
-// export interface User {
-//   username: string;
-//   email: string;
-// }
-
 export interface User {
   id: number;
   documentId: string;
