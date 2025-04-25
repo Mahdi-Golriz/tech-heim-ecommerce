@@ -45,9 +45,9 @@ const useSignup = ({ onClose }: SignUpProps) => {
     setTimeout(() => {
       setOpenModal(false);
       onClose();
+      setUser(response.user);
     }, 1000);
 
-    setUser(response.user);
     setCookie({ key: "jwt", value: response?.jwt });
   };
 

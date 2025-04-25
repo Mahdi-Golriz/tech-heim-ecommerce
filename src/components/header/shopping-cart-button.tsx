@@ -36,7 +36,11 @@ const ShoppingCartButton = () => {
         </div>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="rounded-t-none" sideOffset={0}>
+      <DropdownMenuContent
+        className="rounded-t-none"
+        sideOffset={30}
+        align="end"
+      >
         <DropdownMenuGroup>
           {data.map((item) => (
             <DropdownMenuItem key={item.title}>

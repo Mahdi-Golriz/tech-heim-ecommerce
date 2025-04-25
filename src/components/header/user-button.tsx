@@ -6,7 +6,7 @@ import AuthWrapper, { AuthTabs } from "../auth/auth-wrapper";
 import SignInForm from "../forms/signin-form";
 import { useState } from "react";
 import SignUpForm from "../forms/signup-form";
-// import { useShallow } from "zustand/react/shallow";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,8 +17,6 @@ import {
 import { User } from "lucide-react";
 import LogoutButton from "../auth/logout-button";
 import { useUserStore } from "@/store/user-store";
-// import useFetch from "@/hooks/useFetch";
-// import { User as IUser } from "@/models/user-model";
 
 const UserButton = () => {
   const [isOpen, setIsOpen] = useState(false);
