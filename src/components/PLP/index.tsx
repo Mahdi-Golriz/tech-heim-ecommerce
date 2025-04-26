@@ -15,6 +15,8 @@ import useFetch from "@/hooks/useFetch";
 import { Product } from "@/models/product-model";
 import useProductsSearchParams from "@/hooks/useProductsSearchParams";
 import { DataResponse } from "@/models/response-model";
+import PageLoader from "../ui/page-loader";
+import { motion } from "framer-motion";
 
 type UrlParams = {
   [key: string]: string | number | null | undefined | boolean;
@@ -37,11 +39,7 @@ const Products = () => {
   const router = useRouter();
   const { page, sortBy, filters, queryParams } = useProductsSearchParams();
 
-  const {
-    data: products,
-
-    isLoading,
-  } = useFetch<DataResponse<Product[]>>({
+  const { data: products, isLoading } = useFetch<DataResponse<Product[]>>({
     params: { populate: "*", ...queryParams },
     path: "/api/products",
   });
@@ -98,8 +96,17 @@ const Products = () => {
     filters.priceRange[1] < 2000 ||
     filters.hasDiscount;
 
+  if (isLoading) {
+    return <PageLoader fullPage />;
+  }
+
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      className="flex items-center justify-center min-h-screen"
+    >
       <div className="container">
         <CustomBreadcrumb links={breadcrumbLinks} />
         <div className="w-full min-h-10">
@@ -154,7 +161,7 @@ const Products = () => {
           />
         ) : null}
       </div>
-    </>
+    </motion.div>
   );
 };
 
