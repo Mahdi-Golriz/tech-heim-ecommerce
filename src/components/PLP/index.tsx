@@ -96,10 +96,6 @@ const Products = () => {
     filters.priceRange[1] < 2000 ||
     filters.hasDiscount;
 
-  if (isLoading) {
-    return <PageLoader fullPage />;
-  }
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -133,11 +129,7 @@ const Products = () => {
               </Button>
             </div>
 
-            {isLoading && (
-              <div className="flex justify-center items-center min-h-[300px]">
-                <div className="animate-spin h-8 w-8 border-4 border-gray-300 rounded-full border-t-blue-600" />
-              </div>
-            )}
+            {isLoading && <PageLoader fullPage />}
 
             {products && products.data.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">

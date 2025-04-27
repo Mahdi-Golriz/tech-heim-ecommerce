@@ -62,7 +62,6 @@ const useSignin = ({ onClose }: SignInProps) => {
     path: "/api/auth/local",
     method: "POST",
     autoFetch: false,
-
     onSuccess: handleSuccessSignUp,
   });
 

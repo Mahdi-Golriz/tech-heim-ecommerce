@@ -1,15 +1,20 @@
 import { PiSealPercentFill } from "react-icons/pi";
-import Button from "../ui/button";
 import { FC } from "react";
+import AddToCartButton from "./add-to-cart-button";
+import { Product } from "@/models/product-model";
 
-interface ProductPriceCartProps {
+interface AddToCartProps {
   discountPercentage: number;
   price: number;
+  selectedColor: string;
+  product: Product;
 }
 
-const ProductPriceCart: FC<ProductPriceCartProps> = ({
+const AddToCart: FC<AddToCartProps> = ({
   discountPercentage,
   price,
+  selectedColor,
+  product,
 }) => {
   const salePrice = discountPercentage
     ? price - (discountPercentage / 100) * price
@@ -17,9 +22,7 @@ const ProductPriceCart: FC<ProductPriceCartProps> = ({
 
   return (
     <div className="flex lg:flex-col left-0 w-full border-t p-4 md:border-none lg:gap-10 lg:shadow">
-      <Button className="w-1/2 h-full lg:h-auto lg:w-full lg:order-2">
-        Add to Cart
-      </Button>
+      <AddToCartButton product={product} selectedColor={selectedColor} />
       {discountPercentage ? (
         <div className="w-1/2 flex flex-wrap justify-around lg:w-full">
           <span className="line-through text-gray-500 h-fit font-light">
@@ -41,4 +44,4 @@ const ProductPriceCart: FC<ProductPriceCartProps> = ({
     </div>
   );
 };
-export default ProductPriceCart;
+export default AddToCart;

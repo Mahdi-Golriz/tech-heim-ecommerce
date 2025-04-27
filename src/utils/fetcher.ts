@@ -1,7 +1,7 @@
 type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE";
 
 export interface FetcherConfig {
-  path: string;
+  path?: string;
   method?: HTTPMethod;
   headers?: Record<string, string>;
   params?: Record<string, string>;

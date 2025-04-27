@@ -12,8 +12,9 @@ import ProductImageSlider from "./product-images-slider";
 import ProductServices from "./product-services";
 import ProductColorSelector from "./product-color-selector";
 import ProductSpecs from "./product-details";
-import ProductPriceCart from "./product-price-cart";
 import SimilarProducts from "./similar-products";
+import { useEffect, useState } from "react";
+import AddToCart from "./add-to-cart";
 
 interface Params {
   id: string;
@@ -31,6 +32,13 @@ const ProductDetails = () => {
   });
 
   const product = productResponse?.data;
+  const [selectedColor, setSelectedColor] = useState("");
+
+  useEffect(() => {
+    if (product?.color?.length) {
+      setSelectedColor(product.color[0]);
+    }
+  }, [product]);
 
   const categoryId = product?.category?.documentId;
 
@@ -57,11 +65,17 @@ const ProductDetails = () => {
         </div>
         <div className="py-5">
           <ProductServices />
-          <ProductColorSelector colors={product?.color ?? []} />
+          <ProductColorSelector
+            colors={product?.color ?? []}
+            setSelectedColor={setSelectedColor}
+            selectedColor={selectedColor}
+          />
           <ProductSpecs details={product?.details} />
         </div>
         <div className="sticky bottom-0 md:static bg-white z-40 lg:p-10 md:col-span-2 lg:col-auto">
-          <ProductPriceCart
+          <AddToCart
+            selectedColor={selectedColor}
+            product={product!}
             discountPercentage={product?.discount_percentage ?? 0}
             price={product?.price ?? 0}
           />
