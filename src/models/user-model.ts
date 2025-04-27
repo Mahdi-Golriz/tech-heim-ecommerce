@@ -1,3 +1,5 @@
+import { Cart } from "./cart-model";
+
 export interface User {
   id: number;
   documentId: string;
@@ -12,6 +14,7 @@ export interface User {
   firstName: string | null;
   lastName: string | null;
   phoneNumber: string | null;
+  cart: Cart;
 }
 
 export type UserStore = {
