@@ -96,12 +96,14 @@ const Products = () => {
     filters.priceRange[1] < 2000 ||
     filters.hasDiscount;
 
+  // if (isLoading) return <PageLoader fullPage />;
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
-      className="flex items-center justify-center min-h-screen"
+      className="flex items-center justify-center"
     >
       <div className="container">
         <CustomBreadcrumb links={breadcrumbLinks} />
@@ -116,7 +118,7 @@ const Products = () => {
             initialFilters={filters}
             onFilterChange={handleFilterChange}
           />
-          <div className="lg:col-span-3 col-span-2 ">
+          <div className="lg:col-span-3 col-span-2 min-h-screen">
             <div className="flex justify-between">
               <ProductSorting sortBy={sortBy} onSortChange={handleSortChange} />
               <Button

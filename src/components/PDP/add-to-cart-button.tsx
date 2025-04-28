@@ -8,17 +8,14 @@ interface AddToCartButtonProps {
 }
 
 const AddToCartButton = ({ product, selectedColor }: AddToCartButtonProps) => {
-  const { addToCart, loading, error } = useCart({
-    product,
-    color: selectedColor,
-  });
+  const { addToCart, isLoading } = useCart();
 
   return (
     <Button
       className="w-1/2 h-full lg:h-auto lg:w-full lg:order-2"
-      onClick={addToCart}
+      onClick={() => addToCart({ product, color: selectedColor, quantity: 1 })}
     >
-      Add to Cart
+      {isLoading ? "Adding..." : "Add to Cart"}
     </Button>
   );
 };

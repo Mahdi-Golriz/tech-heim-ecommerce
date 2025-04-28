@@ -11,8 +11,8 @@ const PageLoader = ({ fullPage }: LoadingWrapperProps) => {
   return (
     <div
       className={cn(
-        "flex items-center justify-center size-full flex-1",
-        fullPage ? "min-h-screen" : "py-4"
+        "flex items-start justify-center size-full flex-1 py-40",
+        fullPage && "min-h-screen"
       )}
     >
       <PuffLoader color="#0C68F4" />

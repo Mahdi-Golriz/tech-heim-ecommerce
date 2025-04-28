@@ -9,12 +9,14 @@ import { useCallback } from "react";
 interface UseCartProps {
   product: Product;
   color: string;
+  quantity: number;
 }
 
-const useCart = ({ color, product }: UseCartProps) => {
+const useCart = () => {
   const { items, addItem, setCart } = useCartStore();
   const { user, setUser } = useUserStore();
 
+  //TODO
   // Fetch for user cart
   const { fetchData: fetchUserCart } = useFetch({
     path: "/api/users/me",
@@ -32,62 +34,66 @@ const useCart = ({ color, product }: UseCartProps) => {
     autoFetch: false,
   });
 
-  const addToCart = useCallback(async () => {
-    if (!color) return;
+  const addToCart = useCallback(
+    async ({ color, product, quantity }: UseCartProps) => {
+      if (!color || !product) return;
 
-    // Create new item for local cart
-    const newItem: CartItem = {
-      id: 0,
-      documentId: "",
-      quantity: 1,
-      color,
-      product,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      publishedAt: new Date().toISOString(),
-    };
+      // Create new item for local cart
+      const newItem: CartItem = {
+        id: 0,
+        documentId: "",
+        quantity,
+        color,
+        product,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        publishedAt: new Date().toISOString(),
+      };
 
-    // Update local state immediately for responsive UI
-    addItem(newItem);
+      // Update local state immediately for responsive UI
 
-    // If user is authenticated, sync with backend
-    if (user?.cart) {
-      // Find if item exists in cart
-      const existingItem = items.find(
-        (item) => item.product.id === product.id && item.color === color
-      );
+      // If user is authenticated, sync with backend
+      if (user?.cart) {
+        // Find if item exists in cart
+        const existingItem = items.find(
+          (item) => item.product.id === product.id && item.color === color
+        );
 
-      try {
-        if (existingItem) {
-          // Update existing item
-          await fetchData({
-            method: "PUT",
-            path: `/api/cart-items/${existingItem.documentId}`,
-            body: { data: { quantity: existingItem.quantity } },
-          });
-        } else {
-          // Add new item
-          await fetchData({
-            method: "POST",
-            path: "/api/cart-items",
-            body: {
-              data: {
-                product: product.id,
-                cart: user.cart.id,
-                color,
-                quantity: 1,
+        try {
+          if (existingItem) {
+            // Update existing item
+            await fetchData({
+              method: "PUT",
+              path: `/api/cart-items/${existingItem.documentId}`,
+              body: { data: { quantity: existingItem.quantity + quantity } },
+            });
+          } else {
+            // Add new item
+            await fetchData({
+              method: "POST",
+              path: "/api/cart-items",
+              body: {
+                data: {
+                  product: product.id,
+                  cart: user.cart.id,
+                  color,
+                  quantity: 1,
+                },
               },
-            },
-          });
-        }
+            });
+          }
 
-        // Refresh user cart to ensure consistent data
-        await fetchUserCart();
-      } catch (err) {
-        console.error("Failed to sync cart with backend:", err);
+          // Refresh user cart to ensure consistent data
+          await fetchUserCart();
+        } catch (err) {
+          console.error("Failed to sync cart with backend:", err);
+        }
+      } else {
+        addItem(newItem);
       }
-    }
-  }, [user, items, color, product, fetchData, fetchUserCart, addItem]);
+    },
+    [user, items, fetchData, addItem, fetchUserCart]
+  );
 
   return {
     addToCart,
