@@ -39,13 +39,9 @@ const useCart = () => {
     async ({ color, product, quantity }: UseCartProps) => {
       if (!color || !product) return;
 
-      console.log(user);
-
       if (!!user && !user.cart) {
         await fetchUserCart();
       }
-
-      console.log(user);
 
       // Create new item for local cart
       const newItem: CartItem = {
@@ -67,8 +63,6 @@ const useCart = () => {
             item.product.documentId === product.documentId &&
             item.color === color
         );
-
-        console.log(existingItem);
 
         try {
           if (existingItem) {

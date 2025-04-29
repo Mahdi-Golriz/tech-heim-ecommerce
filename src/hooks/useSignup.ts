@@ -8,6 +8,8 @@ import { z } from "zod";
 import { useUserStore } from "@/store/user-store";
 import { setCookie } from "@/utils/cookie";
 import { SigninResponse } from "@/models/response-model";
+import { User } from "@/models/user-model";
+import { useCartStore } from "@/store/cart-store";
 
 export const SignUpSchema = z.object({
   username: z.string().min(3).max(20, {
@@ -28,6 +30,7 @@ interface SignUpProps {
 const useSignup = ({ onClose }: SignUpProps) => {
   const [openModal, setOpenModal] = useState(false);
   const setUser = useUserStore((state) => state.setUser);
+  const setCart = useCartStore((state) => state.setCart);
 
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
@@ -64,11 +67,12 @@ const useSignup = ({ onClose }: SignUpProps) => {
     path: "/api/users/me",
     autoFetch: false,
     params: { "populate[cart][populate][items][populate]": "product" },
-    onSuccess: (userData) => {
+    onSuccess: (userData: User) => {
       setTimeout(() => {
         setOpenModal(false);
         onClose();
         setUser(userData);
+        setCart(userData.cart);
       }, 1000);
     },
   });
