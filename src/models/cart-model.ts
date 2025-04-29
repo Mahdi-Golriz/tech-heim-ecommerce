@@ -17,7 +17,6 @@ export interface Cart {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  locale: string;
   items: CartItem[];
 }
 

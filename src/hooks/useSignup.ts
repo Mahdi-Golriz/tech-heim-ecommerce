@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import useFetch from "./useFetch";
 
@@ -39,17 +38,40 @@ const useSignup = ({ onClose }: SignUpProps) => {
     },
   });
 
-  const handleSuccessSignUp = (response: SigninResponse) => {
+  const handleSuccessSignUp = async (response: SigninResponse) => {
     form.reset();
     setOpenModal(true);
-    setTimeout(() => {
-      setOpenModal(false);
-      onClose();
-      setUser(response.user);
-    }, 1000);
 
     setCookie({ key: "jwt", value: response?.jwt });
+    await createCart({
+      body: {
+        data: {
+          user: response.user.documentId,
+        },
+      },
+    });
+
+    fetchUserWithCart();
   };
+
+  const { fetchData: createCart } = useFetch({
+    method: "POST",
+    path: "/api/carts",
+    autoFetch: false,
+  });
+
+  const { fetchData: fetchUserWithCart } = useFetch({
+    path: "/api/users/me",
+    autoFetch: false,
+    params: { "populate[cart][populate][items][populate]": "product" },
+    onSuccess: (userData) => {
+      setTimeout(() => {
+        setOpenModal(false);
+        onClose();
+        setUser(userData);
+      }, 1000);
+    },
+  });
 
   const {
     data,

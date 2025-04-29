@@ -20,7 +20,8 @@ const useCart = () => {
   // Fetch for user cart
   const { fetchData: fetchUserCart } = useFetch({
     path: "/api/users/me",
-    autoFetch: !!user && !user.cart,
+    // autoFetch: !!user && !user.cart,
+    autoFetch: false,
     skipRequestIfNoToken: true,
     onSuccess: (userData: User) => {
       setUser(userData);
@@ -38,6 +39,14 @@ const useCart = () => {
     async ({ color, product, quantity }: UseCartProps) => {
       if (!color || !product) return;
 
+      console.log(user);
+
+      if (!!user && !user.cart) {
+        await fetchUserCart();
+      }
+
+      console.log(user);
+
       // Create new item for local cart
       const newItem: CartItem = {
         id: 0,
@@ -50,14 +59,16 @@ const useCart = () => {
         publishedAt: new Date().toISOString(),
       };
 
-      // Update local state immediately for responsive UI
-
       // If user is authenticated, sync with backend
       if (user?.cart) {
         // Find if item exists in cart
         const existingItem = items.find(
-          (item) => item.product.id === product.id && item.color === color
+          (item) =>
+            item.product.documentId === product.documentId &&
+            item.color === color
         );
+
+        console.log(existingItem);
 
         try {
           if (existingItem) {
@@ -74,8 +85,8 @@ const useCart = () => {
               path: "/api/cart-items",
               body: {
                 data: {
-                  product: product.id,
-                  cart: user.cart.id,
+                  product: product.documentId,
+                  cart: user.cart.documentId,
                   color,
                   quantity: 1,
                 },
@@ -89,6 +100,7 @@ const useCart = () => {
           console.error("Failed to sync cart with backend:", err);
         }
       } else {
+        // Update local state immediately for responsive UI for public users
         addItem(newItem);
       }
     },
