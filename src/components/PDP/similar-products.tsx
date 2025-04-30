@@ -6,6 +6,7 @@ import { FC } from "react";
 import useFetch from "@/hooks/useFetch";
 import { DataResponse } from "@/models/response-model";
 import { Category } from "@/models/categories-model";
+import PageLoader from "../ui/page-loader";
 
 interface SimilarProductsProps {
   categoryId: string;
@@ -16,7 +17,7 @@ const SimilarProducts: FC<SimilarProductsProps> = ({
   categoryId,
   productId,
 }) => {
-  const { data } = useFetch<DataResponse<Category>>({
+  const { data, isLoading } = useFetch<DataResponse<Category>>({
     path: `/api/categories/${categoryId}`,
     autoFetch: !!categoryId,
     params: { "populate[products][populate][0]": "product_images" },
@@ -25,6 +26,8 @@ const SimilarProducts: FC<SimilarProductsProps> = ({
   const similarProducts = data?.data.products?.filter(
     (item) => item.documentId !== productId
   );
+
+  if (isLoading) return <PageLoader />;
 
   return (
     <>
@@ -45,7 +48,7 @@ const SimilarProducts: FC<SimilarProductsProps> = ({
         >
           {similarProducts?.slice(0, 6).map((product) => (
             <SwiperSlide key={product.id} className="p-2">
-              <ProductCard {...product} hasCartButton />
+              <ProductCard product={product} hasCartButton />
             </SwiperSlide>
           ))}
         </Swiper>

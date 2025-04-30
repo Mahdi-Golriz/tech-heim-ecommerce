@@ -9,7 +9,7 @@ import PLPAddToCart from "../PLP/plp-add-to-cart";
 
 interface ProductCartProps {
   product: Product;
-  hasCartButton?: boolean;
+  hasCartButton: boolean;
 }
 
 const ProductCard: FC<ProductCartProps> = ({ product, hasCartButton }) => {
@@ -96,7 +96,7 @@ const ProductCard: FC<ProductCartProps> = ({ product, hasCartButton }) => {
             <span className="h-5">{rate}</span>
           </div>
         </div>
-        <PLPAddToCart hasCartButton product={product} />
+        <PLPAddToCart hasCartButton={hasCartButton} product={product} />
         <Button
           variant="icon"
           className={cn(

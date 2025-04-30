@@ -15,6 +15,7 @@ import ProductSpecs from "./product-details";
 import SimilarProducts from "./similar-products";
 import { useEffect, useState } from "react";
 import AddToCart from "./add-to-cart";
+import PageLoader from "../ui/page-loader";
 
 interface Params {
   id: string;
@@ -26,7 +27,7 @@ const ProductDetails = () => {
   const params = useParams<Params>();
 
   const productId = params.id;
-  const { data: productResponse } = useFetch<DataResponse<Product>>({
+  const { data: productResponse, isLoading } = useFetch<DataResponse<Product>>({
     path: `/api/products/${productId}`,
     params: { populate: "*" },
   });
@@ -43,6 +44,8 @@ const ProductDetails = () => {
   const categoryId = product?.category?.documentId;
 
   const productImages = product?.product_images;
+
+  if (isLoading) return <PageLoader fullPage />;
 
   return (
     <>
