@@ -1,32 +1,28 @@
 import Image from "next/image";
 import { FC } from "react";
 import Button from "../ui/button";
-import {
-  PiHeartLight,
-  PiPlusBold,
-  PiStarFill,
-  PiShoppingCartSimpleLight,
-} from "react-icons/pi";
+import { PiHeartLight, PiPlusBold, PiStarFill } from "react-icons/pi";
 import { Product } from "@/models/product-model";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
+import PLPAddToCart from "../PLP/plp-add-to-cart";
 
-interface ProductCartProps extends Product {
+interface ProductCartProps {
+  product: Product;
   hasCartButton?: boolean;
 }
 
-const ProductCard: FC<ProductCartProps> = ({
-  product_images: productImages,
-  title,
-  colors: colorVariant,
-  price: totalPrice,
-  discount_percentage: discountPercentage,
-  rate,
-  hasCartButton,
-  documentId,
-}) => {
-  const t = useTranslations("products");
+const ProductCard: FC<ProductCartProps> = ({ product, hasCartButton }) => {
+  console.log(product);
+  const {
+    product_images: productImages,
+    title,
+    colors: colorVariant,
+    price: totalPrice,
+    discount_percentage: discountPercentage,
+    rate,
+    documentId,
+  } = product;
   const salePrice = discountPercentage
     ? totalPrice - (discountPercentage / 100) * totalPrice
     : null;
@@ -100,18 +96,7 @@ const ProductCard: FC<ProductCartProps> = ({
             <span className="h-5">{rate}</span>
           </div>
         </div>
-        <Button
-          variant="outline"
-          className={cn(
-            "hidden w-fit mt-auto px-2 text-xs [&_svg]:size-4 lg:[&_svg]:size-6 lg:text-sm h-fit font-medium ",
-            {
-              "group-hover:flex": hasCartButton,
-            }
-          )}
-        >
-          <PiShoppingCartSimpleLight strokeWidth={8} />
-          {t("cta.addToCart")}
-        </Button>
+        <PLPAddToCart hasCartButton product={product} />
         <Button
           variant="icon"
           className={cn(
