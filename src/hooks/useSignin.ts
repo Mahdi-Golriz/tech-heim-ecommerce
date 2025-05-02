@@ -1,15 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import useFetch from "./useFetch";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useUserStore } from "@/store/user-store";
 import { setCookie } from "@/utils/cookie";
 import { SigninResponse } from "@/models/response-model";
-import { useCartStore } from "@/store/cart-store";
-import { User } from "@/models/user-model";
+import useSyncCart from "./useSyncCart";
 
 interface SignInProps {
   onClose: VoidFunction;
@@ -36,9 +32,8 @@ export const SignInSchema = z.object({
 
 const useSignin = ({ onClose }: SignInProps) => {
   const [openModal, setOpenModal] = useState(false);
-  const setUser = useUserStore((state) => state.setUser);
-  const setCart = useCartStore((state) => state.setCart);
-  const { items: localCartItems } = useCartStore();
+
+  const { fetchUserWithMergedCart } = useSyncCart({ onClose, setOpenModal });
 
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
@@ -48,105 +43,13 @@ const useSignin = ({ onClose }: SignInProps) => {
     },
   });
 
-  // Generic fetch for cart operations
-  const { fetchData: addItemToCart } = useFetch({
-    method: "POST",
-    path: "/api/cart-items",
-    autoFetch: false,
-  });
-
-  const { fetchData: updateCartItem } = useFetch({
-    method: "PUT",
-    autoFetch: false,
-  });
-
   const handleSuccessSignUp = (response: SigninResponse) => {
     form.reset();
     setOpenModal(true);
     setCookie({ key: "jwt", value: response?.jwt });
 
-    // Fetch user with cart
-    fetchUserWithCart();
-  };
-
-  const { fetchData: fetchUserWithCart } = useFetch({
-    path: "/api/users/me",
-    autoFetch: false,
-    params: { "populate[cart][populate][items][populate]": "product" },
-    onSuccess: async (userData: User) => {
-      // If user has local cart items and a backend cart, merge them
-      if (localCartItems.length > 0 && userData.cart) {
-        await mergeCartsAfterLogin(userData);
-
-        // Fetch updated user data after merging carts
-        await refreshUserCart();
-      } else {
-        // No merging needed
-        setTimeout(() => {
-          setOpenModal(false);
-          onClose();
-          setUser(userData);
-          setCart(userData.cart);
-        }, 1000);
-      }
-    },
-  });
-
-  const { fetchData: refreshUserCart } = useFetch<SigninResponse>({
-    path: "/api/users/me",
-    autoFetch: false,
-    params: { "populate[cart][populate][items][populate]": "product" },
-    onSuccess: (updatedUserData: User) => {
-      setTimeout(() => {
-        setOpenModal(false);
-        onClose();
-        setUser(updatedUserData);
-        setCart(updatedUserData.cart);
-      }, 1000);
-    },
-  });
-
-  // Function to merge local cart with backend cart
-  const mergeCartsAfterLogin = async (userData: User) => {
-    if (!localCartItems.length || !userData.cart) return;
-
-    try {
-      // Process each local cart item
-      for (const item of localCartItems) {
-        // Check if item already exists in backend cart
-        const existingItem = userData.cart.items.find(
-          (cartItem) =>
-            cartItem.product.documentId === item.product.documentId &&
-            cartItem.color === item.color
-        );
-
-        if (existingItem) {
-          // Update existing item quantity
-          await updateCartItem({
-            path: `/api/cart-items/${existingItem.documentId}`,
-            body: {
-              data: {
-                quantity: existingItem.quantity + item.quantity,
-              },
-            },
-          });
-        } else {
-          // Add new item to backend cart
-          await addItemToCart({
-            body: {
-              data: {
-                product: item.product.id,
-                cart: userData.cart.id,
-                color: item.color,
-                quantity: item.quantity,
-              },
-            },
-          });
-        }
-      }
-    } catch (error) {
-      console.error("Error merging carts:", error);
-    }
+    // Merge the local store with backend cart and update the local stores with backend
+    fetchUserWithMergedCart();
   };
 
   const { data, error, fetchData, isLoading } = useFetch({

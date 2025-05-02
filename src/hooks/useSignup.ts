@@ -5,11 +5,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { useUserStore } from "@/store/user-store";
 import { setCookie } from "@/utils/cookie";
 import { SigninResponse } from "@/models/response-model";
-import { User } from "@/models/user-model";
-import { useCartStore } from "@/store/cart-store";
+import useSyncCart from "./useSyncCart";
 
 export const SignUpSchema = z.object({
   username: z.string().min(3).max(20, {
@@ -29,8 +27,11 @@ interface SignUpProps {
 
 const useSignup = ({ onClose }: SignUpProps) => {
   const [openModal, setOpenModal] = useState(false);
-  const setUser = useUserStore((state) => state.setUser);
-  const setCart = useCartStore((state) => state.setCart);
+
+  const { createCart, fetchUserWithMergedCart } = useSyncCart({
+    onClose,
+    setOpenModal,
+  });
 
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
@@ -46,6 +47,9 @@ const useSignup = ({ onClose }: SignUpProps) => {
     setOpenModal(true);
 
     setCookie({ key: "jwt", value: response?.jwt });
+
+    // Create cart after sign up
+    // It should be done by backend! but here, backend is Strapi
     await createCart({
       body: {
         data: {
@@ -54,28 +58,9 @@ const useSignup = ({ onClose }: SignUpProps) => {
       },
     });
 
-    fetchUserWithCart();
+    // Merge the local store with backend cart and update the local stores with backend
+    fetchUserWithMergedCart();
   };
-
-  const { fetchData: createCart } = useFetch({
-    method: "POST",
-    path: "/api/carts",
-    autoFetch: false,
-  });
-
-  const { fetchData: fetchUserWithCart } = useFetch({
-    path: "/api/users/me",
-    autoFetch: false,
-    params: { "populate[cart][populate][items][populate]": "product" },
-    onSuccess: (userData: User) => {
-      setTimeout(() => {
-        setOpenModal(false);
-        onClose();
-        setUser(userData);
-        setCart(userData.cart);
-      }, 1000);
-    },
-  });
 
   const {
     data,

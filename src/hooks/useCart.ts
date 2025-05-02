@@ -9,7 +9,7 @@ import { useCallback } from "react";
 interface UseCartProps {
   product: Product;
   color: string;
-  quantity: number;
+  quantity?: number;
 }
 
 const useCart = () => {
@@ -36,7 +36,7 @@ const useCart = () => {
   });
 
   const addToCart = useCallback(
-    async ({ color, product, quantity }: UseCartProps) => {
+    async ({ color, product, quantity = 1 }: UseCartProps) => {
       if (!color || !product) return;
 
       if (!!user && !user.cart) {
@@ -82,7 +82,7 @@ const useCart = () => {
                   product: product.documentId,
                   cart: user.cart.documentId,
                   color,
-                  quantity: 1,
+                  quantity,
                 },
               },
             });

@@ -13,7 +13,7 @@ const AddToCartButton = ({ product, selectedColor }: AddToCartButtonProps) => {
   return (
     <Button
       className="w-1/2 h-full lg:h-auto lg:w-full lg:order-2"
-      onClick={() => addToCart({ product, color: selectedColor, quantity: 1 })}
+      onClick={() => addToCart({ product, color: selectedColor })}
     >
       {isLoading ? "Adding..." : "Add to Cart"}
     </Button>
