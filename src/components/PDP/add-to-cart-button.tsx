@@ -1,6 +1,6 @@
 import { Product } from "@/models/product-model";
 import Button from "../ui/button";
-import useCart from "@/hooks/useCart";
+import useCart from "@/hooks/useAddToCart";
 
 interface AddToCartButtonProps {
   selectedColor: string;

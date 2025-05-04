@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import Button from "../ui/button";
 import { Product } from "@/models/product-model";
 import { PiShoppingCartSimpleLight } from "react-icons/pi";
-import useCart from "@/hooks/useCart";
+import useCart from "@/hooks/useAddToCart";
 
 interface PLPAddToCartProps {
   product: Product;

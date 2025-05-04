@@ -38,7 +38,10 @@ const useSyncCart = ({ onClose, setOpenModal }: useSyncCartProps) => {
   const { fetchData: refreshUserCart } = useFetch<SigninResponse>({
     path: "/api/users/me",
     autoFetch: false,
-    params: { "populate[cart][populate][items][populate]": "product" },
+    params: {
+      "populate[cart][populate][items][populate][product][populate]":
+        "product_images",
+    },
     onSuccess: (updatedUserData: User) => {
       setTimeout(() => {
         setOpenModal(false);
@@ -52,7 +55,10 @@ const useSyncCart = ({ onClose, setOpenModal }: useSyncCartProps) => {
   const { fetchData: fetchUserWithMergedCart } = useFetch({
     path: "/api/users/me",
     autoFetch: false,
-    params: { "populate[cart][populate][items][populate]": "product" },
+    params: {
+      "populate[cart][populate][items][populate][product][populate]":
+        "product_images",
+    },
     onSuccess: async (userData: User) => {
       // If user has local cart items and a backend cart, merge them
       if (localCartItems.length > 0 && userData.cart) {

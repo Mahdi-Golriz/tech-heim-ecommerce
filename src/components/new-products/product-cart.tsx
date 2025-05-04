@@ -13,7 +13,6 @@ interface ProductCartProps {
 }
 
 const ProductCard: FC<ProductCartProps> = ({ product, hasCartButton }) => {
-  console.log(product);
   const {
     product_images: productImages,
     title,

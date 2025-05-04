@@ -12,7 +12,7 @@ interface UseCartProps {
   quantity?: number;
 }
 
-const useCart = () => {
+const useAddToCart = () => {
   const { items, addItem, setCart } = useCartStore();
   const { user, setUser } = useUserStore();
 
@@ -27,7 +27,10 @@ const useCart = () => {
       setUser(userData);
       if (userData.cart) setCart(userData.cart);
     },
-    params: { "populate[cart][populate][items][populate]": "product" },
+    params: {
+      "populate[cart][populate][items][populate][product][populate]":
+        "product_images",
+    },
   });
 
   // Generic fetch for cart operations
@@ -108,4 +111,4 @@ const useCart = () => {
   };
 };
 
-export default useCart;
+export default useAddToCart;

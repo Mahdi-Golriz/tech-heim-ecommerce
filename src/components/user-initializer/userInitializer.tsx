@@ -26,7 +26,10 @@ const UserInitializer = () => {
     onSuccess: handleAuthenticatedUserData,
     onError: handleUnauthenticatedUser,
     skipRequestIfNoToken: true,
-    params: { "populate[cart][populate][items][populate]": "product" },
+    params: {
+      "populate[cart][populate][items][populate][product][populate]":
+        "product_images",
+    },
   });
 
   return null;
