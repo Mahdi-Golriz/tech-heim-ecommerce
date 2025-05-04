@@ -25,6 +25,7 @@ import useCartActions from "@/hooks/useCartActions";
 const ShoppingCartButton = () => {
   const items = useCartStore((state) => state.items);
   const [sideOffset, setSideOffset] = useState(70);
+  const [open, setOpen] = useState(false);
   const { handleChangeItemQuantity, actionLoading, refreshCartLoading } =
     useCartActions();
 
@@ -56,8 +57,12 @@ const ShoppingCartButton = () => {
     };
   });
 
+  const handleProceedToCart = () => {
+    setOpen(false);
+  };
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <div className="relative">
           <Button variant="icon" size="icon">
@@ -139,8 +144,7 @@ const ShoppingCartButton = () => {
                                 productId: item.product.documentId,
                                 deleteItem: item.quantity === 1,
                                 itemQuantity: item.quantity,
-                                changeRate:
-                                  item.quantity === 1 ? undefined : -1,
+                                changeRate: -1,
                                 itemId: item.documentId,
                               });
                             }}
@@ -200,7 +204,11 @@ const ShoppingCartButton = () => {
                   </span>
                 </div>
 
-                <Button className="w-2/3 py-2 text-base " asChild>
+                <Button
+                  className="w-2/3 py-2 text-base "
+                  asChild
+                  onClick={handleProceedToCart}
+                >
                   <Link href="/cart" passHref className="h-12">
                     Proceed to Cart
                     <PiShoppingCartSimpleLight />

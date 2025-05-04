@@ -43,11 +43,11 @@ const useSyncCart = ({ onClose, setOpenModal }: useSyncCartProps) => {
         "product_images",
     },
     onSuccess: (updatedUserData: User) => {
+      setUser(updatedUserData);
+      setCart(updatedUserData.cart);
       setTimeout(() => {
         setOpenModal(false);
         onClose();
-        setUser(updatedUserData);
-        setCart(updatedUserData.cart);
       }, 1000);
     },
   });
@@ -67,12 +67,12 @@ const useSyncCart = ({ onClose, setOpenModal }: useSyncCartProps) => {
         // Fetch updated user data after merging carts and update the store
         await refreshUserCart();
       } else {
+        setUser(userData);
+        setCart(userData.cart);
         // No merging needed
         setTimeout(() => {
           setOpenModal(false);
           onClose();
-          setUser(userData);
-          setCart(userData.cart);
         }, 1000);
       }
     },
