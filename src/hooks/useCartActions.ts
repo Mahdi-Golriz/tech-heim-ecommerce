@@ -15,11 +15,11 @@ interface handleChangeItemQuantityParams {
 const useCartActions = () => {
   const { setCart, removeItem, updateQuantity } = useCartStore();
   const { setUser, user } = useUserStore();
-  const { fetchData: updateItemQuantity } = useFetch({
+  const { fetchData: updateItemQuantity, isLoading: actionLoading } = useFetch({
     autoFetch: false,
   });
 
-  const { fetchData: fetchUserCart } = useFetch({
+  const { fetchData: fetchUserCart, isLoading: refreshCartLoading } = useFetch({
     path: "/api/users/me",
     autoFetch: false,
     skipRequestIfNoToken: true,
@@ -60,7 +60,7 @@ const useCartActions = () => {
     }
   };
 
-  return { handleChangeItemQuantity };
+  return { handleChangeItemQuantity, refreshCartLoading, actionLoading };
 };
 
 export default useCartActions;

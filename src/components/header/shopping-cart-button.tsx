@@ -25,7 +25,8 @@ import useCartActions from "@/hooks/useCartActions";
 const ShoppingCartButton = () => {
   const items = useCartStore((state) => state.items);
   const [sideOffset, setSideOffset] = useState(70);
-  const { handleChangeItemQuantity } = useCartActions();
+  const { handleChangeItemQuantity, actionLoading, refreshCartLoading } =
+    useCartActions();
 
   // Calculate total items
   const totalItems = items.reduce(
@@ -132,19 +133,29 @@ const ShoppingCartButton = () => {
                           <Button
                             variant="icon"
                             className="p-0 h-fit"
-                            onClick={() =>
+                            onClick={() => {
                               handleChangeItemQuantity({
                                 color: item.color,
                                 productId: item.product.documentId,
+                                deleteItem: item.quantity === 1,
                                 itemQuantity: item.quantity,
-                                changeRate: -1,
+                                changeRate:
+                                  item.quantity === 1 ? undefined : -1,
                                 itemId: item.documentId,
-                              })
-                            }
+                              });
+                            }}
                           >
-                            <PiMinusCircleLight />
+                            {actionLoading || refreshCartLoading ? (
+                              <div className="size-6 relative flex justify-center items-center">
+                                <div className="rounded-full border-2 border-t-gray-600 animate-spin size-full"></div>
+                              </div>
+                            ) : (
+                              <PiMinusCircleLight />
+                            )}
                           </Button>
+
                           <span>{item.quantity}</span>
+
                           <Button
                             variant="icon"
                             className="p-0 h-fit"
@@ -158,7 +169,13 @@ const ShoppingCartButton = () => {
                               })
                             }
                           >
-                            <PiPlusCircleLight />
+                            {actionLoading || refreshCartLoading ? (
+                              <div className="size-6 relative flex justify-center items-center">
+                                <div className="rounded-full border-2 border-t-gray-600 animate-spin size-full"></div>
+                              </div>
+                            ) : (
+                              <PiPlusCircleLight />
+                            )}
                           </Button>
                         </div>
                       </div>
