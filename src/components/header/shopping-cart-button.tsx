@@ -80,7 +80,7 @@ const ShoppingCartButton = () => {
         align="end"
       >
         {/* Header - Cart Summary */}
-        <div className="p-4">
+        <div className="p-6">
           <h3 className="font-medium">{totalItems} items</h3>
         </div>
         {/* Items List */}
