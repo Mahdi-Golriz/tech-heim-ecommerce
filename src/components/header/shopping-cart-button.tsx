@@ -138,11 +138,11 @@ const ShoppingCartButton = () => {
                           <Button
                             variant="icon"
                             className="p-0 h-fit"
+                            disabled={item.quantity === 1}
                             onClick={() => {
                               handleChangeItemQuantity({
                                 color: item.color,
                                 productId: item.product.documentId,
-                                deleteItem: item.quantity === 1,
                                 itemQuantity: item.quantity,
                                 changeRate: -1,
                                 itemId: item.documentId,
