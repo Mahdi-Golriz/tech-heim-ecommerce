@@ -2,6 +2,7 @@
 
 import { Button } from "@/components";
 import useCartActions from "@/hooks/useCartActions";
+import { Link } from "@/i18n/routing";
 import { useCartStore } from "@/store/cart-store";
 import Image from "next/image";
 import {
@@ -46,7 +47,7 @@ const CartPage = () => {
           {items.map((item) => (
             <div
               className="shadow-custom rounded-lg p-2 cursor-default mb-3 bg-white"
-              key={item.documentId}
+              key={item.createdAt}
             >
               <div className="flex w-full">
                 <div className="relative w-44 h-auto">
@@ -201,7 +202,9 @@ const CartPage = () => {
               <span>${grandTotal.toFixed(2)}</span>
             </li>
           </ul>
-          <Button className="my-5 w-full">Proceed to checkout</Button>
+          <Button className="my-5 w-full" asChild>
+            <Link href="/checkout">Proceed to checkout</Link>
+          </Button>
         </div>
       </div>
     </div>

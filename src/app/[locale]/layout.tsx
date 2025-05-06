@@ -3,7 +3,6 @@ import "@/styles/globals.css";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import UserInitializer from "@/components/user-initializer/userInitializer";
-import Layout from "@/components/layout/layout";
 
 export const metadata: Metadata = {
   title: "My Ecommerce Site",
@@ -29,7 +28,7 @@ export default async function RootLayout({ children, params }: Props) {
       <body className="min-h-lvh">
         <NextIntlClientProvider messages={messages}>
           <UserInitializer />
-          <Layout>{children}</Layout>
+          {children}
         </NextIntlClientProvider>
       </body>
     </html>
