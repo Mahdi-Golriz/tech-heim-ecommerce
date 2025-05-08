@@ -1,27 +1,30 @@
 "use client";
 
-import { ReactNode } from "react";
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { PiArrowLeftLight } from "react-icons/pi";
 import Button from "../ui/button";
 import GoogleProviderButton from "./google-provider-button";
+import { useAuthModalStore } from "@/store/auth-modal-store";
+import SignInForm from "../forms/signin-form";
+import SignUpForm from "../forms/signup-form";
 
 export type AuthTabs = "signin" | "signup";
 
-interface AuthWrapperProps {
-  children: ReactNode;
-  onClose: VoidFunction;
-  activeTab: AuthTabs;
-  handleChangeTabs: VoidFunction;
-}
+// interface AuthWrapperProps {
+//   children: ReactNode;
+//   activeTab: AuthTabs;
+//   handleChangeTabs: VoidFunction;
+// }
 
-const AuthWrapper = ({
-  children,
-  onClose,
-  activeTab,
-  handleChangeTabs,
-}: AuthWrapperProps) => {
+const AuthWrapper = () => {
+  const [activeTab, setActiveTab] = useState<AuthTabs>("signin");
+  const { toggleAuthModal } = useAuthModalStore();
   const isSignup = activeTab === "signup";
+
+  const handleChangeTabs = () => {
+    setActiveTab(() => (activeTab === "signin" ? "signup" : "signin"));
+  };
 
   const tabContent = (
     <Tabs value={activeTab} onValueChange={handleChangeTabs} className="w-full">
@@ -33,10 +36,10 @@ const AuthWrapper = ({
         {isSignup ? "Create your account" : "Log in to Tech Heim"}
       </h3>
       <TabsContent value="signin" className="mt-4">
-        {!isSignup && children}
+        {!isSignup && <SignInForm />}
       </TabsContent>
       <TabsContent value="signup" className="mt-4">
-        {isSignup && children}
+        {isSignup && <SignUpForm />}
       </TabsContent>
     </Tabs>
   );
@@ -60,7 +63,7 @@ const AuthWrapper = ({
           Tech Heim
         </h2>
         <Button
-          onClick={onClose}
+          onClick={toggleAuthModal}
           variant="icon"
           className="absolute top-4 left-4 p-0 size-fit"
           aria-label="Close"
@@ -90,7 +93,7 @@ const AuthWrapper = ({
           </div>
           <div>{changeTabButton}</div>
           <Button
-            onClick={onClose}
+            onClick={toggleAuthModal}
             variant="icon"
             className="absolute top-4 left-4 p-0 size-fit"
             aria-label="Close"

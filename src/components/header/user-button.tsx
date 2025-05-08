@@ -2,10 +2,7 @@
 
 import { PiUserLight } from "react-icons/pi";
 import Button from "../ui/button";
-import AuthWrapper, { AuthTabs } from "../auth/auth-wrapper";
-import SignInForm from "../forms/signin-form";
-import { useState } from "react";
-import SignUpForm from "../forms/signup-form";
+import AuthWrapper from "../auth/auth-wrapper";
 
 import {
   DropdownMenu,
@@ -17,21 +14,13 @@ import {
 import { User } from "lucide-react";
 import LogoutButton from "../auth/logout-button";
 import { useUserStore } from "@/store/user-store";
+import { useAuthModalStore } from "@/store/auth-modal-store";
 
 const UserButton = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<AuthTabs>("signin");
+  // const [isOpen, setIsOpen] = useState(false);
+  const { isAuthModalOpen, toggleAuthModal } = useAuthModalStore();
 
   const user = useUserStore((state) => state.user);
-
-  const handleChangeTabs = () => {
-    setActiveTab(() => (activeTab === "signin" ? "signup" : "signin"));
-  };
-
-  const toggleShowModal = () => {
-    setIsOpen((prev) => !prev);
-    document.body.classList.toggle("overflow-hidden");
-  };
 
   const Content = () =>
     user ? (
@@ -60,27 +49,17 @@ const UserButton = () => {
         </DropdownMenuContent>
       </DropdownMenu>
     ) : (
-      <AuthWrapper
-        onClose={toggleShowModal}
-        activeTab={activeTab}
-        handleChangeTabs={handleChangeTabs}
-      >
-        {activeTab === "signin" ? (
-          <SignInForm onClose={toggleShowModal} />
-        ) : (
-          <SignUpForm onClose={toggleShowModal} />
-        )}
-      </AuthWrapper>
+      <AuthWrapper />
     );
 
   return user ? (
     <Content />
   ) : (
     <>
-      <Button variant="icon" size="icon" onClick={toggleShowModal}>
+      <Button variant="icon" size="icon" onClick={toggleAuthModal}>
         <PiUserLight />
       </Button>
-      {isOpen && <Content />}
+      {isAuthModalOpen && <Content />}
     </>
   );
 };
