@@ -23,16 +23,9 @@ import { PiUserLight } from "react-icons/pi";
 import { SubmitButton } from "./submit-button";
 import useSignin, { SignInSchema } from "@/hooks/useSignin";
 
-interface SignInFormProps {
-  onClose: VoidFunction;
-}
-
-const SignInForm = ({ onClose }: SignInFormProps) => {
-  const { signin, isLoading, error, form, openModal, setOpenModal } = useSignin(
-    {
-      onClose,
-    }
-  );
+const SignInForm = () => {
+  const { signin, isLoading, error, form, openModal, setOpenModal } =
+    useSignin();
 
   const onSubmit = (data: z.infer<typeof SignInSchema>) => {
     signin(data);

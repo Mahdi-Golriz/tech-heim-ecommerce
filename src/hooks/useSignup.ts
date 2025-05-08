@@ -8,6 +8,7 @@ import { z } from "zod";
 import { setCookie } from "@/utils/cookie";
 import { SigninResponse } from "@/models/response-model";
 import useSyncCart from "./useSyncCart";
+import { useCheckoutStore } from "@/store/checkout-store";
 
 export const SignUpSchema = z.object({
   username: z.string().min(3).max(20, {
@@ -21,23 +22,20 @@ export const SignUpSchema = z.object({
   }),
 });
 
-interface SignUpProps {
-  onClose: VoidFunction;
-}
-
-const useSignup = ({ onClose }: SignUpProps) => {
+const useSignup = () => {
   const [openModal, setOpenModal] = useState(false);
 
   const { createCart, fetchUserWithMergedCart } = useSyncCart({
-    onClose,
     setOpenModal,
   });
+
+  const { email } = useCheckoutStore();
 
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
       username: "",
-      email: "",
+      email: email || "",
       password: "",
     },
   });

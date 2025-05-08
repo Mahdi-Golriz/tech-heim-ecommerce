@@ -6,10 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { setCookie } from "@/utils/cookie";
 import { SigninResponse } from "@/models/response-model";
 import useSyncCart from "./useSyncCart";
-
-interface SignInProps {
-  onClose: VoidFunction;
-}
+import { useCheckoutStore } from "@/store/checkout-store";
 
 export const SignInSchema = z.object({
   identifier: z
@@ -30,15 +27,15 @@ export const SignInSchema = z.object({
     }),
 });
 
-const useSignin = ({ onClose }: SignInProps) => {
+const useSignin = () => {
   const [openModal, setOpenModal] = useState(false);
-
-  const { fetchUserWithMergedCart } = useSyncCart({ onClose, setOpenModal });
+  const { email } = useCheckoutStore();
+  const { fetchUserWithMergedCart } = useSyncCart({ setOpenModal });
 
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
     defaultValues: {
-      identifier: "",
+      identifier: email || "",
       password: "",
     },
   });

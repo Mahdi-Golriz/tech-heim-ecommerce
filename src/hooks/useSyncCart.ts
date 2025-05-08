@@ -3,16 +3,17 @@ import { useUserStore } from "@/store/user-store";
 import { useCartStore } from "@/store/cart-store";
 import { User } from "@/models/user-model";
 import { SigninResponse } from "@/models/response-model";
+import { useAuthModalStore } from "@/store/auth-modal-store";
 
 interface useSyncCartProps {
-  onClose: VoidFunction;
   setOpenModal: (openModal: boolean) => void;
 }
 
-const useSyncCart = ({ onClose, setOpenModal }: useSyncCartProps) => {
+const useSyncCart = ({ setOpenModal }: useSyncCartProps) => {
   const setUser = useUserStore((state) => state.setUser);
   const setCart = useCartStore((state) => state.setCart);
   const { items: localCartItems } = useCartStore();
+  const { toggleAuthModal } = useAuthModalStore();
 
   // Create cart after sign up
   // It should be done by backend! but here, backend is Strapi
@@ -47,7 +48,7 @@ const useSyncCart = ({ onClose, setOpenModal }: useSyncCartProps) => {
       setCart(updatedUserData.cart);
       setTimeout(() => {
         setOpenModal(false);
-        onClose();
+        toggleAuthModal();
       }, 1000);
     },
   });
@@ -72,7 +73,7 @@ const useSyncCart = ({ onClose, setOpenModal }: useSyncCartProps) => {
         // No merging needed
         setTimeout(() => {
           setOpenModal(false);
-          onClose();
+          toggleAuthModal();
         }, 1000);
       }
     },
