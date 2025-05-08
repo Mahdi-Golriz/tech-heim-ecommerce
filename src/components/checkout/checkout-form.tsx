@@ -22,10 +22,20 @@ import { useCartStore } from "@/store/cart-store";
 import CheckoutCart from "./checkout-cart";
 import "swiper/css";
 import Image from "next/image";
+import { useRouter } from "@/i18n/routing";
+import { useEffect, useState } from "react";
+import { useCheckoutStore } from "@/store/checkout-store";
+import { useAuthModalStore } from "@/store/auth-modal-store";
 
 const CheckoutForm = () => {
   const { user } = useUserStore();
   const { items } = useCartStore();
+  const { setEmail } = useCheckoutStore();
+  const { toggleAuthModal, isAuthModalOpen } = useAuthModalStore();
+  const router = useRouter();
+
+  // State to track if we should redirect after successful login
+  const [shouldRedirectToPayment, setShouldRedirectToPayment] = useState(false);
 
   const subtotalPrice = items.reduce(
     (total, item) => total + item.product.price,
@@ -50,11 +60,37 @@ const CheckoutForm = () => {
     resolver: zodResolver(CheckoutSchema),
     defaultValues: {
       email: user?.email || "",
-      address: "",
+      address: user?.address || "",
       shippingCost: "0",
     },
   });
-  const onSubmit = () => {};
+
+  // Listen for changes in user state (for when they log in via modal)
+  useEffect(() => {
+    if (user && shouldRedirectToPayment) {
+      // If they logged in and we were waiting to redirect
+      router.push("/payment");
+      setShouldRedirectToPayment(false);
+    }
+  }, [user, shouldRedirectToPayment, router]);
+
+  const onSubmit = (data: z.infer<typeof CheckoutSchema>) => {
+    // Save the form data to checkout store
+    // This is useful to persist the shipping method and address
+
+    if (!user) {
+      // Store the email from the form to pre-fill in the auth modal
+      setEmail(data.email);
+      // Set flag to redirect after successful login
+      setShouldRedirectToPayment(true);
+
+      console.log(isAuthModalOpen);
+      // Show the authentication modal
+      toggleAuthModal();
+    } else {
+      router.push("/payment");
+    }
+  };
 
   return (
     <div className="container my-6 flex flex-col md:flex-row md:gap-5">
@@ -298,7 +334,13 @@ const CheckoutForm = () => {
             <span>$ {subtotalPrice - discount}</span>
           </li>
         </ul>
-        <Button className="w-full mt-5">Continue to pay</Button>
+        <Button
+          className="w-full mt-5"
+          onClick={form.handleSubmit(onSubmit)}
+          type="submit"
+        >
+          Continue to pay
+        </Button>
       </div>
     </div>
   );

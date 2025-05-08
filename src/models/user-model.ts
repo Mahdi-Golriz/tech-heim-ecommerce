@@ -15,6 +15,7 @@ export interface User {
   lastName: string | null;
   phoneNumber: string | null;
   cart: Cart;
+  address: string;
 }
 
 export type UserStore = {
