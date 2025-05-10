@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useFetch from "./useFetch";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -29,16 +29,24 @@ export const SignInSchema = z.object({
 
 const useSignin = () => {
   const [openModal, setOpenModal] = useState(false);
-  const { email } = useCheckoutStore();
+  const { checkoutDetails } = useCheckoutStore();
+  const prefilledEmail = checkoutDetails?.email || "";
   const { fetchUserWithMergedCart } = useSyncCart({ setOpenModal });
 
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
     defaultValues: {
-      identifier: email || "",
+      identifier: prefilledEmail || "",
       password: "",
     },
   });
+
+  // Update email field when prefilledEmail prop changes
+  useEffect(() => {
+    if (prefilledEmail) {
+      form.setValue("identifier", prefilledEmail);
+    }
+  }, [prefilledEmail, form]);
 
   const handleSuccessSignUp = (response: SigninResponse) => {
     form.reset();

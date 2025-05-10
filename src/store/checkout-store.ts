@@ -1,13 +1,20 @@
 import { create } from "zustand";
 
-interface CheckoutStore {
+export interface CheckoutDetails {
   email: string;
-  setEmail: (email: string) => void;
-  clearEmail: () => void;
+  address: string;
+  shippingCost: number;
 }
 
+export type CheckoutStore = {
+  checkoutDetails: CheckoutDetails | null;
+  updateCheckoutDetails: (details: CheckoutDetails) => void;
+  clearCheckoutDetails: () => void;
+};
+
 export const useCheckoutStore = create<CheckoutStore>((set) => ({
-  email: "",
-  setEmail: (email) => set({ email }),
-  clearEmail: () => set({ email: "" }),
+  checkoutDetails: null,
+  updateCheckoutDetails: (details: CheckoutDetails) =>
+    set({ checkoutDetails: details }),
+  clearCheckoutDetails: () => set({ checkoutDetails: null }),
 }));

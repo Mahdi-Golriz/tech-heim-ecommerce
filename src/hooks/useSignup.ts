@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useFetch from "./useFetch";
 
 import { useForm } from "react-hook-form";
@@ -29,16 +29,24 @@ const useSignup = () => {
     setOpenModal,
   });
 
-  const { email } = useCheckoutStore();
+  const { checkoutDetails } = useCheckoutStore();
+  const prefilledEmail = checkoutDetails?.email || "";
 
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
       username: "",
-      email: email || "",
+      email: prefilledEmail || "",
       password: "",
     },
   });
+
+  // Update email field when prefilledEmail prop changes
+  useEffect(() => {
+    if (prefilledEmail) {
+      form.setValue("email", prefilledEmail);
+    }
+  }, [prefilledEmail, form]);
 
   const handleSuccessSignUp = async (response: SigninResponse) => {
     form.reset();
