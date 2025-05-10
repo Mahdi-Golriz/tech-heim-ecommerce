@@ -17,7 +17,6 @@ import { useUserStore } from "@/store/user-store";
 import { useAuthModalStore } from "@/store/auth-modal-store";
 
 const UserButton = () => {
-  // const [isOpen, setIsOpen] = useState(false);
   const { isAuthModalOpen, toggleAuthModal } = useAuthModalStore();
 
   const user = useUserStore((state) => state.user);

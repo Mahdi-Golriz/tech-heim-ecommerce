@@ -26,35 +26,38 @@ import { useRouter } from "@/i18n/routing";
 import { useEffect, useState } from "react";
 import { useCheckoutStore } from "@/store/checkout-store";
 import { useAuthModalStore } from "@/store/auth-modal-store";
+import AuthWrapper from "../auth/auth-wrapper";
+
+const CheckoutSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address",
+  }),
+  address: z.string().min(1, { message: "Address is required" }),
+  shippingCost: z.string(),
+});
 
 const CheckoutForm = () => {
+  const router = useRouter();
   const { user } = useUserStore();
   const { items } = useCartStore();
-  const { setEmail } = useCheckoutStore();
+  const { updateCheckoutDetails } = useCheckoutStore();
   const { toggleAuthModal, isAuthModalOpen } = useAuthModalStore();
-  const router = useRouter();
 
   // State to track if we should redirect after successful login
   const [shouldRedirectToPayment, setShouldRedirectToPayment] = useState(false);
 
   const subtotalPrice = items.reduce(
-    (total, item) => total + item.product.price,
+    (total, item) => total + item.product.price * item.quantity,
     0
   );
 
   const discount = items.reduce(
     (total, item) =>
-      total + (item.product.price * item.product!.discount_percentage!) / 100,
+      total +
+      (item.product.price * item.product.discount_percentage! * item.quantity) /
+        100,
     0
   );
-
-  const CheckoutSchema = z.object({
-    email: z.string().email({
-      message: "Please enter a valid email address",
-    }),
-    address: z.string(),
-    shippingCost: z.string(),
-  });
 
   const form = useForm<z.infer<typeof CheckoutSchema>>({
     resolver: zodResolver(CheckoutSchema),
@@ -64,6 +67,17 @@ const CheckoutForm = () => {
       shippingCost: "0",
     },
   });
+
+  // Update form values if user logs in during checkout
+  useEffect(() => {
+    if (user) {
+      form.setValue("email", user.email || "");
+      // If user has a saved address, use it
+      if (user.address) {
+        form.setValue("address", user.address);
+      }
+    }
+  }, [user, form]);
 
   // Listen for changes in user state (for when they log in via modal)
   useEffect(() => {
@@ -75,22 +89,28 @@ const CheckoutForm = () => {
   }, [user, shouldRedirectToPayment, router]);
 
   const onSubmit = (data: z.infer<typeof CheckoutSchema>) => {
-    // Save the form data to checkout store
-    // This is useful to persist the shipping method and address
-
+    updateCheckoutDetails({
+      email: data.email,
+      address: data.address,
+      shippingCost: parseFloat(data.shippingCost),
+    });
     if (!user) {
-      // Store the email from the form to pre-fill in the auth modal
-      setEmail(data.email);
       // Set flag to redirect after successful login
       setShouldRedirectToPayment(true);
 
-      console.log(isAuthModalOpen);
-      // Show the authentication modal
       toggleAuthModal();
     } else {
       router.push("/payment");
     }
   };
+
+  const handleReturnToCart = () => {
+    router.push("/cart");
+  };
+
+  // Calculate the grand total including shipping
+  const shippingCost = parseFloat(form.watch("shippingCost") || "0");
+  const grandTotal = subtotalPrice - discount + shippingCost;
 
   return (
     <div className="container my-6 flex flex-col md:flex-row md:gap-5">
@@ -233,7 +253,11 @@ const CheckoutForm = () => {
           </Form>
         </div>
         <div>
-          <Button variant="custom" className="text-primary my-2 px-0 ml-2">
+          <Button
+            variant="custom"
+            className="text-primary my-2 px-0 ml-2"
+            onClick={handleReturnToCart}
+          >
             Return to Cart
           </Button>
         </div>
@@ -319,19 +343,21 @@ const CheckoutForm = () => {
         <ul className="flex flex-col gap-3 md:gap-2">
           <li className="flex justify-between text-gray-600">
             <span>Subtotal</span>
-            <span>$ {subtotalPrice}</span>
+            <span>$ {subtotalPrice.toFixed(2)}</span>
           </li>
           <li className="flex justify-between text-gray-600">
             <span>Discount</span>
-            <span>$ {discount}</span>
+            <span>$ {discount.toFixed(2)}</span>
           </li>
           <li className="flex justify-between border-b-2 pb-3 text-gray-600">
             <span>Shipment cost</span>
-            <span>${form.getValues().shippingCost}</span>
+            <span>
+              ${parseFloat(form.watch("shippingCost") || "0").toFixed(2)}
+            </span>
           </li>
           <li className="flex justify-between font-medium">
             <span>Grand total</span>
-            <span>$ {subtotalPrice - discount}</span>
+            <span>$ {grandTotal.toFixed(2)}</span>
           </li>
         </ul>
         <Button
@@ -342,6 +368,7 @@ const CheckoutForm = () => {
           Continue to pay
         </Button>
       </div>
+      {isAuthModalOpen && <AuthWrapper />}
     </div>
   );
 };
