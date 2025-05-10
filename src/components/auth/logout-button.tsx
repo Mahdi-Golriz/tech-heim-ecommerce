@@ -5,14 +5,17 @@ import Button from "../ui/button";
 import { removeCookie } from "@/utils/cookie";
 import { useUserStore } from "@/store/user-store";
 import { useCartStore } from "@/store/cart-store";
+import { useRouter } from "@/i18n/routing";
 
 const LogoutButton = () => {
+  const router = useRouter();
   const setUser = useUserStore((state) => state.setUser);
   const clearCart = useCartStore((state) => state.clearCart);
   const handleClick = () => {
     removeCookie({ key: "jwt" });
     setUser(null);
     clearCart();
+    router.push("/");
   };
 
   return (
