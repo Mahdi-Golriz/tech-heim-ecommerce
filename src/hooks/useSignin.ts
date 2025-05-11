@@ -48,13 +48,13 @@ const useSignin = () => {
     }
   }, [prefilledEmail, form]);
 
-  const handleSuccessSignUp = (response: SigninResponse) => {
+  const handleSuccessSignUp = async (response: SigninResponse) => {
     form.reset();
     setOpenModal(true);
     setCookie({ key: "jwt", value: response?.jwt });
 
     // Merge the local store with backend cart and update the local stores with backend
-    fetchUserWithMergedCart();
+    await fetchUserWithMergedCart();
   };
 
   const { data, error, fetchData, isLoading } = useFetch({

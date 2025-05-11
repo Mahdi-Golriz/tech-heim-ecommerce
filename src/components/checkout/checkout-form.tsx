@@ -38,9 +38,9 @@ const CheckoutSchema = z.object({
 
 const CheckoutForm = () => {
   const router = useRouter();
-  const { user } = useUserStore();
-  const { items } = useCartStore();
-  const { updateCheckoutDetails } = useCheckoutStore();
+  const user = useUserStore((state) => state.user);
+  const items = useCartStore((state) => state.items);
+  const { updateCheckoutDetails, checkoutDetails } = useCheckoutStore();
   const { toggleAuthModal, isAuthModalOpen } = useAuthModalStore();
 
   // State to track if we should redirect after successful login
@@ -63,7 +63,7 @@ const CheckoutForm = () => {
     resolver: zodResolver(CheckoutSchema),
     defaultValues: {
       email: user?.email || "",
-      address: user?.address || "",
+      address: checkoutDetails?.address || "",
       shippingCost: "0",
     },
   });

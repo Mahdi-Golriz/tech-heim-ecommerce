@@ -44,9 +44,9 @@ const useSyncCart = ({ setOpenModal }: useSyncCartProps) => {
         "product_images",
     },
     onSuccess: (updatedUserData: User) => {
-      setUser(updatedUserData);
       setCart(updatedUserData.cart);
       setTimeout(() => {
+        setUser(updatedUserData);
         setOpenModal(false);
         toggleAuthModal();
       }, 1000);
@@ -68,10 +68,11 @@ const useSyncCart = ({ setOpenModal }: useSyncCartProps) => {
         // Fetch updated user data after merging carts and update the store
         await refreshUserCart();
       } else {
-        setUser(userData);
-        setCart(userData.cart);
         // No merging needed
+
+        setCart(userData.cart);
         setTimeout(() => {
+          setUser(userData);
           setOpenModal(false);
           toggleAuthModal();
         }, 1000);
