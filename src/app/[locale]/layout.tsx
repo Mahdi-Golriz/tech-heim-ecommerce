@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import UserInitializer from "@/components/user-initializer/userInitializer";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "My Ecommerce Site",
@@ -29,6 +30,7 @@ export default async function RootLayout({ children, params }: Props) {
         <NextIntlClientProvider messages={messages}>
           <UserInitializer />
           {children}
+          <Toaster richColors />
         </NextIntlClientProvider>
       </body>
     </html>
