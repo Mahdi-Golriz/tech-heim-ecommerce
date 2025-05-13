@@ -6,22 +6,29 @@ export interface OrderData {
   totalPrice: number;
   deliveryAddress: string;
   items: CartItem[];
+  userId: string;
 }
 
 const useSuccessPayment = () => {
-  const { fetchData: createOrder, data: orderData } = useFetch({
+  const {
+    fetchData: createOrder,
+    data: orderData,
+    isLoading: createOrderLoading,
+  } = useFetch({
     autoFetch: false,
   });
 
-  const { fetchData: deleteCartItems } = useFetch({
-    autoFetch: false,
-  });
+  const { fetchData: deleteCartItems, isLoading: deleteItemsLoading } =
+    useFetch({
+      autoFetch: false,
+    });
 
   const successfulPayment = async ({
     items,
     cardNumber,
     deliveryAddress,
     totalPrice,
+    userId,
   }: OrderData) => {
     try {
       await createOrder({
@@ -32,6 +39,7 @@ const useSuccessPayment = () => {
             cardNumber: cardNumber,
             totalPrice: totalPrice,
             deliveryAddress: deliveryAddress,
+            user: userId,
           },
         },
       });
@@ -47,7 +55,12 @@ const useSuccessPayment = () => {
     }
   };
 
-  return { successfulPayment, orderData };
+  return {
+    successfulPayment,
+    orderData,
+    deleteItemsLoading,
+    createOrderLoading,
+  };
 };
 
 export default useSuccessPayment;

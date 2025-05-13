@@ -20,7 +20,7 @@ import {
   PiPencilSimpleLineDuotone,
 } from "react-icons/pi";
 import { useUserStore } from "@/store/user-store";
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import useSuccessPayment from "@/hooks/useSuccessPayment";
 import { toast } from "sonner";
 import { PaymentSchema } from "@/validations/payment-schema";
@@ -38,10 +38,17 @@ const PaymentForm = () => {
   const { user } = useUserStore();
   const { items, clearCart } = useCartStore();
   const { checkoutDetails, clearCheckoutDetails } = useCheckoutStore();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const skipRedirect = useRef(false);
 
-  const { successfulPayment, orderData } = useSuccessPayment();
+  const { successfulPayment, createOrderLoading, deleteItemsLoading } =
+    useSuccessPayment();
   const { subtotalPrice, discount } = usePaymentDetails();
+
+  useEffect(() => {
+    if (!checkoutDetails && !skipRedirect.current) {
+      router.push("/checkout");
+    }
+  }, [checkoutDetails, router]);
 
   const shippingCost = checkoutDetails?.shippingCost || 0;
   const grandTotal = subtotalPrice - discount + shippingCost;
@@ -62,40 +69,32 @@ const PaymentForm = () => {
   };
 
   const onSubmit = async (data: z.infer<typeof PaymentSchema>) => {
-    setIsSubmitting(true);
-
+    const toastId = toast.loading("Processing payment...");
     try {
-      await successfulPayment({
-        items,
-        cardNumber: data.cardNumber,
-        deliveryAddress: checkoutDetails?.address || "",
-        totalPrice: grandTotal,
+      if (user)
+        await successfulPayment({
+          items,
+          cardNumber: data.cardNumber,
+          deliveryAddress: checkoutDetails?.address || "",
+          totalPrice: grandTotal,
+          userId: user?.documentId,
+        });
+
+      toast.success("Your order has been placed successfully.", {
+        id: toastId,
       });
+      router.push("/");
 
       // Clear cart after successful payment
+      skipRedirect.current = true;
       clearCart();
       clearCheckoutDetails();
-      const promise = () =>
-        new Promise((resolve) => setTimeout(() => resolve(orderData), 1000));
-
-      toast.promise(promise, {
-        loading: "Loading...",
-        success: () => {
-          return "Your order has been placed successfully.";
-        },
-        error: "Error",
-      });
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
     } catch (error) {
       console.error("Failed to process payment:", error);
       toast.error("Payment processing failed", {
         description: "Please check your payment details and try again.",
         duration: 1000,
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -105,8 +104,8 @@ const PaymentForm = () => {
     }
   };
 
-  //   If required data not available, show loading
-  if (!user || !checkoutDetails || items.length === 0) {
+  if (!user || items.length === 0) {
+    //   If required data not available, show loading
     return (
       <div className="my-6 flex justify-center items-center min-h-[60vh]">
         <div className="text-center">
@@ -281,7 +280,9 @@ const PaymentForm = () => {
             onClick={form.handleSubmit(onSubmit)}
             type="submit"
           >
-            {isSubmitting ? "Processing Payment..." : "Complete Payment"}
+            {createOrderLoading || deleteItemsLoading
+              ? "Processing Payment..."
+              : "Complete Payment"}
           </Button>
         </div>
       </div>
