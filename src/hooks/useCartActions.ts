@@ -13,7 +13,10 @@ interface handleChangeItemQuantityParams {
 }
 
 const useCartActions = () => {
-  const { setCart, removeItem, updateQuantity } = useCartStore();
+  const setCart = useCartStore((state) => state.setCart);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+
   const { setUser, user } = useUserStore();
   const { fetchData: updateItemQuantity, isLoading: actionLoading } = useFetch({
     autoFetch: false,
