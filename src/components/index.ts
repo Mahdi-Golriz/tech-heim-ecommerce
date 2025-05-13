@@ -11,3 +11,7 @@ export { default as CustomBreadcrumb } from "@/components/custom-breadcrumb/cust
 export { default as Checkbox } from "@/components/ui/checkbox";
 export { default as Products } from "@/components/PLP";
 export { default as ProductDetails } from "@/components/PDP";
+export { default as Checkout } from "@/components/checkout";
+export { default as Cart } from "@/components/cart";
+export { default as AuthWrapper } from "@/components/auth/auth-wrapper";
+export { default as InputIcon } from "@/components/input-with-icon/icon-input";

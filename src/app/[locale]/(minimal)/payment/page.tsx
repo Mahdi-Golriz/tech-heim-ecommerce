@@ -1,10 +1,8 @@
-import PaymentForm from "@/components/payment/payment-form";
-import PaymentHeader from "@/components/payment/payment-header";
+import PaymentForm from "@/components/payment";
 
 const PaymentPage = () => {
   return (
-    <div>
-      <PaymentHeader />
+    <div className="container">
       <PaymentForm />
     </div>
   );
