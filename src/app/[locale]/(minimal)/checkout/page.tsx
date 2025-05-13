@@ -1,11 +1,9 @@
-import CheckoutForm from "@/components/checkout/checkout-form";
-import CheckoutHeader from "@/components/checkout/checkout-header";
+import Checkout from "@/components/checkout";
 
 const CheckoutPage = () => {
   return (
     <div className="container">
-      <CheckoutHeader />
-      <CheckoutForm />
+      <Checkout />
     </div>
   );
 };

@@ -1,0 +1,241 @@
+"use client";
+
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { PiPencilSimpleLineDuotone } from "react-icons/pi";
+import { z } from "zod";
+import { useUserStore } from "@/store/user-store";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { cn } from "@/lib/utils";
+import { Button, AuthWrapper, InputIcon } from "@/components";
+import "swiper/css";
+import { useRouter } from "@/i18n/routing";
+import { useEffect, useState } from "react";
+import { useCheckoutStore } from "@/store/checkout-store";
+import { useAuthModalStore } from "@/store/auth-modal-store";
+import CheckoutSlider from "./checkout-slider";
+import CheckoutPaymentDetails from "./checkout-payment-details";
+import CheckoutItemsList from "./checkout-items-list";
+import CheckoutHeader from "./checkout-header";
+
+const CheckoutSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address",
+  }),
+  address: z.string().min(1, { message: "Address is required" }),
+  shippingCost: z.string(),
+});
+
+const Checkout = () => {
+  const router = useRouter();
+  const user = useUserStore((state) => state.user);
+  const { updateCheckoutDetails, checkoutDetails } = useCheckoutStore();
+  const { toggleAuthModal, isAuthModalOpen } = useAuthModalStore();
+
+  // State to track if we should redirect after successful login
+  const [shouldRedirectToPayment, setShouldRedirectToPayment] = useState(false);
+
+  const form = useForm<z.infer<typeof CheckoutSchema>>({
+    resolver: zodResolver(CheckoutSchema),
+    defaultValues: {
+      email: user?.email || "",
+      address: checkoutDetails?.address || "",
+      shippingCost: "0",
+    },
+  });
+
+  // Update form values if user logs in during checkout
+  useEffect(() => {
+    if (user) {
+      form.setValue("email", user.email || "");
+    }
+  }, [user, form]);
+
+  // Listen for changes in user state (for when they log in via modal)
+  useEffect(() => {
+    if (user && shouldRedirectToPayment) {
+      // If they logged in and we were waiting to redirect
+      router.push("/payment");
+      setShouldRedirectToPayment(false);
+    }
+  }, [user, shouldRedirectToPayment, router]);
+
+  const onSubmit = (data: z.infer<typeof CheckoutSchema>) => {
+    updateCheckoutDetails({
+      email: data.email,
+      address: data.address,
+      shippingCost: parseFloat(data.shippingCost),
+    });
+    if (!user) {
+      // Set flag to redirect after successful login
+      setShouldRedirectToPayment(true);
+
+      toggleAuthModal();
+    } else {
+      router.push("/payment");
+    }
+  };
+
+  const handleReturnToCart = () => {
+    router.push("/cart");
+  };
+
+  interface FormInputItems {
+    name: "email" | "address" | "shippingCost";
+    label: string;
+    placeholder: string;
+  }
+
+  interface FormRadioGroupItems {
+    value: string;
+    label: string;
+    text: string;
+  }
+
+  const formInputItems: FormInputItems[] = [
+    { name: "email", label: "Email", placeholder: "Email..." },
+    { name: "address", label: "Ship to", placeholder: "Address..." },
+  ];
+
+  const formRadioGroupItems: FormRadioGroupItems[] = [
+    {
+      value: "0",
+      label: "Free Shipping",
+      text: "7-30 business days",
+    },
+    {
+      value: "7.5",
+      label: "Regular Shipping",
+      text: "3-14 business days",
+    },
+    {
+      value: "22.5",
+      label: "Express Shipping",
+      text: "1-3 business days",
+    },
+  ];
+
+  return (
+    <>
+      <CheckoutHeader />
+      <div className="my-6 flex flex-col md:flex-row md:gap-5">
+        <div className="md:w-3/5">
+          <div className="md:border md:rounded-lg md:px-8 md:py-6">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                {formInputItems.map((item) => (
+                  <FormField
+                    key={item.name}
+                    control={form.control}
+                    name={item.name}
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel className="text-base font-medium text-gray-700">
+                          {item.label}
+                        </FormLabel>
+                        <FormControl>
+                          <InputIcon
+                            {...field}
+                            placeholder={item.placeholder}
+                            endIcon={PiPencilSimpleLineDuotone}
+                            color="blue"
+                            variant="checkout"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                ))}
+                <FormField
+                  control={form.control}
+                  name="shippingCost"
+                  render={({ field }) => (
+                    <FormItem className="mt-3">
+                      <FormLabel className="text-base font-medium text-gray-700">
+                        Shipping Method
+                      </FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="flex flex-col space-y-1"
+                        >
+                          {formRadioGroupItems.map((item) => (
+                            <FormItem
+                              key={item.value}
+                              className={cn(
+                                "flex items-start space-x-3 space-y-0 p-2 rounded-lg transition-colors duration-200 text-gray-500",
+                                field.value === item.value
+                                  ? "bg-blue-50 border border-blue-500"
+                                  : "bg-gray-50 border border-transparent"
+                              )}
+                            >
+                              <FormControl>
+                                <RadioGroupItem value={item.value} />
+                              </FormControl>
+                              <div className="w-full">
+                                <FormLabel className="font-normal">
+                                  <p className="text-sm mb-1 text-gray-600">
+                                    {item.label}
+                                  </p>
+                                </FormLabel>
+                                <div className="flex justify-between text-xs">
+                                  <span>{item.text}</span>
+                                  <span>${item.value}</span>
+                                </div>
+                              </div>
+                            </FormItem>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </form>
+            </Form>
+          </div>
+          <div>
+            <Button
+              variant="custom"
+              className="text-primary my-2 px-0 ml-2"
+              onClick={handleReturnToCart}
+            >
+              Return to Cart
+            </Button>
+          </div>
+        </div>
+
+        <div className="md:grow md:px-8 md:py-6 md:border md:rounded-lg">
+          <div className="my-4">
+            <h3 className="text-base font-medium text-gray-700 mb-3">
+              Your Order
+            </h3>
+            <CheckoutSlider />
+            <CheckoutItemsList />
+          </div>
+          <CheckoutPaymentDetails form={form} />
+          <Button
+            className="w-full mt-5"
+            onClick={form.handleSubmit(onSubmit)}
+            type="submit"
+          >
+            Continue to pay
+          </Button>
+        </div>
+        {isAuthModalOpen && <AuthWrapper />}
+      </div>
+    </>
+  );
+};
+
+export default Checkout;
