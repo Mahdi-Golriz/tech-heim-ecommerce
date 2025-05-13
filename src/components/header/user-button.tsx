@@ -14,7 +14,7 @@ import {
 import { User } from "lucide-react";
 import LogoutButton from "../auth/logout-button";
 import { useUserStore } from "@/store/user-store";
-import { useAuthModalStore } from "@/store/auth-modal-store";
+import useAuthModalStore from "@/store/auth-modal-store";
 
 const UserButton = () => {
   const { isAuthModalOpen, toggleAuthModal } = useAuthModalStore();

@@ -15,7 +15,7 @@ interface Props {
   params: { locale: string } | Promise<{ locale: string }>;
 }
 
-export default async function RootLayout({ children, params }: Props) {
+const RootLayout = async ({ children, params }: Props) => {
   // Wait for the params to resolve
   const resolvedParams = await params;
   const { locale } = resolvedParams;
@@ -35,4 +35,6 @@ export default async function RootLayout({ children, params }: Props) {
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

@@ -5,7 +5,7 @@ interface AuthModalStore {
   toggleAuthModal: () => void;
 }
 
-export const useAuthModalStore = create<AuthModalStore>((set, get) => ({
+const useAuthModalStore = create<AuthModalStore>((set, get) => ({
   isAuthModalOpen: false,
   toggleAuthModal: () => {
     const isOpen = get().isAuthModalOpen;
@@ -13,3 +13,5 @@ export const useAuthModalStore = create<AuthModalStore>((set, get) => ({
     set({ isAuthModalOpen: !isOpen });
   },
 }));
+
+export default useAuthModalStore;

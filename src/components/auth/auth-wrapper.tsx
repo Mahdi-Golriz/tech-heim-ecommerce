@@ -5,17 +5,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { PiArrowLeftLight } from "react-icons/pi";
 import Button from "../ui/button";
 import GoogleProviderButton from "./google-provider-button";
-import { useAuthModalStore } from "@/store/auth-modal-store";
+import useAuthModalStore from "@/store/auth-modal-store";
 import SignInForm from "../forms/signin-form";
 import SignUpForm from "../forms/signup-form";
 
 export type AuthTabs = "signin" | "signup";
-
-// interface AuthWrapperProps {
-//   children: ReactNode;
-//   activeTab: AuthTabs;
-//   handleChangeTabs: VoidFunction;
-// }
 
 const AuthWrapper = () => {
   const [activeTab, setActiveTab] = useState<AuthTabs>("signin");

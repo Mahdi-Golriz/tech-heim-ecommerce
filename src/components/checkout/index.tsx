@@ -20,7 +20,7 @@ import "swiper/css";
 import { useRouter } from "@/i18n/routing";
 import { useEffect, useState } from "react";
 import { useCheckoutStore } from "@/store/checkout-store";
-import { useAuthModalStore } from "@/store/auth-modal-store";
+import useAuthModalStore from "@/store/auth-modal-store";
 import CheckoutSlider from "./checkout-slider";
 import CheckoutPaymentDetails from "./checkout-payment-details";
 import CheckoutItemsList from "./checkout-items-list";
@@ -92,6 +92,7 @@ const Checkout = () => {
     name: "email" | "address" | "shippingCost";
     label: string;
     placeholder: string;
+    disabled?: boolean;
   }
 
   interface FormRadioGroupItems {
@@ -101,7 +102,12 @@ const Checkout = () => {
   }
 
   const formInputItems: FormInputItems[] = [
-    { name: "email", label: "Email", placeholder: "Email..." },
+    {
+      name: "email",
+      label: "Email",
+      placeholder: "Email...",
+      disabled: !!user,
+    },
     { name: "address", label: "Ship to", placeholder: "Address..." },
   ];
 
@@ -136,6 +142,7 @@ const Checkout = () => {
                     key={item.name}
                     control={form.control}
                     name={item.name}
+                    disabled={item.disabled}
                     render={({ field }) => (
                       <FormItem className="mt-3">
                         <FormLabel className="text-base font-medium text-gray-700">

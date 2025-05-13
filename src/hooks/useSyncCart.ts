@@ -3,7 +3,7 @@ import { useUserStore } from "@/store/user-store";
 import { useCartStore } from "@/store/cart-store";
 import { User } from "@/models/user-model";
 import { SigninResponse } from "@/models/response-model";
-import { useAuthModalStore } from "@/store/auth-modal-store";
+import useAuthModalStore from "@/store/auth-modal-store";
 
 interface useSyncCartProps {
   setOpenModal: (openModal: boolean) => void;
