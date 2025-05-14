@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useFetch from "./useFetch";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -7,6 +7,7 @@ import { setCookie } from "@/utils/cookie";
 import { SigninResponse } from "@/models/response-model";
 import useSyncCart from "./useSyncCart";
 import { useCheckoutStore } from "@/store/checkout-store";
+import { toast } from "sonner";
 
 export const SignInSchema = z.object({
   identifier: z
@@ -28,10 +29,9 @@ export const SignInSchema = z.object({
 });
 
 const useSignin = () => {
-  const [openModal, setOpenModal] = useState(false);
   const { checkoutDetails } = useCheckoutStore();
   const prefilledEmail = checkoutDetails?.email || "";
-  const { fetchUserWithMergedCart } = useSyncCart({ setOpenModal });
+  const { fetchUserWithMergedCart } = useSyncCart();
 
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
@@ -50,11 +50,11 @@ const useSignin = () => {
 
   const handleSuccessSignUp = async (response: SigninResponse) => {
     form.reset();
-    setOpenModal(true);
     setCookie({ key: "jwt", value: response?.jwt });
 
     // Merge the local store with backend cart and update the local stores with backend
     await fetchUserWithMergedCart();
+    toast.success("You have been successfully logged in");
   };
 
   const { data, error, fetchData, isLoading } = useFetch({
@@ -75,8 +75,6 @@ const useSignin = () => {
     data,
     error,
     form,
-    openModal,
-    setOpenModal,
   };
 };
 

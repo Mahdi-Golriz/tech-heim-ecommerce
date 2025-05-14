@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useFetch from "./useFetch";
 
 import { useForm } from "react-hook-form";
@@ -9,6 +9,7 @@ import { setCookie } from "@/utils/cookie";
 import { SigninResponse } from "@/models/response-model";
 import useSyncCart from "./useSyncCart";
 import { useCheckoutStore } from "@/store/checkout-store";
+import { toast } from "sonner";
 
 export const SignUpSchema = z.object({
   username: z.string().min(3).max(20, {
@@ -23,11 +24,7 @@ export const SignUpSchema = z.object({
 });
 
 const useSignup = () => {
-  const [openModal, setOpenModal] = useState(false);
-
-  const { createCart, fetchUserWithMergedCart } = useSyncCart({
-    setOpenModal,
-  });
+  const { createCart, fetchUserWithMergedCart } = useSyncCart();
 
   const { checkoutDetails } = useCheckoutStore();
   const prefilledEmail = checkoutDetails?.email || "";
@@ -50,7 +47,6 @@ const useSignup = () => {
 
   const handleSuccessSignUp = async (response: SigninResponse) => {
     form.reset();
-    setOpenModal(true);
 
     setCookie({ key: "jwt", value: response?.jwt });
 
@@ -66,6 +62,7 @@ const useSignup = () => {
 
     // Merge the local store with backend cart and update the local stores with backend
     fetchUserWithMergedCart();
+    toast.success("Congratulation your account has been successfully created.");
   };
 
   const {
@@ -91,8 +88,6 @@ const useSignup = () => {
     data,
     error,
     form,
-    openModal,
-    setOpenModal,
   };
 };
 

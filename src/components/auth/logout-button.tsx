@@ -6,6 +6,7 @@ import { removeCookie } from "@/utils/cookie";
 import { useUserStore } from "@/store/user-store";
 import { useCartStore } from "@/store/cart-store";
 import { useRouter } from "@/i18n/routing";
+import { toast } from "sonner";
 
 const LogoutButton = () => {
   const router = useRouter();
@@ -16,6 +17,7 @@ const LogoutButton = () => {
     setUser(null);
     clearCart();
     router.push("/");
+    toast.info("You've been successfully signed out");
   };
 
   return (

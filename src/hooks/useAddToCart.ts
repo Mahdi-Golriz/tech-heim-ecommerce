@@ -5,6 +5,7 @@ import { User } from "@/models/user-model";
 import { Product } from "@/models/product-model";
 import { CartItem } from "@/models/cart-model";
 import { useCallback } from "react";
+import { toast } from "sonner";
 
 interface UseCartProps {
   product: Product;
@@ -26,6 +27,7 @@ const useAddToCart = () => {
     onSuccess: (userData: User) => {
       setUser(userData);
       if (userData.cart) setCart(userData.cart);
+      toast.success("Item has been added to your shopping basket");
     },
     params: {
       "populate[cart][populate][items][populate][product][populate]":
@@ -99,6 +101,7 @@ const useAddToCart = () => {
       } else {
         // Update local state immediately for responsive UI for public users
         addItem(newItem);
+        toast.success("Item has been added to your shopping basket");
       }
     },
     [user, items, fetchData, addItem, fetchUserCart]

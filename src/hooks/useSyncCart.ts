@@ -5,11 +5,7 @@ import { User } from "@/models/user-model";
 import { SigninResponse } from "@/models/response-model";
 import useAuthModalStore from "@/store/auth-modal-store";
 
-interface useSyncCartProps {
-  setOpenModal: (openModal: boolean) => void;
-}
-
-const useSyncCart = ({ setOpenModal }: useSyncCartProps) => {
+const useSyncCart = () => {
   const setUser = useUserStore((state) => state.setUser);
   const setCart = useCartStore((state) => state.setCart);
   const { items: localCartItems } = useCartStore();
@@ -45,11 +41,8 @@ const useSyncCart = ({ setOpenModal }: useSyncCartProps) => {
     },
     onSuccess: (updatedUserData: User) => {
       setCart(updatedUserData.cart);
-      setTimeout(() => {
-        setUser(updatedUserData);
-        setOpenModal(false);
-        toggleAuthModal();
-      }, 1000);
+      setUser(updatedUserData);
+      toggleAuthModal();
     },
   });
 
@@ -71,11 +64,8 @@ const useSyncCart = ({ setOpenModal }: useSyncCartProps) => {
         // No merging needed
 
         setCart(userData.cart);
-        setTimeout(() => {
-          setUser(userData);
-          setOpenModal(false);
-          toggleAuthModal();
-        }, 1000);
+        setUser(userData);
+        toggleAuthModal();
       }
     },
   });
