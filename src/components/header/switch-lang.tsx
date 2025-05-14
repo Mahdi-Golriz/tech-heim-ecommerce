@@ -2,32 +2,37 @@
 
 import { usePathname, useRouter } from "@/i18n/routing";
 import { useLocale } from "next-intl";
-import React, { useState } from "react";
+import React from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const SwitchLang = () => {
   const router = useRouter();
   const pathname = usePathname();
   const currentLocale = useLocale();
-  const [selectedLocale, setSelectedLocale] = useState<string>(currentLocale);
 
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLocale = e.target.value;
-    setSelectedLocale(newLocale);
+  const handleLanguageChange = (newLocale: string) => {
     router.replace(pathname, { locale: newLocale });
   };
 
   return (
-    <div>
-      <select
-        className="border py-1 px-2 rounded-lg cursor-pointer"
-        onChange={(e) => handleLanguageChange(e)}
-        value={selectedLocale}
-      >
-        <option value="en">En</option>
-        <hr />
-        <option value="de">De</option>
-      </select>
-    </div>
+    <Select onValueChange={handleLanguageChange} defaultValue={currentLocale}>
+      <SelectTrigger>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent className="bg-white min-w-fit" align="end">
+        <SelectGroup>
+          <SelectItem value="en">En</SelectItem>
+          <SelectItem value="de">De</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   );
 };
 
