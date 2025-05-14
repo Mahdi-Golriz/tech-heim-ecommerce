@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
 export interface CheckoutDetails {
-  email: string;
+  email?: string;
   address: string;
-  shippingCost: number;
+  shippingCost?: number;
 }
 
 export type CheckoutStore = {

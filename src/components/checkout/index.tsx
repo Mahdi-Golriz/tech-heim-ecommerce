@@ -25,6 +25,8 @@ import CheckoutSlider from "./checkout-slider";
 import CheckoutPaymentDetails from "./checkout-payment-details";
 import CheckoutItemsList from "./checkout-items-list";
 import CheckoutHeader from "./checkout-header";
+import AddressMapModal, { AddressData } from "../map/map-modal";
+import { MdLocationOn } from "react-icons/md";
 
 const CheckoutSchema = z.object({
   email: z.string().email({
@@ -42,6 +44,8 @@ const Checkout = () => {
 
   // State to track if we should redirect after successful login
   const [shouldRedirectToPayment, setShouldRedirectToPayment] = useState(false);
+  // State for the map modal
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
 
   const form = useForm<z.infer<typeof CheckoutSchema>>({
     resolver: zodResolver(CheckoutSchema),
@@ -86,6 +90,16 @@ const Checkout = () => {
 
   const handleReturnToCart = () => {
     router.push("/cart");
+  };
+
+  // Function to handle address selection from the map
+  const handleAddressSelected = (addressData: AddressData) => {
+    form.setValue("address", addressData.fullAddress);
+    // Optionally store coordinates in your checkout store
+    updateCheckoutDetails({
+      ...checkoutDetails,
+      address: addressData.fullAddress,
+    });
   };
 
   interface FormInputItems {
@@ -157,6 +171,19 @@ const Checkout = () => {
                             variant="checkout"
                           />
                         </FormControl>
+                        {item.name === "address" && (
+                          <div className="mt-2">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className="flex items-center text-sm"
+                              onClick={() => setIsMapModalOpen(true)}
+                            >
+                              <MdLocationOn className="mr-1" />
+                              Select address on map
+                            </Button>
+                          </div>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )}
@@ -240,6 +267,12 @@ const Checkout = () => {
           </Button>
         </div>
         {isAuthModalOpen && <AuthWrapper />}
+        {/* Map Modal */}
+        <AddressMapModal
+          isOpen={isMapModalOpen}
+          onClose={() => setIsMapModalOpen(false)}
+          onAddressSelected={handleAddressSelected}
+        />
       </div>
     </>
   );

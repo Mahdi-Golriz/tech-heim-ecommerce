@@ -4,6 +4,7 @@ import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import UserInitializer from "@/components/user-initializer/userInitializer";
 import { Toaster } from "sonner";
+import "leaflet/dist/leaflet.css";
 
 export const metadata: Metadata = {
   title: "My Ecommerce Site",
