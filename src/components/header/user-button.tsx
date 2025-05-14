@@ -15,31 +15,48 @@ import { User } from "lucide-react";
 import LogoutButton from "../auth/logout-button";
 import { useUserStore } from "@/store/user-store";
 import useAuthModalStore from "@/store/auth-modal-store";
+import { useEffect, useState } from "react";
 
 const UserButton = () => {
   const { isAuthModalOpen, toggleAuthModal } = useAuthModalStore();
 
   const user = useUserStore((state) => state.user);
+  const [sideOffset, setSideOffset] = useState(70);
+  useEffect(() => {
+    const updateSideOffset = () => {
+      if (window.innerWidth > 640) {
+        setSideOffset(30);
+      } else {
+        setSideOffset(10);
+      }
+    };
 
-  const Content = () =>
-    user ? (
+    updateSideOffset();
+    window.addEventListener("resize", updateSideOffset);
+
+    return () => {
+      window.removeEventListener("resize", updateSideOffset);
+    };
+  });
+  // If user is authenticated, show dropdown
+  if (user) {
+    return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="h-full flex items-center">
-            <Button variant="icon" size="icon">
-              <PiUserLight />
-            </Button>
-          </div>
+          <Button variant="icon" size="icon">
+            <PiUserLight />
+          </Button>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
-          className="absolute -right-8 top-0 rounded-b-lg"
-          sideOffset={0}
+          className="rounded-t-none"
+          sideOffset={sideOffset}
+          align="end"
         >
           <DropdownMenuGroup>
             <DropdownMenuItem>
               <User />
-              <span>{user?.username}</span>
+              <span>{user.username}</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <LogoutButton />
@@ -47,18 +64,17 @@ const UserButton = () => {
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-    ) : (
-      <AuthWrapper />
     );
+  }
 
-  return user ? (
-    <Content />
-  ) : (
+  // If user is not authenticated, show login button
+  return (
     <>
       <Button variant="icon" size="icon" onClick={toggleAuthModal}>
         <PiUserLight />
       </Button>
-      {isAuthModalOpen && <Content />}
+
+      {isAuthModalOpen && <AuthWrapper />}
     </>
   );
 };
