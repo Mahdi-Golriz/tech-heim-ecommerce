@@ -5,6 +5,12 @@ import { NextIntlClientProvider } from "next-intl";
 import UserInitializer from "@/components/user-initializer/userInitializer";
 import { Toaster } from "sonner";
 import "leaflet/dist/leaflet.css";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500"],
+});
 
 export const metadata: Metadata = {
   title: "My Ecommerce Site",
@@ -26,7 +32,7 @@ const RootLayout = async ({ children, params }: Props) => {
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={poppins.className}>
       <body className="min-h-lvh">
         <NextIntlClientProvider messages={messages}>
           <UserInitializer />
