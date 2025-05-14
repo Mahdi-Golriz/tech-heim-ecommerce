@@ -44,7 +44,8 @@ export const useCartStore = create<CartStore>()(
       removeItem: (documentId: string, color: string) => {
         const { items } = get();
         const updatedItems = items.filter(
-          (item) => item.documentId !== documentId && item.color !== color
+          (item) =>
+            item.product.documentId !== documentId || item.color !== color
         );
 
         set({ items: updatedItems });

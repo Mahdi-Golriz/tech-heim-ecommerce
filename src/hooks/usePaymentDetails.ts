@@ -4,9 +4,14 @@ import { useMemo } from "react";
 const usePaymentDetails = () => {
   const items = useCartStore((state) => state.items);
 
-  const { subtotalPrice, discount, grandTotal } = useMemo(() => {
+  const { subtotalPrice, discount, grandTotal, totalItems } = useMemo(() => {
     const subtotal = items.reduce(
       (total, item) => total + item.product.price * item.quantity,
+      0
+    );
+
+    const totalItems = items.reduce(
+      (totalNumber, item) => totalNumber + item.quantity,
       0
     );
 
@@ -22,6 +27,7 @@ const usePaymentDetails = () => {
       subtotalPrice: subtotal,
       discount: discountAmount,
       grandTotal: subtotal - discountAmount,
+      totalItems,
     };
   }, [items]);
 
@@ -29,6 +35,7 @@ const usePaymentDetails = () => {
     subtotalPrice,
     discount,
     grandTotal,
+    totalItems,
   };
 };
 

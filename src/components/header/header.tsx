@@ -5,7 +5,7 @@ import Navigation from "./navigation";
 import { useTranslations } from "next-intl";
 import SwitchLang from "./switch-lang";
 import UserButton from "./user-button";
-import ShoppingCartButton from "./shopping-cart-button";
+import ShoppingCartButton from "./shopping-cart/shopping-cart-button";
 
 const Header = () => {
   const t = useTranslations("home.header");
