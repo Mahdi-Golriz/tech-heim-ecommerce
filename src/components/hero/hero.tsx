@@ -2,6 +2,7 @@ import Image from "next/image";
 import heroImage from "@/assets/hero.png";
 import { Button } from "@/components";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 
 const Hero = () => {
   const t = useTranslations("home.hero");
@@ -17,11 +18,12 @@ const Hero = () => {
             <span className="text-secondary">{t("subtext")}</span>&quot;
           </p>
           <Button
+            asChild
             variant="secondary"
             size="sm"
             className="mt-auto mb-2 lg:mb-14 w-fit sm:text-xl sm:w-full sm:h-12 lg:w-2/3 font-bold"
           >
-            {t("cta")}
+            <Link href="/products">{t("cta")}</Link>
           </Button>
         </div>
         <Image

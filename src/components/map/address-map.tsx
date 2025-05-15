@@ -2,7 +2,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { Map as LeafletMap } from "leaflet";
-import { JSX, useEffect, useRef, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import Button from "../ui/button";
 import { AddressData } from "./map-modal";
 
@@ -48,15 +48,6 @@ const AddressMap = ({ onAddressSelected }: AddressMapProps): JSX.Element => {
   const [map, setMap] = useState<LeafletMap | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  // Store the callback in a ref so we can access the latest version without
-  // adding it to dependency arrays
-  const onAddressSelectedRef = useRef(onAddressSelected);
-
-  // Update the ref when the prop changes
-  useEffect(() => {
-    onAddressSelectedRef.current = onAddressSelected;
-  }, [onAddressSelected]);
-
   // Default center position
   const defaultCenter: [number, number] = [53.5488, 9.9872];
 
@@ -75,8 +66,8 @@ const AddressMap = ({ onAddressSelected }: AddressMapProps): JSX.Element => {
 
         if (data && data.display_name) {
           setAddress(data.display_name);
-          if (onAddressSelectedRef.current) {
-            onAddressSelectedRef.current({
+          if (onAddressSelected) {
+            onAddressSelected({
               fullAddress: data.display_name,
               coordinates: position,
               addressComponents: data.address,
@@ -91,7 +82,7 @@ const AddressMap = ({ onAddressSelected }: AddressMapProps): JSX.Element => {
     };
 
     getAddressFromCoordinates();
-  }, [position]);
+  }, [position, onAddressSelected]);
 
   // Handle address search
   const searchAddress = async (e: React.FormEvent): Promise<void> => {

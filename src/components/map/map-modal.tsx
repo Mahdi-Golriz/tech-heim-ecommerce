@@ -51,10 +51,6 @@ const AddressMapModal = ({
     null
   );
 
-  const handleAddressSelected = (addressData: AddressData): void => {
-    setSelectedAddress(addressData);
-  };
-
   const handleConfirm = () => {
     if (selectedAddress) {
       onAddressSelected(selectedAddress);
@@ -69,7 +65,7 @@ const AddressMapModal = ({
           <DialogTitle>Select Your Delivery Address</DialogTitle>
         </DialogHeader>
         <div className="py-4">
-          <AddressMap onAddressSelected={handleAddressSelected} />
+          <AddressMap onAddressSelected={setSelectedAddress} />
 
           <div className="flex justify-end gap-3 mt-6">
             <Button variant="outline" onClick={onClose}>
