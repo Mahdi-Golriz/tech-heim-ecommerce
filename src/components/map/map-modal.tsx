@@ -14,15 +14,6 @@ import { Button } from "@/components";
 export interface AddressData {
   fullAddress: string;
   coordinates: [number, number];
-  addressComponents: {
-    road?: string;
-    house_number?: string;
-    city?: string;
-    state?: string;
-    country?: string;
-    postcode?: string;
-    [key: string]: string | undefined;
-  };
 }
 
 interface AddressMapModalProps {

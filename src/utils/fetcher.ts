@@ -8,6 +8,7 @@ export interface FetcherConfig {
   token?: string | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: Record<string, any> | null;
+  strapiReq?: boolean;
 }
 
 interface FetcherErrorType extends Error {
@@ -44,8 +45,17 @@ function isFetcherError(error: unknown): error is FetcherErrorType {
  */
 
 const fetcher = async <T>(config: FetcherConfig): Promise<T> => {
-  const { path, method, headers: customHeaders = {}, params, token } = config;
-  const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}${path}`);
+  const {
+    path,
+    method,
+    headers: customHeaders = {},
+    params,
+    token,
+    strapiReq,
+  } = config;
+  const url = new URL(
+    `${strapiReq ? process.env.NEXT_PUBLIC_API_URL : ""}${path}`
+  );
 
   // const locale = document.cookie
   //   .split("; ")

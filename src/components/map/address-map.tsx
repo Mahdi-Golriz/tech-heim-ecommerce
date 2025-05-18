@@ -5,9 +5,10 @@ import { Map as LeafletMap } from "leaflet";
 import { JSX, useEffect, useState } from "react";
 import Button from "../ui/button";
 import { AddressData } from "./map-modal";
+import useLocationToAddress from "../../hooks/useLocationToAddress";
 
 interface AddressMapProps {
-  onAddressSelected?: (addressData: AddressData) => void;
+  onAddressSelected: (addressData: AddressData) => void;
 }
 
 interface MapMarkerProps {
@@ -42,87 +43,45 @@ function MapMarker({
 }
 
 const AddressMap = ({ onAddressSelected }: AddressMapProps): JSX.Element => {
-  const [position, setPosition] = useState<[number, number] | null>(null);
-  const [address, setAddress] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [map, setMap] = useState<LeafletMap | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchAddress, setSearchAddress] = useState<string>("");
+
+  // Replace the useEffect with our custom hook
+  const { getLocationDetails, position, isLoading, address } =
+    useLocationToAddress();
 
   // Default center position
   const defaultCenter: [number, number] = [53.5488, 9.9872];
 
-  // Convert coordinates to address (reverse geocoding)
+  const handlePositionChange = async (
+    newPosition: [number, number] | string
+  ) => {
+    await getLocationDetails(newPosition);
+  };
+
   useEffect(() => {
-    const getAddressFromCoordinates = async (): Promise<void> => {
-      if (!position) return;
-
-      setIsLoading(true);
-      try {
-        const [lat, lng] = position;
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
-        );
-        const data = await response.json();
-
-        if (data && data.display_name) {
-          setAddress(data.display_name);
-          if (onAddressSelected) {
-            onAddressSelected({
-              fullAddress: data.display_name,
-              coordinates: position,
-              addressComponents: data.address,
-            });
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching address:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getAddressFromCoordinates();
-  }, [position, onAddressSelected]);
+    if (address && position) {
+      onAddressSelected(address);
+      map?.flyTo(position, 15);
+    }
+  }, [address, position, onAddressSelected, map]);
 
   // Handle address search
-  const searchAddress = async (e: React.FormEvent): Promise<void> => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    if (!searchQuery.trim() || !map) return;
+    if (!searchAddress.trim() || !map) return;
 
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          searchQuery
-        )}`
-      );
-      const data = await response.json();
-
-      if (data && data.length > 0) {
-        const { lat, lon } = data[0];
-        const newPosition: [number, number] = [
-          parseFloat(lat),
-          parseFloat(lon),
-        ];
-        setPosition(newPosition);
-        // Center map to the found location
-        map.flyTo(newPosition, 15);
-      }
-    } catch (error) {
-      console.error("Error searching address:", error);
-    } finally {
-      setIsLoading(false);
-    }
+    await handlePositionChange(searchAddress);
   };
 
   return (
     <div className="address-map-container">
-      <form onSubmit={searchAddress} className="mb-4">
+      <form onSubmit={handleSubmit} className="mb-4">
         <div className="flex">
           <input
             type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchAddress}
+            onChange={(e) => setSearchAddress(e.target.value)}
             placeholder="Search for an address"
             className="flex-1 p-2 border rounded-l"
           />
@@ -147,7 +106,7 @@ const AddressMap = ({ onAddressSelected }: AddressMapProps): JSX.Element => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <MapMarker position={position} setPosition={setPosition} />
+          <MapMarker position={position} setPosition={handlePositionChange} />
         </MapContainer>
       </div>
 
@@ -160,7 +119,7 @@ const AddressMap = ({ onAddressSelected }: AddressMapProps): JSX.Element => {
         {address && !isLoading && (
           <>
             <p className="font-medium">Selected Address:</p>
-            <p className="text-sm">{address}</p>
+            <p className="text-sm">{address.fullAddress}</p>
           </>
         )}
       </div>
