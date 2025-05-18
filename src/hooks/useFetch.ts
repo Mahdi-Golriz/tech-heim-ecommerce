@@ -32,7 +32,7 @@ function useFetch<T>({
   onError,
   onSuccess,
   needToken = true,
-  strapiReq = true,
+  baseUrl,
 }: UseFetchParams<T>) {
   const [data, setData] = useState<T | undefined>(initialData);
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +52,7 @@ function useFetch<T>({
       const fetcherParams = {
         path,
         method,
-        strapiReq,
+        baseUrl,
         params,
         ...(needToken && { token }),
         headers,
@@ -65,6 +65,8 @@ function useFetch<T>({
       const response = await fetcher<T>(fetcherParams);
       setData(response);
       onSuccess?.(response);
+
+      return response;
     } catch (err) {
       const fetchError = isFetcherError(err)
         ? err

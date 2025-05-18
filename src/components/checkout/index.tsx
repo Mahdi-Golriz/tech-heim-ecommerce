@@ -36,6 +36,19 @@ const CheckoutSchema = z.object({
   shippingCost: z.string(),
 });
 
+interface FormInputItems {
+  name: "email" | "address" | "shippingCost";
+  label: string;
+  placeholder: string;
+  disabled?: boolean;
+}
+
+interface FormRadioGroupItems {
+  value: string;
+  label: string;
+  text: string;
+}
+
 const Checkout = () => {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
@@ -101,19 +114,6 @@ const Checkout = () => {
       address: addressData.fullAddress,
     });
   };
-
-  interface FormInputItems {
-    name: "email" | "address" | "shippingCost";
-    label: string;
-    placeholder: string;
-    disabled?: boolean;
-  }
-
-  interface FormRadioGroupItems {
-    value: string;
-    label: string;
-    text: string;
-  }
 
   const formInputItems: FormInputItems[] = [
     {

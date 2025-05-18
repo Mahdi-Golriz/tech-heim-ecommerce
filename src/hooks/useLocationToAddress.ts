@@ -16,9 +16,11 @@ const useLocationToAddress = () => {
   const [address, setAddress] = useState<AddressData | null>(null);
   const [position, setPosition] = useState<[number, number] | null>(null);
 
+  //TODO: define functions
+
   const { fetchData, isLoading } = useFetch({
     autoFetch: false,
-    strapiReq: false,
+    baseUrl: "https://nominatim.openstreetmap.org",
     onSuccess: (fetchedAddress: FetchedAddress | FetchedAddress[]) => {
       if (Array.isArray(fetchedAddress)) {
         const firstAddress = fetchedAddress[0];
@@ -46,19 +48,17 @@ const useLocationToAddress = () => {
         const [lat, lon] = input;
 
         await fetchData({
-          path: `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`,
+          path: `/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`,
         });
       }
 
       // Case: Address input (string)
-      else if (typeof input === "string") {
+      else {
         const query = input.trim();
         if (!query) return;
 
         await fetchData({
-          path: `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-            query
-          )}`,
+          path: `/search?format=json&q=${encodeURIComponent(query)}`,
         });
       }
     },

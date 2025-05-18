@@ -46,18 +46,8 @@ const AddressMap = ({ onAddressSelected }: AddressMapProps): JSX.Element => {
   const [map, setMap] = useState<LeafletMap | null>(null);
   const [searchAddress, setSearchAddress] = useState<string>("");
 
-  // Replace the useEffect with our custom hook
   const { getLocationDetails, position, isLoading, address } =
     useLocationToAddress();
-
-  // Default center position
-  const defaultCenter: [number, number] = [53.5488, 9.9872];
-
-  const handlePositionChange = async (
-    newPosition: [number, number] | string
-  ) => {
-    await getLocationDetails(newPosition);
-  };
 
   useEffect(() => {
     if (address && position) {
@@ -66,12 +56,15 @@ const AddressMap = ({ onAddressSelected }: AddressMapProps): JSX.Element => {
     }
   }, [address, position, onAddressSelected, map]);
 
+  // Default center position
+  const defaultCenter: [number, number] = [53.5488, 9.9872];
+
   // Handle address search
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     if (!searchAddress.trim() || !map) return;
 
-    await handlePositionChange(searchAddress);
+    await getLocationDetails(searchAddress);
   };
 
   return (
@@ -106,7 +99,7 @@ const AddressMap = ({ onAddressSelected }: AddressMapProps): JSX.Element => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <MapMarker position={position} setPosition={handlePositionChange} />
+          <MapMarker position={position} setPosition={getLocationDetails} />
         </MapContainer>
       </div>
 

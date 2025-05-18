@@ -8,7 +8,7 @@ export interface FetcherConfig {
   token?: string | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: Record<string, any> | null;
-  strapiReq?: boolean;
+  baseUrl?: string;
 }
 
 interface FetcherErrorType extends Error {
@@ -51,11 +51,9 @@ const fetcher = async <T>(config: FetcherConfig): Promise<T> => {
     headers: customHeaders = {},
     params,
     token,
-    strapiReq,
+    baseUrl,
   } = config;
-  const url = new URL(
-    `${strapiReq ? process.env.NEXT_PUBLIC_API_URL : ""}${path}`
-  );
+  const url = new URL(`${baseUrl ?? process.env.NEXT_PUBLIC_API_URL}${path}`);
 
   // const locale = document.cookie
   //   .split("; ")
