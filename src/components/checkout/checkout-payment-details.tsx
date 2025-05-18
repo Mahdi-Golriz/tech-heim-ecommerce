@@ -1,4 +1,4 @@
-import usePaymentDetails from "@/hooks/usePaymentDetails";
+import { useCartStore } from "@/store/cart-store";
 import { UseFormReturn } from "react-hook-form";
 
 interface CheckoutFormData {
@@ -12,7 +12,7 @@ interface CheckoutPaymentDetailsProps {
 }
 
 const CheckoutPaymentDetails = ({ form }: CheckoutPaymentDetailsProps) => {
-  const { discount, grandTotal, subtotalPrice } = usePaymentDetails();
+  const { discount, grandTotal, subtotalPrice } = useCartStore();
   const shippingCost = parseFloat(form.watch("shippingCost") || "0");
 
   return (

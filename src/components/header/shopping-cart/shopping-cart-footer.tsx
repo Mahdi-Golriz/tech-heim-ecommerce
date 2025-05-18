@@ -1,6 +1,6 @@
 import Button from "@/components/ui/button";
-import usePaymentDetails from "@/hooks/usePaymentDetails";
 import { Link } from "@/i18n/routing";
+import { useCartStore } from "@/store/cart-store";
 import { PiShoppingCartSimpleLight } from "react-icons/pi";
 
 interface ShoppingCartFooterProps {
@@ -10,7 +10,7 @@ interface ShoppingCartFooterProps {
 const ShoppingCartFooter = ({
   handleProceedToCart,
 }: ShoppingCartFooterProps) => {
-  const { grandTotal } = usePaymentDetails();
+  const { grandTotal } = useCartStore();
   return (
     <>
       {/* Footer - Total and Checkout Button */}

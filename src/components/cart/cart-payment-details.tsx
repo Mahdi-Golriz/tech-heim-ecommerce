@@ -1,9 +1,9 @@
 "use client";
 
-import usePaymentDetails from "@/hooks/usePaymentDetails";
+import { useCartStore } from "@/store/cart-store";
 
 const CartPaymentDetails = () => {
-  const { subtotalPrice, grandTotal, discount } = usePaymentDetails();
+  const { subtotalPrice, grandTotal, discount } = useCartStore();
 
   return (
     <>

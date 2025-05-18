@@ -6,18 +6,10 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
-      getTotalItems: () => {
-        const { items } = get();
-        return items.reduce((total, item) => total + item.quantity, 0);
-      },
-
-      getTotalPrice: () => {
-        const { items } = get();
-        return items.reduce(
-          (totalPrice, item) => totalPrice + item.quantity * item.product.price,
-          0
-        );
-      },
+      discount: 0,
+      grandTotal: 0,
+      totalItems: 0,
+      subtotalPrice: 0,
 
       addItem: (newItem) => {
         const { items } = get();
@@ -69,3 +61,26 @@ export const useCartStore = create<CartStore>()(
     { name: "cart-storage" }
   )
 );
+
+// Derived states: Automatically update with items change
+useCartStore.subscribe((state) => {
+  state.totalItems = state.items.reduce(
+    (totalNumber, item) => totalNumber + item.quantity,
+    0
+  );
+
+  state.subtotalPrice = state.items.reduce(
+    (total, item) => total + item.product.price * item.quantity,
+    0
+  );
+
+  state.discount = state.items.reduce(
+    (total, item) =>
+      total +
+      ((item.product.price * (item.product.discount_percentage || 0)) / 100) *
+        item.quantity,
+    0
+  );
+
+  state.grandTotal = state.subtotalPrice - state.discount;
+});

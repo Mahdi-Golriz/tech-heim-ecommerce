@@ -1,8 +1,8 @@
-import usePaymentDetails from "@/hooks/usePaymentDetails";
+import { useCartStore } from "@/store/cart-store";
 import { useCheckoutStore } from "@/store/checkout-store";
 
 const PaymentDetails = () => {
-  const { discount, grandTotal, subtotalPrice } = usePaymentDetails();
+  const { discount, grandTotal, subtotalPrice } = useCartStore();
   const { checkoutDetails } = useCheckoutStore();
   return (
     <>
@@ -18,7 +18,7 @@ const PaymentDetails = () => {
         </li>
         <li className="flex justify-between border-b-2 pb-3 text-gray-600">
           <span>Shipment cost</span>
-          <span>${checkoutDetails?.shippingCost.toFixed(2)}</span>
+          <span>${checkoutDetails?.shippingCost?.toFixed(2)}</span>
         </li>
         <li className="flex justify-between font-medium">
           <span>Grand total</span>

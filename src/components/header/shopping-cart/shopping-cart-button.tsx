@@ -13,7 +13,6 @@ import {
 import { useCartStore } from "@/store/cart-store";
 import { useEffect, useState } from "react";
 
-import usePaymentDetails from "@/hooks/usePaymentDetails";
 import ShoppingCartCard from "./shopping-cart-card";
 import ShoppingCartFooter from "./shopping-cart-footer";
 
@@ -21,7 +20,7 @@ const ShoppingCartButton = () => {
   const items = useCartStore((state) => state.items);
   const [sideOffset, setSideOffset] = useState(70);
   const [open, setOpen] = useState(false);
-  const { totalItems } = usePaymentDetails();
+  const { totalItems } = useCartStore();
 
   useEffect(() => {
     const updateSideOffset = () => {

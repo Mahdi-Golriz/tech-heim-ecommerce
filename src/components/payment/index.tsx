@@ -29,20 +29,18 @@ import {
   formatCardNumber,
   formatExpirationDate,
 } from "@/utils/format-card-info";
-import usePaymentDetails from "@/hooks/usePaymentDetails";
 import CheckoutItemsList from "../checkout/checkout-items-list";
 import PaymentHeader from "./payment-header";
 
 const PaymentForm = () => {
   const router = useRouter();
   const { user } = useUserStore();
-  const { items, clearCart } = useCartStore();
+  const { items, clearCart, discount, subtotalPrice } = useCartStore();
   const { checkoutDetails, clearCheckoutDetails } = useCheckoutStore();
   const skipRedirect = useRef(false);
 
   const { successfulPayment, createOrderLoading, deleteItemsLoading } =
     useSuccessPayment();
-  const { subtotalPrice, discount } = usePaymentDetails();
 
   useEffect(() => {
     if (!checkoutDetails && !skipRedirect.current) {

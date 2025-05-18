@@ -22,8 +22,10 @@ export interface Cart {
 
 export type CartStore = {
   items: CartItem[];
-  getTotalItems: () => number;
-  getTotalPrice: () => number;
+  subtotalPrice: number;
+  discount: number;
+  grandTotal: number;
+  totalItems: number;
   setCart: (cart: Cart) => void;
   addItem: (newItem: CartItem) => void;
   removeItem: (documentId: string, color: string) => void;
