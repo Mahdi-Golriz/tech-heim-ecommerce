@@ -1,3 +1,5 @@
+"use client";
+
 import { useCartStore } from "@/store/cart-store";
 import { useUserStore } from "@/store/user-store";
 import useFetch from "./useFetch";

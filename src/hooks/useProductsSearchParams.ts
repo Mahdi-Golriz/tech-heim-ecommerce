@@ -1,4 +1,4 @@
-import { FilterValues } from "@/app/[locale]/products/_components/products-list";
+import { FilterValues } from "@/components/PLP";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 
