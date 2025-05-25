@@ -1,12 +1,10 @@
 "use client";
+"use client";
 
-import useFetch from "@/hooks/useFetch";
 import { Product } from "@/models/product-model";
-import { useParams } from "next/navigation";
 import { PiStarFill } from "react-icons/pi";
 import "swiper/css";
 import "swiper/css/pagination";
-import { DataResponse } from "@/models/response-model";
 import ProductDetailsBreadcrumb from "./product-breadcrumb";
 import ProductImageSlider from "./product-images-slider";
 import ProductServices from "./product-services";
@@ -15,24 +13,13 @@ import ProductSpecs from "./product-details";
 import SimilarProducts from "./similar-products";
 import { useEffect, useState } from "react";
 import AddToCart from "./add-to-cart";
-import PageLoader from "../ui/page-loader";
 
-interface Params {
-  id: string;
-  locale: string;
-  [key: string]: string;
+interface ProductDetailsProps {
+  product: Product;
+  productId: string;
 }
 
-const ProductDetails = () => {
-  const params = useParams<Params>();
-
-  const productId = params.id;
-  const { data: productResponse, isLoading } = useFetch<DataResponse<Product>>({
-    path: `/api/products/${productId}`,
-    params: { populate: "*" },
-  });
-
-  const product = productResponse?.data;
+const ProductDetails = ({ product, productId }: ProductDetailsProps) => {
   const [selectedColor, setSelectedColor] = useState("");
 
   useEffect(() => {
@@ -45,7 +32,7 @@ const ProductDetails = () => {
 
   const productImages = product?.product_images;
 
-  if (isLoading) return <PageLoader fullPage />;
+  // if (isLoading) return <PageLoader fullPage />;
 
   return (
     <>

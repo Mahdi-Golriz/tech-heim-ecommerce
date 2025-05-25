@@ -31,12 +31,10 @@ const PLPPage = async ({ searchParams }: PLPProps) => {
   try {
     products = await fetcher({
       path: "/api/products",
-      method: "GET",
       params: {
         populate: "*",
         ...cleanedQueryParams,
       },
-      baseUrl: process.env.NEXT_PUBLIC_API_URL,
     });
   } catch (error) {
     console.error("Error fetching products:", error);

@@ -25,6 +25,8 @@ const breadcrumbLinks = [
   { href: "/products", title: "Products" },
 ];
 
+export const dynamic = "force-dynamic"; // Ensures SSR
+
 const Products = ({
   products,
   page,
