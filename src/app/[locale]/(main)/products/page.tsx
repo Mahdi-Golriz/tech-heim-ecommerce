@@ -4,12 +4,6 @@ import { DataResponse } from "@/models/response-model";
 import fetcher from "@/utils/fetcher";
 import { parseProductsSearchParams } from "@/utils/parseProductsSearchParams";
 
-export interface FilterValues {
-  categories: string[];
-  priceRange: [number, number];
-  hasDiscount: boolean;
-}
-
 interface PLPProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
@@ -38,6 +32,7 @@ const PLPPage = async ({ searchParams }: PLPProps) => {
     });
   } catch (error) {
     console.error("Error fetching products:", error);
+    return null;
   }
 
   return (

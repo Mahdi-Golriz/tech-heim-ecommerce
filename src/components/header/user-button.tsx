@@ -55,8 +55,13 @@ const UserButton = () => {
         >
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              <User />
-              <span>{user.username}</span>
+              <div className="p-2">
+                <User size="50" />
+              </div>
+              <div className="flex flex-col pr-2">
+                <span className="text-primary">{user.username}</span>
+                <span className="text-xs">{user.email}</span>
+              </div>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <LogoutButton />

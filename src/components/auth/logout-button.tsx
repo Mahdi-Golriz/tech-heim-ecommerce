@@ -27,7 +27,9 @@ const LogoutButton = () => {
       size="custom"
       className="p-0 [&_svg]:size-4 text-black"
     >
-      <LogOut size={24} />
+      <div className="p-2">
+        <LogOut size={24} />
+      </div>
       Log out
     </Button>
   );
