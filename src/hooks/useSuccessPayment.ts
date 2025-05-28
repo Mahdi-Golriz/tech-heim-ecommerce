@@ -30,6 +30,15 @@ const useSuccessPayment = () => {
     totalPrice,
     userId,
   }: OrderData) => {
+    const itemsDetails = items.map((item) => ({
+      itemNum: item.quantity,
+      itemTitle: item.product.title,
+      itemColor: item.color,
+      itemPrice: item.product.discount_percentage
+        ? (1 - item.product.discount_percentage / 100) * item.product.price
+        : item.product.price,
+    }));
+
     try {
       await createOrder({
         method: "POST",
@@ -40,6 +49,7 @@ const useSuccessPayment = () => {
             totalPrice: totalPrice,
             deliveryAddress: deliveryAddress,
             user: userId,
+            itemsDetails: itemsDetails,
           },
         },
       });

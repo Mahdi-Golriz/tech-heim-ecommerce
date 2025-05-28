@@ -1,5 +1,24 @@
 import { Cart } from "./cart-model";
 
+interface ItemsDetails {
+  itemNum: number;
+  itemTitle: string;
+  itemColor: string;
+  itemPrice: number;
+}
+
+export interface Order {
+  id: number;
+  documentId: string;
+  totalPrice: 83.2;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  cardNumber: string;
+  deliveryAddress: string;
+  itemsDetails: ItemsDetails[];
+}
+
 export interface User {
   id: number;
   documentId: string;
@@ -16,6 +35,9 @@ export interface User {
   phoneNumber: string | null;
   cart: Cart;
   address: string;
+  postalCode: string;
+  fullName: string;
+  orders: Order[];
 }
 
 export type UserStore = {
