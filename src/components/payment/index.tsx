@@ -25,10 +25,7 @@ import useSuccessPayment from "@/hooks/useSuccessPayment";
 import { toast } from "sonner";
 import { PaymentSchema } from "@/validations/payment-schema";
 import PaymentDetails from "./payment-details";
-import {
-  formatCardNumber,
-  formatExpirationDate,
-} from "@/utils/format-card-info";
+import { formatCardNumber, formatExpirationDate } from "@/utils/formatter";
 import CheckoutItemsList from "../checkout/checkout-items-list";
 import PaymentHeader from "./payment-header";
 
