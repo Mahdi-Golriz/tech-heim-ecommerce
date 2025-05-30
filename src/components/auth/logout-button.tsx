@@ -25,7 +25,7 @@ const LogoutButton = () => {
       onClick={handleClick}
       variant="custom"
       size="custom"
-      className="p-0 [&_svg]:size-4 text-black"
+      className="p-0 [&_svg]:size-4 text-black hover:text-primary"
     >
       <div className="p-2">
         <LogOut size={24} />

@@ -1,3 +1,5 @@
+"use client";
+
 import ProductCard from "@/components/new-products/product-cart";
 import { CustomBreadcrumb } from "@/components";
 import ActiveFiltersDisplay from "./active-filters-display";
@@ -24,8 +26,6 @@ const breadcrumbLinks = [
   { href: "/", title: "Home" },
   { href: "/products", title: "Products" },
 ];
-
-export const dynamic = "force-dynamic"; // Ensures SSR
 
 const Products = ({
   products,
@@ -63,7 +63,12 @@ const Products = ({
           ) : products.data.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {products.data.map((product) => (
-                <ProductCard key={product.id} product={product} hasCartButton />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  hasAddToCartButton
+                  wishlistButtonPosition="bottomRight"
+                />
               ))}
             </div>
           ) : (

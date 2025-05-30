@@ -139,7 +139,8 @@ const CSRProducts = () => {
                   <ProductCard
                     key={product.id}
                     product={product}
-                    hasCartButton
+                    hasAddToCartButton
+                    wishlistButtonPosition="bottomRight"
                   />
                 ))}
               </div>

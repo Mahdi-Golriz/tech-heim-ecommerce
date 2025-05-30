@@ -21,7 +21,7 @@ const ProfileOrders = () => {
 
   return (
     <div className="space-y-4">
-      <Accordion type="multiple" className="w-full space-y-4 mb-10">
+      <Accordion type="multiple" className="w-full space-y-4 my-10">
         {orders?.map((order, index) => (
           <AccordionItem
             key={order.documentId}
