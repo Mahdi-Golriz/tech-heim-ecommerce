@@ -1,18 +1,25 @@
 import Image from "next/image";
 import { FC } from "react";
-import Button from "../ui/button";
-import { PiHeartLight, PiPlusBold, PiStarFill } from "react-icons/pi";
+import { PiPlusBold, PiStarFill } from "react-icons/pi";
 import { Product } from "@/models/product-model";
 import { cn } from "@/lib/utils";
 import { Link } from "@/i18n/routing";
 import PLPAddToCart from "../PLP/plp-add-to-cart";
+import WishlistButton from "../wishlist-button/wishlist-button";
 
 interface ProductCartProps {
   product: Product;
-  hasCartButton: boolean;
+  hasAddToCartButton: boolean;
+  plpCard?: boolean;
+  newProductCard?: boolean;
+  wishlistButtonPosition: "topLeft" | "bottomRight";
 }
 
-const ProductCard: FC<ProductCartProps> = ({ product, hasCartButton }) => {
+const ProductCard: FC<ProductCartProps> = ({
+  product,
+  hasAddToCartButton,
+  wishlistButtonPosition,
+}) => {
   const {
     product_images: productImages,
     title,
@@ -75,7 +82,7 @@ const ProductCard: FC<ProductCartProps> = ({ product, hasCartButton }) => {
         </p>
         <div
           className={cn("flex justify-between items-center mt-auto", {
-            "group-hover:hidden": hasCartButton,
+            "group-hover:hidden": hasAddToCartButton,
           })}
         >
           <div className="">
@@ -95,16 +102,15 @@ const ProductCard: FC<ProductCartProps> = ({ product, hasCartButton }) => {
             <span className="h-5">{rate}</span>
           </div>
         </div>
-        <PLPAddToCart hasCartButton={hasCartButton} product={product} />
-        <Button
-          variant="icon"
-          className={cn(
-            "absolute p-0 [&_svg]:size-5 [&_svg]:text-blue-600 group-hover:opacity-100 h-fit opacity-0",
-            hasCartButton ? "bottom-4 right-3" : "top-1"
-          )}
-        >
-          <PiHeartLight />
-        </Button>
+        <PLPAddToCart
+          hasAddToCartButton={hasAddToCartButton}
+          product={product}
+        />
+        <WishlistButton
+          className="group-hover:opacity-100 h-fit opacity-0"
+          relativePosition={wishlistButtonPosition}
+          productId={product.documentId}
+        />
       </div>
     </Link>
   );

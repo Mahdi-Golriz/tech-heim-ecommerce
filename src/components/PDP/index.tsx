@@ -1,5 +1,4 @@
 "use client";
-"use client";
 
 import { Product } from "@/models/product-model";
 import { PiStarFill } from "react-icons/pi";
@@ -13,6 +12,7 @@ import ProductSpecs from "./product-details";
 import SimilarProducts from "./similar-products";
 import { useEffect, useState } from "react";
 import AddToCart from "./add-to-cart";
+import WishlistButton from "../wishlist-button/wishlist-button";
 
 interface ProductDetailsProps {
   product: Product;
@@ -32,8 +32,6 @@ const ProductDetails = ({ product, productId }: ProductDetailsProps) => {
 
   const productImages = product?.product_images;
 
-  // if (isLoading) return <PageLoader fullPage />;
-
   return (
     <>
       <div className="container">
@@ -41,7 +39,8 @@ const ProductDetails = ({ product, productId }: ProductDetailsProps) => {
       </div>
 
       <div className="container grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-3 ">
-        <div className="p-2 ">
+        <div className="p-2 relative">
+          <WishlistButton className="z-10" productId={productId} />
           <ProductImageSlider productImages={productImages ?? []} />
           <div className="p-2">
             <h3 className="text-base font-medium my-3">{product?.title}</h3>

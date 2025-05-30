@@ -48,7 +48,11 @@ const SimilarProducts: FC<SimilarProductsProps> = ({
         >
           {similarProducts?.slice(0, 6).map((product) => (
             <SwiperSlide key={product.id} className="p-2">
-              <ProductCard product={product} hasCartButton />
+              <ProductCard
+                product={product}
+                hasAddToCartButton
+                wishlistButtonPosition="bottomRight"
+              />
             </SwiperSlide>
           ))}
         </Swiper>

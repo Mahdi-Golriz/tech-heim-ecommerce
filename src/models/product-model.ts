@@ -6,23 +6,23 @@ export interface ProductImage {
 }
 
 export interface Product {
-  title: string;
-  id: number;
+  title?: string;
+  id?: number;
   documentId: string;
   description?: string;
   on_sale?: boolean;
   discount_percentage?: number;
-  price: number;
+  price?: number;
   product_images?: ProductImage[];
   colors?: string;
   color?: string[];
   new_collection?: boolean;
   rate?: number;
-  slug: string;
+  slug?: string;
   category?: {
     title: string;
     id: number;
     documentId: string;
   };
-  details: Record<string, string>;
+  details?: Record<string, string>;
 }

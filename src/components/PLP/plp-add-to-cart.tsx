@@ -8,10 +8,10 @@ import useCart from "@/hooks/useAddToCart";
 
 interface PLPAddToCartProps {
   product: Product;
-  hasCartButton: boolean;
+  hasAddToCartButton: boolean;
 }
 
-const PLPAddToCart = ({ product, hasCartButton }: PLPAddToCartProps) => {
+const PLPAddToCart = ({ product, hasAddToCartButton }: PLPAddToCartProps) => {
   const { addToCart, isLoading } = useCart();
   const defaultColor = product.color?.at(0) || "";
 
@@ -28,7 +28,7 @@ const PLPAddToCart = ({ product, hasCartButton }: PLPAddToCartProps) => {
       className={cn(
         "hidden w-fit mt-auto px-2 text-xs [&_svg]:size-4 lg:[&_svg]:size-6 lg:text-sm h-fit font-medium ",
         {
-          "group-hover:flex": hasCartButton,
+          "group-hover:flex": hasAddToCartButton,
         }
       )}
       onClick={handleAddToCart}

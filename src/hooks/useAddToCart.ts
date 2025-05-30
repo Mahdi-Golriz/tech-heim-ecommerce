@@ -34,6 +34,7 @@ const useAddToCart = () => {
     params: {
       "populate[cart][populate][items][populate][product][populate]":
         "product_images",
+      "populate[wishlists][populate][product][fields]": "documentId",
     },
   });
 

@@ -17,8 +17,8 @@ const iconInputVariants = cva("", {
 interface InputIconProps
   extends ComponentProps<typeof Input>,
     VariantProps<typeof iconInputVariants> {
-  startIcon?: React.ComponentType<{ color: string }>;
-  endIcon?: React.ComponentType<{ color: string }>;
+  startIcon?: React.ComponentType<{ color?: string }>;
+  endIcon?: React.ComponentType<{ color?: string }>;
   placeholder?: string;
   type?: string;
   color?: string;
