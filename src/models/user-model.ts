@@ -1,4 +1,5 @@
 import { Cart } from "./cart-model";
+import { Product } from "./product-model";
 
 interface ItemsDetails {
   itemNum: number;
@@ -17,6 +18,15 @@ export interface Order {
   cardNumber: string;
   deliveryAddress: string;
   itemsDetails: ItemsDetails[];
+}
+
+export interface Wishlist {
+  id: number;
+  documentId: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  product: Product;
 }
 
 export interface User {
@@ -38,6 +48,7 @@ export interface User {
   postalCode: string;
   fullName: string;
   orders: Order[];
+  wishlists: Wishlist[];
 }
 
 export type UserStore = {
