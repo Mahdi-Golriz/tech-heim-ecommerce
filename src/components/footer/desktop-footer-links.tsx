@@ -19,7 +19,7 @@ const DesktopFooterLinks = () => {
     {
       title: t("company.title"),
       links: [
-        { title: t("company.link-1"), href: "" },
+        { title: t("company.link-1"), href: "/about-us" },
         { title: t("company.link-2"), href: "" },
         { title: t("company.link-3"), href: "" },
         { title: t("company.link-4"), href: "" },
@@ -30,7 +30,7 @@ const DesktopFooterLinks = () => {
       links: [
         { title: t("info.link-1"), href: "" },
         { title: t("info.link-2"), href: "" },
-        { title: t("info.link-3"), href: "" },
+        { title: t("info.link-3"), href: "faq" },
       ],
     },
     {
