@@ -15,9 +15,7 @@ const PLPPage = async ({ searchParams }: PLPProps) => {
   const { page, sortBy, filters, queryParams } = parsedParams;
 
   const cleanedQueryParams = Object.fromEntries(
-    Object.entries(queryParams).filter(
-      ([, value]) => value !== null && value !== undefined
-    )
+    Object.entries(queryParams).filter(([, value]) => value !== undefined)
   );
 
   // Fetch products

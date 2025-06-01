@@ -36,14 +36,16 @@ const ProductsFilter = ({
     path: "/api/categories",
   });
 
+  const isOpenPriceRange =
+    initialFilters.priceRange[0] !== 0 || initialFilters.priceRange[1] !== 2000;
+
+  const isOpenCategories = initialFilters.categories.length !== 0;
+
   const isMobile = useMediaQuery("(max-width: 640px)");
   const [filters, setFilters] = useState(initialFilters);
   const [minPrice, setMinPrice] = useState(initialFilters.priceRange[0]);
   const [maxPrice, setMaxPrice] = useState(initialFilters.priceRange[1]);
   const [hasChanges, setHasChanges] = useState(false);
-
-  //TODO
-  // const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     setFilters(initialFilters);
@@ -140,7 +142,12 @@ const ProductsFilter = ({
         </Button>
       </div>
 
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion
+        type="single"
+        collapsible
+        className="w-full"
+        defaultValue={isOpenCategories ? "categories" : ""}
+      >
         <AccordionItem value="categories">
           <AccordionTrigger>Category</AccordionTrigger>
           <AccordionContent>
@@ -173,7 +180,12 @@ const ProductsFilter = ({
           onCheckedChange={(checked) => updateFilters({ hasDiscount: checked })}
         />
       </div>
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion
+        type="single"
+        collapsible
+        className="w-full"
+        defaultValue={isOpenPriceRange ? "price" : ""}
+      >
         <AccordionItem value="price">
           <AccordionTrigger>Price</AccordionTrigger>
           <AccordionContent className="pt-2 mb-5">
