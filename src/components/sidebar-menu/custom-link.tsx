@@ -19,6 +19,7 @@ const CustomLink: FC<CustomLinkProps> = ({
   onClick,
   className,
 }) => {
+  const isDisabled = !href || href === "#" || href === "";
   return (
     <li>
       <Button
@@ -31,10 +32,17 @@ const CustomLink: FC<CustomLinkProps> = ({
         asChild
         onClick={onClick}
       >
-        <Link href={href}>
-          {Icon && <Icon />}
-          {title}
-        </Link>
+        {!isDisabled ? (
+          <Link href={href}>
+            {Icon && <Icon />}
+            {title}
+          </Link>
+        ) : (
+          <span className="cursor-pointer">
+            {Icon && <Icon />}
+            {title}
+          </span>
+        )}
       </Button>
     </li>
   );

@@ -30,7 +30,7 @@ const DesktopFooterLinks = () => {
       links: [
         { title: t("info.link-1"), href: "" },
         { title: t("info.link-2"), href: "" },
-        { title: t("info.link-3"), href: "faq" },
+        { title: t("info.link-3"), href: "/faq" },
       ],
     },
     {

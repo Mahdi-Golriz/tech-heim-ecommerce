@@ -6,7 +6,6 @@ import {
   PiTwitterLogoLight,
   PiYoutubeLogoLight,
 } from "react-icons/pi";
-import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
 interface SocialMediaIconsProps {
@@ -25,9 +24,9 @@ const SocialMediaIcons: FC<SocialMediaIconsProps> = ({ className }) => {
     <div className={cn("[&_svg]:size-6", className)}>
       {socialMedia.map((Item, i) => (
         <Button variant="icon" className="p-0 h-fit" key={i}>
-          <Link href="">
+          <span>
             <Item color="white" strokeWidth={10} />
-          </Link>
+          </span>
         </Button>
       ))}
     </div>
