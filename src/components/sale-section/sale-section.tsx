@@ -16,6 +16,7 @@ import Image from "next/image";
 import useFetch from "@/hooks/useFetch";
 import { Product } from "@/models/product-model";
 import { DataResponse } from "@/models/response-model";
+import { Link } from "@/i18n/routing";
 
 const SaleSection = () => {
   const swiperRef = useRef<SwiperType | null>(null);
@@ -48,8 +49,9 @@ const SaleSection = () => {
             variant="link"
             className="text-white lg:text-base z-10"
             size="sm"
+            asChild
           >
-            {t("cta")}
+            <Link href="/products?page=1&hasDiscount=true">{t("cta")}</Link>
           </Button>
         </div>
         <div className="col-span-2 lg:col-span-4 ml-7">
@@ -69,8 +71,10 @@ const SaleSection = () => {
             }}
           >
             {saleProducts?.data.map((item) => (
-              <SwiperSlide key={item.id} className=" bg-white rounded">
-                <SaleCard {...item} />
+              <SwiperSlide className=" bg-white rounded" key={item.documentId}>
+                <Link href={`/products/${item.documentId}`}>
+                  <SaleCard {...item} />
+                </Link>
               </SwiperSlide>
             ))}
           </Swiper>

@@ -6,12 +6,9 @@ import { FC, useMemo, useState } from "react";
 import {
   PiDeviceMobileCameraThin,
   PiLaptopLight,
-  PiDeviceTabletSpeakerThin,
   PiWatchLight,
-  PiHeadsetThin,
   PiCameraLight,
   PiGameControllerLight,
-  PiPlugsLight,
   PiMouseSimpleLight,
   PiCaretDown,
   PiXCircleLight,
@@ -45,39 +42,32 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onClose, isOpen }) => {
       {
         title: t("products.mobilePhones"),
         icon: PiDeviceMobileCameraThin,
-        href: "/mobilePhones",
+        href: "/products?page=1&categories=2",
       },
       {
         title: t("products.laptopsComputers"),
         icon: PiLaptopLight,
-        href: "/laptopsComputers",
-      },
-      {
-        title: t("products.tabletsEReader"),
-        icon: PiDeviceTabletSpeakerThin,
-        href: "/tabletsEReader",
+        href: "/products?page=1&categories=3",
       },
       {
         title: t("products.wearables"),
         icon: PiWatchLight,
-        href: "/wearables",
+        href: "/products?page=1&categories=5",
       },
-      { title: t("products.audio"), icon: PiHeadsetThin, href: "/audio" },
-      { title: t("products.cameras"), icon: PiCameraLight, href: "/cameras" },
+      {
+        title: t("products.cameras"),
+        icon: PiCameraLight,
+        href: "/products?page=1&categories=7",
+      },
       {
         title: t("products.gaming"),
         icon: PiGameControllerLight,
-        href: "/gaming",
-      },
-      {
-        title: t("products.networking"),
-        icon: PiPlugsLight,
-        href: "/networking",
+        href: "/products?page=1&categories=8",
       },
       {
         title: t("products.accessories"),
         icon: PiMouseSimpleLight,
-        href: "/accessories",
+        href: "/products?page=1&categories=10",
       },
     ];
   }, [t]);
@@ -89,7 +79,7 @@ const SideBarMenu: FC<SideBarMenuProps> = ({ onClose, isOpen }) => {
         href: "/products",
         links: productLinks,
       },
-      { title: t("burgerMenu.blog"), href: "/" },
+      { title: t("burgerMenu.aboutUs"), href: "/about-us" },
       { title: t("burgerMenu.faq"), href: "/faq" },
       { title: t("burgerMenu.contactUs"), href: "/contact-us" },
     ];

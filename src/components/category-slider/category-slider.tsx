@@ -9,9 +9,9 @@ import { Category } from "@/models/categories-model";
 import useFetch from "@/hooks/useFetch";
 import { DataResponse } from "@/models/response-model";
 
-const CategoryCard = ({ title, thumbnail }: Category) => (
+const CategoryCard = ({ title, thumbnail, id }: Category) => (
   <Link
-    href="/"
+    href={`/products?page=1&categories=${id}`}
     className="block h-28 sm:h-36 lg:h-48 p-2 shadow-cart rounded-lg"
   >
     <Image
@@ -31,7 +31,7 @@ const CategorySlider = () => {
   const { data: categories } = useFetch<DataResponse<Category[]>>({
     path: "/api/categories",
     params: {
-      populate: "*",
+      "populate[thumbnail][fields]": "url",
     },
   });
 
