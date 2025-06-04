@@ -40,7 +40,7 @@ const AddToCart: FC<AddToCartProps> = ({
         </div>
       ) : (
         <p className="w-full text-center text-xl font-medium h-fit sm:px-5 lg:my-5">
-          {t("last price: $")} {price}
+          {t("lastPrice")} {price}
         </p>
       )}
     </div>

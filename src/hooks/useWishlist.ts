@@ -53,7 +53,7 @@ const useWishlist = () => {
     userId,
     wishlist,
   }: HandleAddToWishList) => {
-    const AvailableItem = wishlist.find(
+    const AvailableItem = wishlist?.find(
       (item) => item.product.documentId === productId
     );
 

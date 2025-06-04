@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { PiArrowLeftLight } from "react-icons/pi";
 import Button from "../ui/button";
-import GoogleProviderButton from "./google-provider-button";
 import useAuthModalStore from "@/store/auth-modal-store";
 import SignInForm from "../forms/signin-form";
 import SignUpForm from "../forms/signup-form";
@@ -41,14 +40,14 @@ const AuthWrapper = () => {
   );
 
   const changeTabButton = (
-    <div className="mb-6">
+    <>
       <span className="text-gray-500">
         {isSignup ? t("signUp.footer") : t("signIn.footer")}
       </span>
       <Button variant="link" onClick={handleChangeTabs}>
         {isSignup ? t("signIn.cta") : t("signUp.cta")}
       </Button>
-    </div>
+    </>
   );
 
   return (
@@ -67,27 +66,13 @@ const AuthWrapper = () => {
           <PiArrowLeftLight className="w-6 h-6" />
         </Button>
         <div>{tabContent}</div>
-        <div className="flex items-center">
-          <div className="flex-grow border-t border-gray-400"></div>
-          <span className="px-4 text-gray-600">{t("signIn.header")}</span>
-          <div className="flex-grow border-t border-gray-400"></div>
-        </div>
-        <GoogleProviderButton />
         <div>{changeTabButton}</div>
       </div>
       {/* desktop */}
       <div className="fixed inset-0 z-50 bg-black/50 sm:flex items-center justify-center text-center hidden">
-        <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 relative min-h-[600px]">
+        <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 relative min-h-[520px] flex flex-col">
           <div className="p-6">{tabContent}</div>
-          <div className="flex items-center px-6">
-            <div className="flex-grow border-t border-gray-400"></div>
-            <span className="px-4 text-gray-600">{t("signIn.header")}</span>
-            <div className="flex-grow border-t border-gray-400"></div>
-          </div>
-          <div className="px-6">
-            <GoogleProviderButton />
-          </div>
-          <div>{changeTabButton}</div>
+          <div className="mt-auto pb-6">{changeTabButton}</div>
           <Button
             onClick={toggleAuthModal}
             variant="icon"

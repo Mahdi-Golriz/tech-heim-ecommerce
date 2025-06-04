@@ -40,8 +40,6 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  firstName: string | null;
-  lastName: string | null;
   phoneNumber: string | null;
   cart: Cart;
   address: string;

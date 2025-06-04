@@ -55,29 +55,38 @@ const SaleSection = () => {
           </Button>
         </div>
         <div className="col-span-2 lg:col-span-4 ml-7">
-          <Swiper
-            onSwiper={(swiper) => (swiperRef.current = swiper)}
-            className="relative"
-            modules={[Autoplay, Navigation]}
-            autoplay={{ delay: 3000, disableOnInteraction: false }}
-            loop
-            navigation
-            grabCursor
-            breakpoints={{
-              320: { slidesPerView: 1.5, spaceBetween: 16 },
-              640: { slidesPerView: 2.5, spaceBetween: 16 },
-              1024: { slidesPerView: 3.5, spaceBetween: 24 },
-              1280: { slidesPerView: 4.5, spaceBetween: 24 },
-            }}
-          >
-            {saleProducts?.data.map((item) => (
-              <SwiperSlide className=" bg-white rounded" key={item.documentId}>
-                <Link href={`/products/${item.documentId}`}>
-                  <SaleCard {...item} />
-                </Link>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          {saleProducts?.data ? (
+            <Swiper
+              onSwiper={(swiper) => {
+                swiperRef.current = swiper;
+                swiper.autoplay.start();
+              }}
+              initialSlide={1}
+              className="relative"
+              modules={[Autoplay, Navigation]}
+              autoplay={{ delay: 3000, disableOnInteraction: false }}
+              loop
+              navigation
+              grabCursor
+              breakpoints={{
+                320: { slidesPerView: 1.5, spaceBetween: 16 },
+                640: { slidesPerView: 2.5, spaceBetween: 16 },
+                1024: { slidesPerView: 3.5, spaceBetween: 24 },
+                1280: { slidesPerView: 4.5, spaceBetween: 24 },
+              }}
+            >
+              {saleProducts?.data.map((item) => (
+                <SwiperSlide
+                  className=" bg-white rounded"
+                  key={item.documentId}
+                >
+                  <Link href={`/products/${item.documentId}`}>
+                    <SaleCard {...item} />
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : null}
         </div>
         <div className="hidden lg:flex lg:justify-end col-start-5 lg:gap-1 p-2">
           <NextButton swiperRef={swiperRef} />
