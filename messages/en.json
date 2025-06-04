@@ -7,12 +7,23 @@
         "products": "Products",
         "faq": "FAQ",
         "contactUs": "Contact Us"
+      },
+      "user": {
+        "orders": "Orders",
+        "wishlist": "Wishlist",
+        "logOut": "Log out",
+        "logOutToast": "You've been successfully signed out"
       }
     },
     "hero": {
-      "title": "Tech Heim",
-      "text": "Join the",
-      "subtext": "digital revolution",
+      "slides": {
+        "cameraText": "Stay connected and track your goals with smart wearables designed for modern life.",
+        "gamingText": "Level up your gameplay with high-performance gaming gear and accessories.",
+        "laptopsText": "Power through any task with cutting-edge laptops and desktop solutions.",
+        "phoneText": "Discover the latest smartphones that keep you connected to what matters most.",
+        "wearableText": "Stay connected and track your goals with smart wearables designed for modern life.",
+        "accessoriesText": "Complete your tech setup with premium accessories that enhance every experience."
+      },
       "cta": "Explore More"
     },
     "saleSection": {
@@ -29,10 +40,13 @@
         "laptops": "Laptops",
         "cameras": "Cameras"
       }
+    },
+    "newProducts": {
+      "header": { "title": "New Products", "cta": "View all" }
     }
   },
   "burgerMenu": {
-    "blog": "Blog",
+    "aboutUs": "About Us",
     "faq": "FAQ",
     "contactUs": "Contact Us",
     "products": "Products"
@@ -48,13 +62,53 @@
     "networking": "Networking",
     "accessories": "Accessories",
     "cta": {
-      "addToCart": "Add to cart"
+      "addToCart": "Add to cart",
+      "addingToCart": "Adding..."
+    },
+    "toast": {
+      "addedToCart": "Item has been added to your shopping basket"
+    },
+    "plp": {
+      "breadcrumb": "Products",
+      "emptyState": "No products match your current filters.",
+      "filters": {
+        "title": "Filters",
+        "category": "Category",
+        "discount": "Discount",
+        "price": "Price",
+        "firstCta": "Apply Filters",
+        "secondCta": "Clear All"
+      },
+      "sort": {
+        "defaultSort": "Default Sort",
+        "priceAsc": "Price: ascending",
+        "priceDesc": "Price: descending",
+        "newArrivals": "New Arrivals"
+      },
+      "pagination": {
+        "next": "Next",
+        "previous": "Previous"
+      }
+    },
+    "pdp": {
+      "breadcrumb": "Products",
+      "addToCart": "Add to cart",
+      "addingToCart": "Adding...",
+      "lastPrice": "last price: $",
+      "productServices": {
+        "inStock": "In Stock",
+        "guarantee": "Guaranteed",
+        "delivery": "Free Delivery"
+      },
+      "selectColor": "Select Color :",
+      "similarProducts": "Similar Products"
     }
   },
   "footer": {
     "emailInput": {
       "label": "Sign up for News and updates",
-      "placeholder": "E-mail Address"
+      "placeholder": "E-mail Address",
+      "toast": "Your email was subscribed"
     },
     "mainCategories": {
       "company": {
@@ -82,6 +136,297 @@
       "privacyPolicy": "Privacy Policy",
       "termsAndConditions": "Terms and Conditions",
       "imprint": "Imprint"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "trust": {
+      "title": "Trust & Safety",
+      "questions": {
+        "firstQuestion": "Is Tech Helm a secure platform for online shopping?",
+        "secondQuestion": "How do you protect my personal data?",
+        "thirdQuestion": "What should I do if I suspect fraudulent activity on my account?",
+        "fourthQuestion": "Are the product reviews on Tech Helm authentic?"
+      },
+      "answers": {
+        "firstAnswer": "Yes, Tech Helm uses industry-standard SSL encryption and secure payment gateways to protect your personal and financial information. We also comply with PCI DSS standards for payment processing security.",
+        "secondAnswer": "We follow strict privacy policies and never share your personal information with third parties without your consent. All data is encrypted and stored on secure servers with regular security audits.",
+        "thirdAnswer": "If you notice any suspicious activity, immediately change your password and contact our security team through the support page. We monitor all accounts for unusual activity and will assist you promptly.",
+        "forthAnswer": "Yes, we have strict policies to ensure review authenticity. Only verified buyers can leave reviews, and we use advanced algorithms to detect and remove fake reviews to maintain trust in our community."
+      }
+    },
+    "services": {
+      "title": "Services",
+      "questions": {
+        "firstQuestion": "What services does Tech Helm offer?",
+        "secondQuestion": "Do you provide technical support after purchase?",
+        "thirdQuestion": "Can I get installation services for my purchased products?",
+        "fourthQuestion": "How can I engage with the magazine content on Tech Helm?"
+      },
+      "answers": {
+        "firstAnswer": "Tech Helm offers a comprehensive range of services including product sales, technical support, installation services, extended warranties, and access to our tech magazine with expert reviews and tutorials.",
+        "secondAnswer": "Yes, we offer comprehensive technical support for all products purchased through Tech Helm. Our support team is available via phone, email, and live chat to help with setup, troubleshooting, and maintenance.",
+        "thirdAnswer": "Absolutely! We offer professional installation services for eligible products. Our certified technicians can set up your equipment at your location. Installation fees vary by product and location.",
+        "forthAnswer": "You can actively engage with the magazine content by leaving comments and participating in the question-and-answer section. Feel free to share your thoughts, ask questions, and interact with fellow tech enthusiasts in the community."
+      }
+    },
+    "billing": {
+      "title": "Billing",
+      "questions": {
+        "firstQuestion": "Can I purchase products from Tech Helm using installment payments?",
+        "secondQuestion": "What payment methods do you accept?",
+        "thirdQuestion": "When will I be charged for my order?",
+        "fourthQuestion": "Can I get a refund if I'm not satisfied with my purchase?",
+        "fifthQuestion": "How can I get assistance with my purchase or any other inquiries?"
+      },
+      "answers": {
+        "firstAnswer": "Yes, Tech Helm offers the option to purchase products using both cash and installment payments. This allows you to choose the payment method that suits your needs and budget. We partner with several financing companies to provide flexible payment options.",
+        "secondAnswer": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, bank transfers, and financing options. For high-value purchases, we also accept wire transfers and cryptocurrency payments.",
+        "thirdAnswer": "For in-stock items, payment is processed immediately upon order confirmation. For pre-orders or back-ordered items, payment is processed when the item ships. Installment payments follow the agreed schedule.",
+        "forthAnswer": "Yes, we offer a 30-day return policy for most products in original condition. Refunds are processed within 5-7 business days after we receive the returned item. Some restrictions may apply for certain product categories.",
+        "fifthAnswer": "If you need assistance with your purchase or have any questions, our dedicated customer support team is here to help. You can reach out to us through the contact page on our website, and we'll be happy to assist you promptly."
+      }
+    }
+  },
+  "contactUs": {
+    "breadcrumb": "Contact Us",
+    "icons": {
+      "office": "Office",
+      "email": "Email",
+      "phone": "Phone"
+    },
+    "messageUs": {
+      "title": "Message Us",
+      "description": "We are here to assist you every step of the way. Whether you have a question, need technical support, or simply want to share your feedback, our dedicated team is ready to listen and provide prompt assistance."
+    },
+    "form": {
+      "placeholders": {
+        "name": "* Your name",
+        "email": "* Email",
+        "message": "Message"
+      },
+      "cta": "Submit",
+      "toast": "Your message was sent"
+    }
+  },
+  "aboutUs": {
+    "breadcrumb": "About us",
+    "introduction": "Tech Helm is an innovative online store that offers a diverse selection of digital gadgets, available for purchase in both cash and installment options. Embodying the motto 'Join the digital revolution today' the website not only provides a seamless shopping experience but also features a captivating blog section filled with insightful reviews, articles, and videos about cutting-edge technology and digital gadgets. Users can actively engage with the content through comments and a question-answer section, fostering a dynamic community of tech enthusiasts.",
+    "description": {
+      "title": "Tech Helm Meaning",
+      "text": "The name &quot;Tech Helm&quot; cleverly combines two language (English & German), signifying a home of technology that provides all the essential tech products and services, making it a one-stop destination for tech-savvy individuals seeking the latest and most exciting gadgets."
+    },
+    "features": {
+      "title": "Some of Tech Heim's impressive features:",
+      "firstFeature": "Diverse digital gadgets for purchase in cash or installments",
+      "secondFeature": "A blog with reviews and articles about the latest technology and gadgets",
+      "thirdFeature": "User comments and Q&A section for community interaction",
+      "fourthFeature": "Represents a tech-savvy 'home' with all necessary technology",
+      "fifthFeature": "Easy-to-use interface for a great user experience",
+      "seventhFeature": "Consistent and visually appealing design",
+      "eighthFeature": "A hub for tech enthusiasts to connect and share insights",
+      "ninthFeature": "Helps users make informed purchase decisions"
+    }
+  },
+  "authentication": {
+    "signIn": {
+      "title": "Log in",
+      "subtitle": "Log in to Tech Heim",
+      "header": "Or Log In with",
+      "footer": "Don’t have an account ?",
+      "cta": "Sign In",
+      "successfulLoginToast": "You have been successfully logged in."
+    },
+    "signUp": {
+      "title": "Create account",
+      "subtitle": "Create your account",
+      "footer": "Already have an account ?",
+      "cta": "Sign Up",
+      "successfulSignUpToast": "Congratulation your account has been successfully created."
+    }
+  },
+  "validation": {
+    "signIn": {
+      "identifier-invalid": "Please enter a valid email address",
+      "password-minLength": "Password must have at least 6 or more characters",
+      "password-maxLength": "Password must be between 6 and 100 characters"
+    },
+    "signUp": {
+      "username-minLength": "Username must be at least 3 characters long",
+      "username-maxLength": "Username must be between 3 and 20 characters",
+      "email-invalid": "Please enter a valid email address",
+      "password-minLength": "Password must be at least 6 characters long",
+      "password-maxLength": "Password must be between 6 and 100 characters"
+    },
+    "checkout": {
+      "email-invalid": "Please enter a valid email address",
+      "address-required": "Address is required"
+    },
+    "payment": {
+      "cardNumber-digitsOnly": "Card number must contain only digits",
+      "cardNumber-length": "Card number must be 16 digits",
+      "nameOnCard-minLength": "Name must be at least 2 characters",
+      "nameOnCard-lettersOnly": "Name must contain only letters and spaces",
+      "expirationDate-format": "Invalid expiration date format (MM/YY)",
+      "cvv-digitsOnly": "CVV must contain only digits",
+      "cvv-length": "CVV must be 3 or 4 digits",
+      "billingAddress-minLength": "Please enter a valid billing address"
+    },
+    "profile": {
+      "fullName-minLength": "Full name must be at least 2 characters",
+      "fullName-maxLength": "Full name must not exceed 50 characters",
+      "fullName-pattern": "Full name should only contain letters and spaces",
+
+      "email-invalid": "Please enter a valid email address",
+
+      "phoneNumber-minLength": "Phone number must be at least 10 digits",
+      "phoneNumber-maxLength": "Phone number must not exceed 15 digits",
+      "phoneNumber-pattern": "Please enter a valid phone number",
+
+      "address-minLength": "Address must be at least 5 characters",
+      "address-maxLength": "Address must not exceed 100 characters",
+
+      "postalCode-minLength": "Postal code must be at least 3 characters",
+      "postalCode-maxLength": "Postal code must not exceed 10 characters",
+      "postalCode-pattern": "Please enter a valid postal code"
+    }
+  },
+  "shoppingCart": {
+    "header": "items",
+    "emptyState": "Your cart is empty",
+    "grandTotal": "Grand total",
+    "cta": "Proceed to Cart"
+  },
+  "cart": {
+    "firstCta": "Proceed to checkout",
+    "secondCta": "Continue to shop",
+    "emptyState": "Your Cart is Empty",
+    "paymentDetails": {
+      "title": "Payment Details",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "grandTotal": "Grand total"
+    },
+    "cartCard": {
+      "guarantee": "Guaranteed",
+      "delivery": "Free Delivery"
+    }
+  },
+  "checkout": {
+    "header": {
+      "title": "Checkout"
+    },
+    "formInputs": {
+      "shipTo": {
+        "label": "Ship to",
+        "placeholder": "Address...",
+        "cta": "Select address on map"
+      },
+      "shippingMethod": {
+        "label": "Shipping Method",
+        "free": {
+          "label": "Free Shipping",
+          "text": "7-30 business days"
+        },
+        "regular": {
+          "label": "Regular Shipping",
+          "text": "3-14 business days"
+        },
+        "express": {
+          "label": "Express Shipping",
+          "text": "1-3 business days"
+        }
+      }
+    },
+    "returnButton": "Return to Cart",
+    "checkoutCard": {
+      "title": "Your Order",
+      "cta": "Continue to pay",
+      "paymentDetails": {
+        "title": "Payment Details",
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "shipmentCost": "Shipment cost",
+        "grandTotal": "Grand total"
+      }
+    }
+  },
+  "payment": {
+    "headerTitle": "Payment",
+    "toast": {
+      "processingPayment": "Processing payment...",
+      "successfulPayment": "Your order has been placed successfully.",
+      "unsuccessfulPayment": {
+        "title": "Payment processing failed",
+        "description": "Please check your payment details and try again."
+      }
+    },
+    "loading": {
+      "title": "Loading...",
+      "text": "Please wait while we prepare your payment details."
+    },
+    "formInputs": {
+      "title": "Payment Information",
+      "cardNumberLabel": "Card Number",
+      "cardNameLabel": "Name on Card",
+      "expirationDate": "Expiration Date",
+      "billingAddress": "Billing address",
+      "useAddress": "Use same as shipping address"
+    },
+    "returnButton": "Return to Checkout",
+    "paymentCard": {
+      "title": "Your Order",
+      "cta": "Complete Payment",
+      "paymentProcessing": "Processing Payment...",
+      "paymentDetails": {
+        "title": "Payment Details",
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "shipmentCost": "Shipment cost",
+        "grandTotal": "Grand total"
+      }
+    }
+  },
+  "profile": {
+    "tabs": {
+      "personalData": "Personal Data",
+      "orders": "Orders",
+      "wishlist": "Wishlist",
+      "loadingState": "Loading..."
+    },
+    "personalData": {
+      "formInputs": {
+        "fullName": {
+          "label": "Full name",
+          "placeholder": "First and Last Name"
+        },
+        "phoneNumber": {
+          "label": "Phone number"
+        },
+        "address": {
+          "label": "Address",
+          "placeholder": "country, city, street..."
+        },
+        "postalCode": {
+          "label": "Postal code"
+        }
+      },
+      "cta": "Save Changes",
+      "toast": {
+        "confirmLabel": "Confirm Changes",
+        "confirmDescription": "Are you sure you want to update your account?",
+        "saveAction": "Save Changes",
+        "cancelAction": "Cancel"
+      }
+    },
+    "orders": {
+      "order": "Order",
+      "orderData": "Placed on",
+      "cardNumber": "Card",
+      "shipTo": "Delivery",
+      "viewItems": "View Items",
+      "quantity": "Qty: ",
+      "color": "Color: "
     }
   }
 }

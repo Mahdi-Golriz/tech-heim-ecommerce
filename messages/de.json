@@ -7,12 +7,23 @@
         "products": "Produkte",
         "faq": "FAQ",
         "contactUs": "Kontakt"
+      },
+      "user": {
+        "orders": "Bestellungen",
+        "wishlist": "Wunschliste",
+        "logOut": "Abmelden",
+        "logOutToast": "Du wurdest erfolgreich abgemeldet"
       }
     },
     "hero": {
-      "title": "Tech Heim",
-      "text": "Begleite die",
-      "subtext": "digitale Revolution",
+      "slides": {
+        "cameraText": "Bleiben Sie verbunden und verfolgen Sie Ihre Ziele mit smarten Wearables für das moderne Leben.",
+        "gamingText": "Steigern Sie Ihr Spielerlebnis mit leistungsstarkem Gaming-Zubehör und Ausrüstung.",
+        "laptopsText": "Bewältigen Sie jede Aufgabe mit hochmodernen Laptops und Desktop-Lösungen.",
+        "phoneText": "Entdecken Sie die neuesten Smartphones, die Sie mit dem verbinden, was wirklich zählt.",
+        "wearableText": "Bleiben Sie verbunden und verfolgen Sie Ihre Ziele mit smarten Wearables für das moderne Leben.",
+        "accessoriesText": "Vervollständigen Sie Ihr technisches Setup mit hochwertigem Zubehör für ein besseres Erlebnis."
+      },
       "cta": "Mehr entdecken"
     },
     "saleSection": {
@@ -29,10 +40,16 @@
         "laptops": "Laptops",
         "cameras": "Kameras"
       }
+    },
+    "newProducts": {
+      "header": {
+        "title": "Neue Produkte",
+        "cta": "Alle anzeigen"
+      }
     }
   },
   "burgerMenu": {
-    "blog": "Blog",
+    "aboutUs": "Über uns",
     "faq": "FAQ",
     "contactUs": "Kontakt",
     "products": "Produkte"
@@ -48,13 +65,53 @@
     "networking": "Netzwerk",
     "accessories": "Zubehör",
     "cta": {
-      "addToCart": "In den Warenkorb"
+      "addToCart": "In den Warenkorb",
+      "addingToCart": "Wird hinzugefügt..."
+    },
+    "toast": {
+      "addedToCart": "Der Artikel wurde dem Warenkorb hinzugefügt."
+    },
+    "plp": {
+      "breadcrumb": "Produkte",
+      "emptyState": "Keine Produkte entsprechen Ihren aktuellen Filtern.",
+      "filters": {
+        "title": "Filtern",
+        "category": "Kategorie",
+        "discount": "Rabatt",
+        "price": "Preis",
+        "firstCta": "Filter anwenden",
+        "secondCta": "Alle zurücksetzen"
+      },
+      "sort": {
+        "defaultSort": "Standardsortierung",
+        "priceAsc": "Preis: aufsteigend",
+        "priceDesc": "Preis: absteigend",
+        "newArrivals": "Neuheiten"
+      },
+      "pagination": {
+        "next": "Nächste",
+        "previous": "Zurück"
+      }
+    },
+    "pdp": {
+      "breadcrumb": "Produkte",
+      "addToCart": "In den Warenkorb",
+      "addingToCart": "Wird hinzugefügt...",
+      "lastPrice": "Letzter Preis: $",
+      "productServices": {
+        "inStock": "Auf Lager",
+        "guarantee": "Garantiert",
+        "delivery": "Kostenlose Lieferung"
+      },
+      "selectColor": "Farbe auswählen:",
+      "similarProducts": "Ähnliche Produkte"
     }
   },
   "footer": {
     "emailInput": {
       "label": "Melde dich für Neuigkeiten und Updates an",
-      "placeholder": "E-Mail-Adresse"
+      "placeholder": "E-Mail-Adresse",
+      "toast": "Ihre E-Mail wurde abonniert"
     },
     "mainCategories": {
       "company": {
@@ -82,6 +139,297 @@
       "privacyPolicy": "Datenschutzerklärung",
       "termsAndConditions": "Allgemeine Geschäftsbedingungen",
       "imprint": "Impressum"
+    }
+  },
+  "faq": {
+    "title": "Häufig gestellte Fragen",
+    "trust": {
+      "title": "Vertrauen und Sicherheit",
+      "questions": {
+        "firstQuestion": "Ist Tech Helm eine sichere Plattform für den Online-Einkauf?",
+        "secondQuestion": "Wie schützen Sie meine persönlichen Daten?",
+        "thirdQuestion": "Was soll ich tun, wenn ich verdächtige Aktivitäten in meinem Konto bemerke?",
+        "fourthQuestion": "Sind die Produktbewertungen auf Tech Helm authentisch?"
+      },
+      "answers": {
+        "firstAnswer": "Ja, Tech Helm verwendet branchenübliche SSL-Verschlüsselung und sichere Zahlungsportale, um Ihre persönlichen und finanziellen Daten zu schützen. Wir erfüllen außerdem die PCI-DSS-Standards für Zahlungssicherheit.",
+        "secondAnswer": "Wir folgen strengen Datenschutzrichtlinien und geben Ihre persönlichen Daten niemals ohne Ihre Zustimmung an Dritte weiter. Alle Daten werden verschlüsselt und auf sicheren Servern mit regelmäßigen Sicherheitsprüfungen gespeichert.",
+        "thirdAnswer": "Wenn Sie verdächtige Aktivitäten bemerken, ändern Sie bitte umgehend Ihr Passwort und kontaktieren Sie unser Sicherheitsteam über die Support-Seite. Wir überwachen alle Konten auf ungewöhnliche Aktivitäten und helfen Ihnen schnellstmöglich.",
+        "forthAnswer": "Ja, wir haben strenge Richtlinien zur Sicherstellung der Authentizität von Bewertungen. Nur verifizierte Käufer können Bewertungen abgeben, und wir verwenden fortschrittliche Algorithmen zur Erkennung und Entfernung gefälschter Bewertungen, um das Vertrauen in unsere Community zu wahren."
+      }
+    },
+    "services": {
+      "title": "Dienstleistungen",
+      "questions": {
+        "firstQuestion": "Welche Dienstleistungen bietet Tech Helm an?",
+        "secondQuestion": "Bieten Sie technischen Support nach dem Kauf an?",
+        "thirdQuestion": "Kann ich Installationsdienste für meine gekauften Produkte erhalten?",
+        "fourthQuestion": "Wie kann ich mit den Magazin-Inhalten auf Tech Helm interagieren?"
+      },
+      "answers": {
+        "firstAnswer": "Tech Helm bietet ein umfassendes Dienstleistungsspektrum, darunter Produktverkauf, technischer Support, Installationsdienste, erweiterte Garantien und Zugang zu unserem Tech-Magazin mit Expertenbewertungen und Tutorials.",
+        "secondAnswer": "Ja, wir bieten umfassenden technischen Support für alle über Tech Helm gekauften Produkte. Unser Support-Team ist telefonisch, per E-Mail und im Live-Chat erreichbar und hilft bei Einrichtung, Fehlerbehebung und Wartung.",
+        "thirdAnswer": "Natürlich! Wir bieten professionelle Installationsdienste für geeignete Produkte an. Unsere zertifizierten Techniker richten Ihre Geräte vor Ort ein. Die Installationskosten variieren je nach Produkt und Standort.",
+        "forthAnswer": "Sie können mit den Magazin-Inhalten aktiv interagieren, indem Sie Kommentare hinterlassen und an der Frage-und-Antwort-Sektion teilnehmen. Teilen Sie gerne Ihre Gedanken, stellen Sie Fragen und tauschen Sie sich mit anderen Technikbegeisterten in der Community aus."
+      }
+    },
+    "billing": {
+      "title": "Abrechnung",
+      "questions": {
+        "firstQuestion": "Kann ich Produkte bei Tech Helm auf Raten kaufen?",
+        "secondQuestion": "Welche Zahlungsmethoden akzeptieren Sie?",
+        "thirdQuestion": "Wann wird meine Bestellung abgerechnet?",
+        "fourthQuestion": "Bekomme ich eine Rückerstattung, wenn ich mit meinem Kauf nicht zufrieden bin?",
+        "fifthQuestion": "Wie bekomme ich Hilfe bei meinem Kauf oder anderen Anliegen?"
+      },
+      "answers": {
+        "firstAnswer": "Ja, Tech Helm bietet die Möglichkeit, Produkte sowohl per Einmalzahlung als auch in Raten zu bezahlen. So können Sie die Zahlungsmethode wählen, die zu Ihren Bedürfnissen und Ihrem Budget passt. Wir arbeiten mit mehreren Finanzdienstleistern zusammen, um flexible Zahlungsoptionen anzubieten.",
+        "secondAnswer": "Wir akzeptieren alle gängigen Kreditkarten (Visa, MasterCard, American Express), PayPal, Banküberweisungen und Finanzierungsoptionen. Bei hochpreisigen Einkäufen akzeptieren wir auch Überweisungen und Kryptowährungen.",
+        "thirdAnswer": "Bei sofort lieferbaren Artikeln wird die Zahlung direkt bei Bestellbestätigung verarbeitet. Bei Vorbestellungen oder Nachlieferungen erfolgt die Zahlung beim Versand der Artikel. Ratenzahlungen erfolgen gemäß dem vereinbarten Zahlungsplan.",
+        "forthAnswer": "Ja, wir bieten ein 30-tägiges Rückgaberecht für die meisten Produkte im Originalzustand. Rückerstattungen werden innerhalb von 5–7 Werktagen nach Eingang der Rücksendung bearbeitet. Für bestimmte Produktkategorien können Ausnahmen gelten.",
+        "fifthAnswer": "Wenn Sie Unterstützung beim Kauf benötigen oder Fragen haben, steht Ihnen unser Kundenservice gerne zur Verfügung. Sie erreichen uns über die Kontaktseite auf unserer Website – wir helfen Ihnen schnell und zuverlässig."
+      }
+    }
+  },
+  "contactUs": {
+    "breadcrumb": "Kontakt",
+    "icons": {
+      "office": "Büro",
+      "email": "E-Mail",
+      "phone": "Telefon"
+    },
+    "messageUs": {
+      "title": "Schreiben Sie uns",
+      "description": "Wir sind für Sie da – bei Fragen, technischem Support oder Feedback. Unser engagiertes Team hört Ihnen zu und hilft Ihnen schnell und zuverlässig weiter."
+    },
+    "form": {
+      "placeholders": {
+        "name": "* Ihr Name",
+        "email": "* E-Mail",
+        "message": "Nachricht"
+      },
+      "cta": "Absenden",
+      "toast": "Ihre Nachricht wurde gesendet"
+    }
+  },
+  "aboutUs": {
+    "breadcrumb": "Über uns",
+    "introduction": "Tech Helm ist ein innovativer Online-Shop, der eine vielfältige Auswahl an digitalen Gadgets anbietet – sowohl zum Sofortkauf als auch in Ratenzahlung. Getreu dem Motto „Schließe dich heute der digitalen Revolution an“ bietet die Website nicht nur ein nahtloses Einkaufserlebnis, sondern auch einen spannenden Blogbereich mit aufschlussreichen Bewertungen, Artikeln und Videos über moderne Technologien und digitale Geräte. Nutzer können aktiv über Kommentare und eine Frage-Antwort-Sektion mit den Inhalten interagieren und so eine dynamische Community von Technikbegeisterten mitgestalten.",
+    "description": {
+      "title": "Bedeutung von Tech Helm",
+      "text": "Der Name „Tech Helm“ kombiniert auf clevere Weise zwei Sprachen (Englisch & Deutsch) und steht für ein Zuhause der Technologie, das alle wichtigen Tech-Produkte und -Dienstleistungen bietet – ein echter One-Stop-Shop für technikaffine Menschen, die auf der Suche nach den neuesten und spannendsten Gadgets sind."
+    },
+    "features": {
+      "title": "Einige der beeindruckenden Merkmale von Tech Heim:",
+      "firstFeature": "Vielfältige digitale Gadgets, erhältlich per Sofort- oder Ratenkauf",
+      "secondFeature": "Ein Blog mit Rezensionen und Artikeln über neueste Technologien und Gadgets",
+      "thirdFeature": "Nutzerkommentare und Q&A-Bereich zur Interaktion in der Community",
+      "fourthFeature": "Verkörpert ein technikaffines „Zuhause“ mit allem, was man braucht",
+      "fifthFeature": "Benutzerfreundliche Oberfläche für ein großartiges Nutzungserlebnis",
+      "seventhFeature": "Konsistentes und optisch ansprechendes Design",
+      "eighthFeature": "Ein Treffpunkt für Technikbegeisterte zum Austausch und zur Vernetzung",
+      "ninthFeature": "Hilft Nutzern, fundierte Kaufentscheidungen zu treffen"
+    }
+  },
+  "authentication": {
+    "signIn": {
+      "title": "Anmelden",
+      "subtitle": "Anmelden bei Tech Heim",
+      "header": "Oder anmelden mit",
+      "footer": "Sie haben noch kein Konto ?",
+      "cta": "sich anmelden",
+      "successfulLoginToast": "Sie haben sich erfolgreich eingeloggt"
+    },
+    "signUp": {
+      "title": "Konto erstellen",
+      "subtitle": "Ihr Konto erstellen",
+      "footer": "Sie haben bereits ein Konto ?",
+      "cta": "Registrieren",
+      "successfulSignUpToast": "Herzlichen Glückwunsch, Ihr Konto wurde erfolgreich erstellt."
+    }
+  },
+  "validation": {
+    "signIn": {
+      "identifier-invalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "password-minLength": "Das Passwort muss mindestens 6 Zeichen lang sein",
+      "password-maxLength": "Das Passwort muss zwischen 6 und 100 Zeichen lang sein"
+    },
+    "signUp": {
+      "username-minLength": "Der Benutzername muss mindestens 3 Zeichen lang sein",
+      "username-maxLength": "Der Benutzername muss zwischen 3 und 20 Zeichen lang sein",
+      "email-invalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "password-minLength": "Das Passwort muss mindestens 6 Zeichen lang sein",
+      "password-maxLength": "Das Passwort muss zwischen 6 und 100 Zeichen lang sein"
+    },
+    "checkout": {
+      "email-invalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "address-required": "Adresse ist erforderlich"
+    },
+    "payment": {
+      "cardNumber-digitsOnly": "Die Kartennummer darf nur Ziffern enthalten",
+      "cardNumber-length": "Die Kartennummer muss 16 Ziffern enthalten",
+      "nameOnCard-minLength": "Der Name muss mindestens 2 Zeichen lang sein",
+      "nameOnCard-lettersOnly": "Der Name darf nur Buchstaben und Leerzeichen enthalten",
+      "expirationDate-format": "Ungültiges Ablaufdatum-Format (MM/JJ)",
+      "cvv-digitsOnly": "Der CVV darf nur Ziffern enthalten",
+      "cvv-length": "Der CVV muss 3 oder 4 Ziffern lang sein",
+      "billingAddress-minLength": "Bitte geben Sie eine gültige Rechnungsadresse ein"
+    },
+    "profile": {
+      "fullName-minLength": "Der vollständige Name muss mindestens 2 Zeichen lang sein.",
+      "fullName-maxLength": "Der vollständige Name darf maximal 50 Zeichen lang sein.",
+      "fullName-pattern": "Der vollständige Name darf nur Buchstaben und Leerzeichen enthalten.",
+
+      "email-invalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+
+      "phoneNumber-minLength": "Die Telefonnummer muss mindestens 10 Ziffern enthalten.",
+      "phoneNumber-maxLength": "Die Telefonnummer darf maximal 15 Ziffern enthalten.",
+      "phoneNumber-pattern": "Bitte geben Sie eine gültige Telefonnummer ein.",
+
+      "address-minLength": "Die Adresse muss mindestens 5 Zeichen lang sein.",
+      "address-maxLength": "Die Adresse darf maximal 100 Zeichen lang sein.",
+
+      "postalCode-minLength": "Die Postleitzahl muss mindestens 3 Zeichen lang sein.",
+      "postalCode-maxLength": "Die Postleitzahl darf maximal 10 Zeichen lang sein.",
+      "postalCode-pattern": "Bitte geben Sie eine gültige Postleitzahl ein."
+    }
+  },
+  "shoppingCart": {
+    "header": "Artikel",
+    "emptyState": "Ihr Warenkorb ist leer",
+    "grandTotal": "Gesamtsumme",
+    "cta": "Zum Warenkorb"
+  },
+  "cart": {
+    "firstCta": "Zur Kasse gehen",
+    "secondCta": "Weiter zum Shop",
+    "emptyState": "Ihr Warenkorb ist leer",
+    "paymentDetails": {
+      "title": "Zahlungsdetails",
+      "subtotal": "Zwischensumme",
+      "discount": "Rabatt",
+      "grandTotal": "Gesamtsumme"
+    },
+    "cartCard": {
+      "guarantee": "Garantiert",
+      "delivery": "Kostenlose Lieferung"
+    }
+  },
+  "checkout": {
+    "header": {
+      "title": "Kasse"
+    },
+    "formInputs": {
+      "shipTo": {
+        "label": "Lieferadresse",
+        "placeholder": "Adresse...",
+        "cta": "Adresse auf der Karte auswählen"
+      },
+      "shippingMethod": {
+        "label": "Versandart",
+        "free": {
+          "label": "Kostenloser Versand",
+          "text": "7–30 Werktage"
+        },
+        "regular": {
+          "label": "Regulärer Versand",
+          "text": "3–14 Werktage"
+        },
+        "express": {
+          "label": "Expressversand",
+          "text": "1–3 Werktage"
+        }
+      }
+    },
+    "returnButton": "Zurück zum Warenkorb",
+    "checkoutCard": {
+      "title": "Ihre Bestellung",
+      "cta": "Weiter zur Bezahlung",
+      "paymentDetails": {
+        "title": "Zahlungsdetails",
+        "subtotal": "Zwischensumme",
+        "discount": "Rabatt",
+        "shipmentCost": "Versandkosten",
+        "grandTotal": "Gesamtsumme"
+      }
+    }
+  },
+  "payment": {
+    "headerTitle": "Zahlung",
+    "toast": {
+      "processingPayment": "Zahlungsabwicklung...",
+      "successfulPayment": "Ihre Bestellung wurde erfolgreich aufgegeben.",
+      "unsuccessfulPayment": {
+        "title": "Zahlungsabwicklung fehlgeschlagen",
+        "description": "Bitte überprüfen Sie Ihre Zahlungsdaten und versuchen Sie es erneut."
+      }
+    },
+    "loading": {
+      "title": "Laden...",
+      "text": "Bitte warten Sie, während wir Ihre Zahlungsdaten vorbereiten."
+    },
+    "formInputs": {
+      "title": "Zahlungsinformationen",
+      "cardNumberLabel": "Kartennummer",
+      "cardNameLabel": "Name auf der Karte",
+      "expirationDate": "Ablaufdatum",
+      "billingAddress": "Rechnungsadresse",
+      "useAddress": "Gleich wie Versandadresse verwenden"
+    },
+    "returnButton": "Zurück zur Kasse",
+    "paymentCard": {
+      "title": "Ihre Bestellung",
+      "cta": "Zahlung abschließen",
+      "paymentProcessing": "Zahlung wird verarbeitet...",
+      "paymentDetails": {
+        "title": "Zahlungsdetails",
+        "subtotal": "Zwischensumme",
+        "discount": "Rabatt",
+        "shipmentCost": "Versandkosten",
+        "grandTotal": "Gesamtsumme"
+      }
+    }
+  },
+  "profile": {
+    "tabs": {
+      "personalData": "Persönliche Daten",
+      "orders": "Bestellungen",
+      "wishlist": "Wunschliste",
+      "loadingState": "Laden..."
+    },
+    "personalData": {
+      "formInputs": {
+        "fullName": {
+          "label": "Vollständiger Name",
+          "placeholder": "Vor- und Nachname"
+        },
+        "phoneNumber": {
+          "label": "Telefonnummer"
+        },
+        "address": {
+          "label": "Adresse",
+          "placeholder": "Land, Stadt, Straße..."
+        },
+        "postalCode": {
+          "label": "Postleitzahl"
+        }
+      },
+      "cta": "Änderungen speichern",
+      "toast": {
+        "confirmLabel": "Änderungen bestätigen",
+        "confirmDescription": "Möchten Sie Ihr Konto wirklich aktualisieren?",
+        "saveAction": "Änderungen speichern",
+        "cancelAction": "Abbrechen"
+      }
+    },
+    "orders": {
+      "order": "Bestellung",
+      "orderData": "Bestellt am",
+      "cardNumber": "Karte",
+      "shipTo": "Lieferung",
+      "viewItems": "Artikel anzeigen",
+      "quantity": "Menge: ",
+      "color": "Farbe: "
     }
   }
 }
