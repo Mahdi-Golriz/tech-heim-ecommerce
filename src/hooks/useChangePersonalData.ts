@@ -1,9 +1,7 @@
-import { z } from "zod";
 import useFetch from "./useFetch";
-import { personalDataSchema } from "@/validations/personal-data-schema";
-import { toast } from "sonner";
 
-type PersonalData = z.infer<typeof personalDataSchema>;
+import { toast } from "sonner";
+import { PersonalDataSchema } from "@/validations/get-personal-data-schema";
 
 const useChangePersonalData = () => {
   const { data, fetchData: changePersonalData } = useFetch({
@@ -20,7 +18,7 @@ const useChangePersonalData = () => {
   });
 
   const handleChangePersonalData = async (
-    data: PersonalData,
+    data: PersonalDataSchema,
     userId: number
   ) => {
     await changePersonalData({

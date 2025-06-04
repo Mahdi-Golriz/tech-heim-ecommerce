@@ -1,7 +1,5 @@
 "use client";
 
-import { z } from "zod";
-
 import {
   Form,
   FormControl,
@@ -13,12 +11,15 @@ import InputIcon from "../input-with-icon/icon-input";
 import { GoKey } from "react-icons/go";
 import { PiUserLight } from "react-icons/pi";
 import { SubmitButton } from "./submit-button";
-import useSignin, { SignInSchema } from "@/hooks/useSignin";
+import useSignin from "@/hooks/useSignin";
+import { useTranslations } from "next-intl";
+import { SignInSchema } from "@/validations/get-auth-schema";
 
 const SignInForm = () => {
+  const t = useTranslations("authentication.signIn");
   const { signin, isLoading, error, form } = useSignin();
 
-  const onSubmit = (data: z.infer<typeof SignInSchema>) => {
+  const onSubmit = (data: SignInSchema) => {
     signin(data);
   };
 
@@ -33,7 +34,7 @@ const SignInForm = () => {
               <FormControl>
                 <InputIcon
                   {...field}
-                  placeholder="Email or Username"
+                  placeholder="Email"
                   startIcon={PiUserLight}
                 />
               </FormControl>
@@ -60,7 +61,7 @@ const SignInForm = () => {
         />
 
         <SubmitButton
-          text="Sign In"
+          text={t("title")}
           loadingText="Loading"
           className="w-full my-6"
           loading={isLoading}

@@ -1,6 +1,6 @@
 import useChangePersonalData from "@/hooks/useChangePersonalData";
 import { useUserStore } from "@/store/user-store";
-import { personalDataSchema } from "@/validations/personal-data-schema";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -21,8 +21,12 @@ import {
   PiBuildingFill,
   PiSignpostFill,
 } from "react-icons/pi";
-import { z } from "zod";
 import Button from "../ui/button";
+import { useTranslations } from "next-intl";
+import {
+  getPersonalDataSchema,
+  PersonalDataSchema,
+} from "@/validations/get-personal-data-schema";
 
 interface FormItem {
   name: "fullName" | "email" | "phoneNumber" | "address" | "postalCode";
@@ -35,9 +39,10 @@ interface FormItem {
 const ProfileForm = () => {
   const user = useUserStore((state) => state.user);
   const { handleChangePersonalData } = useChangePersonalData();
-
-  const form = useForm<z.infer<typeof personalDataSchema>>({
-    resolver: zodResolver(personalDataSchema),
+  const formT = useTranslations("validation.profile");
+  const t = useTranslations("profile.personalData");
+  const form = useForm<PersonalDataSchema>({
+    resolver: zodResolver(getPersonalDataSchema(formT)),
     defaultValues: {
       fullName: "",
       address: "",
@@ -63,8 +68,8 @@ const ProfileForm = () => {
   const formItems: FormItem[] = [
     {
       name: "fullName",
-      label: "Full name",
-      placeholder: "First and Last Name",
+      label: t("formInputs.fullName.label"),
+      placeholder: t("formInputs.fullName.placeholder"),
       startIcon: PiUserFill,
     },
     {
@@ -76,31 +81,31 @@ const ProfileForm = () => {
     },
     {
       name: "phoneNumber",
-      label: "Phone number",
+      label: t("formInputs.phoneNumber.label"),
       placeholder: "+1234567890",
       startIcon: PiDeviceMobileSpeakerDuotone,
     },
     {
       name: "address",
-      label: "Address",
-      placeholder: "country, city, street...",
+      label: t("formInputs.address.label"),
+      placeholder: t("formInputs.address.placeholder"),
       startIcon: PiBuildingFill,
     },
     {
       name: "postalCode",
-      label: "Postal code",
+      label: t("formInputs.postalCode.label"),
       placeholder: "12345",
       startIcon: PiSignpostFill,
     },
   ];
 
-  const onSubmit = async (formData: z.infer<typeof personalDataSchema>) => {
+  const onSubmit = async (formData: PersonalDataSchema) => {
     if (!form.formState.isDirty) return;
 
-    toast("Confirm Changes", {
-      description: "Are you sure you want to update your account?",
+    toast(t("toast.confirmLabel"), {
+      description: t("toast.confirmDescription"),
       action: {
-        label: "Save Changes",
+        label: t("toast.saveAction"),
         onClick: async () => {
           if (user?.documentId) {
             await handleChangePersonalData(formData, user.id);
@@ -110,7 +115,7 @@ const ProfileForm = () => {
       },
       position: "top-center",
       cancel: {
-        label: "Cancel",
+        label: t("toast.cancelAction"),
         onClick: () => {
           toast.dismiss();
         },
@@ -152,7 +157,7 @@ const ProfileForm = () => {
           className="mt-5 sm:col-span-full sm:w-fit"
           disabled={!form.formState.isDirty}
         >
-          Save Changes
+          {t("cta")}
         </Button>
       </form>
     </Form>

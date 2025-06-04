@@ -1,40 +1,24 @@
 import { useEffect } from "react";
 import useFetch from "./useFetch";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { setCookie } from "@/utils/cookie";
 import { SigninResponse } from "@/models/response-model";
 import useSyncCart from "./useSyncCart";
 import { useCheckoutStore } from "@/store/checkout-store";
 import { toast } from "sonner";
-
-export const SignInSchema = z.object({
-  identifier: z
-    .string()
-    .min(3, {
-      message: "Identifier must have at least 3 or more characters",
-    })
-    .email({
-      message: "Please enter a valid username or email address",
-    }),
-  password: z
-    .string()
-    .min(6, {
-      message: "Password must have at least 6 or more characters",
-    })
-    .max(100, {
-      message: "Password must be between 6 and 100 characters",
-    }),
-});
+import { getSignInSchema, SignInSchema } from "@/validations/get-auth-schema";
+import { useTranslations } from "next-intl";
 
 const useSignin = () => {
+  const formT = useTranslations("validation.signIn");
+  const t = useTranslations("authentication.signIn");
   const { checkoutDetails } = useCheckoutStore();
   const prefilledEmail = checkoutDetails?.email || "";
   const { fetchUserWithMergedCart } = useSyncCart();
 
-  const form = useForm<z.infer<typeof SignInSchema>>({
-    resolver: zodResolver(SignInSchema),
+  const form = useForm<SignInSchema>({
+    resolver: zodResolver(getSignInSchema(formT)),
     defaultValues: {
       identifier: prefilledEmail || "",
       password: "",
@@ -54,7 +38,7 @@ const useSignin = () => {
 
     // Merge the local store with backend cart and update the local stores with backend
     await fetchUserWithMergedCart();
-    toast.success("You have been successfully logged in");
+    toast.success(t("successfulLoginToast"));
   };
 
   const { data, error, fetchData, isLoading } = useFetch({
@@ -65,7 +49,7 @@ const useSignin = () => {
     onSuccess: handleSuccessSignUp,
   });
 
-  const signin = async (userData: z.infer<typeof SignInSchema>) => {
+  const signin = async (userData: SignInSchema) => {
     await fetchData({ body: userData });
   };
 

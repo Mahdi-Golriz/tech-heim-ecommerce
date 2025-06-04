@@ -10,7 +10,6 @@ import {
   FormMessage,
 } from "../ui/form";
 import { PiPencilSimpleLineDuotone } from "react-icons/pi";
-import { z } from "zod";
 import { useUserStore } from "@/store/user-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
@@ -27,14 +26,11 @@ import CheckoutItemsList from "./checkout-items-list";
 import CheckoutHeader from "./checkout-header";
 import AddressMapModal, { AddressData } from "../map/map-modal";
 import { MdLocationOn } from "react-icons/md";
-
-const CheckoutSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address",
-  }),
-  address: z.string().min(1, { message: "Address is required" }),
-  shippingCost: z.string(),
-});
+import { useTranslations } from "next-intl";
+import {
+  CheckoutSchema,
+  getCheckoutSchema,
+} from "@/validations/get-checkout-schema";
 
 interface FormInputItems {
   name: "email" | "address" | "shippingCost";
@@ -51,6 +47,8 @@ interface FormRadioGroupItems {
 
 const Checkout = () => {
   const router = useRouter();
+  const formT = useTranslations("validation.checkout");
+  const t = useTranslations("checkout");
   const user = useUserStore((state) => state.user);
   const { updateCheckoutDetails, checkoutDetails } = useCheckoutStore();
   const { toggleAuthModal, isAuthModalOpen } = useAuthModalStore();
@@ -60,8 +58,8 @@ const Checkout = () => {
   // State for the map modal
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
 
-  const form = useForm<z.infer<typeof CheckoutSchema>>({
-    resolver: zodResolver(CheckoutSchema),
+  const form = useForm<CheckoutSchema>({
+    resolver: zodResolver(getCheckoutSchema(formT)),
     defaultValues: {
       email: user?.email || "",
       address: checkoutDetails?.address || "",
@@ -85,7 +83,7 @@ const Checkout = () => {
     }
   }, [user, shouldRedirectToPayment, router]);
 
-  const onSubmit = (data: z.infer<typeof CheckoutSchema>) => {
+  const onSubmit = (data: CheckoutSchema) => {
     updateCheckoutDetails({
       email: data.email,
       address: data.address,
@@ -122,24 +120,28 @@ const Checkout = () => {
       placeholder: "Email...",
       disabled: !!user,
     },
-    { name: "address", label: "Ship to", placeholder: "Address..." },
+    {
+      name: "address",
+      label: t("formInputs.shipTo.label"),
+      placeholder: t("formInputs.shipTo.placeholder"),
+    },
   ];
 
   const formRadioGroupItems: FormRadioGroupItems[] = [
     {
       value: "0",
-      label: "Free Shipping",
-      text: "7-30 business days",
+      label: t("formInputs.shippingMethod.free.label"),
+      text: t("formInputs.shippingMethod.free.text"),
     },
     {
       value: "7.5",
-      label: "Regular Shipping",
-      text: "3-14 business days",
+      label: t("formInputs.shippingMethod.regular.label"),
+      text: t("formInputs.shippingMethod.regular.text"),
     },
     {
       value: "22.5",
-      label: "Express Shipping",
-      text: "1-3 business days",
+      label: t("formInputs.shippingMethod.express.label"),
+      text: t("formInputs.shippingMethod.express.text"),
     },
   ];
 
@@ -169,6 +171,7 @@ const Checkout = () => {
                             endIcon={PiPencilSimpleLineDuotone}
                             color="blue"
                             variant="checkout"
+                            className="pr-10"
                           />
                         </FormControl>
                         {item.name === "address" && (
@@ -180,7 +183,7 @@ const Checkout = () => {
                               onClick={() => setIsMapModalOpen(true)}
                             >
                               <MdLocationOn className="mr-1" />
-                              Select address on map
+                              {t("formInputs.shipTo.cta")}
                             </Button>
                           </div>
                         )}
@@ -195,7 +198,7 @@ const Checkout = () => {
                   render={({ field }) => (
                     <FormItem className="mt-3">
                       <FormLabel className="text-base font-medium text-gray-700">
-                        Shipping Method
+                        {t("formInputs.shippingMethod.label")}
                       </FormLabel>
                       <FormControl>
                         <RadioGroup
@@ -244,7 +247,7 @@ const Checkout = () => {
               className="text-primary my-2 px-0 ml-2"
               onClick={handleReturnToCart}
             >
-              Return to Cart
+              {t("returnButton")}
             </Button>
           </div>
         </div>
@@ -252,7 +255,7 @@ const Checkout = () => {
         <div className="md:grow md:px-8 md:py-6 md:border md:rounded-lg">
           <div className="my-4">
             <h3 className="text-base font-medium text-gray-700 mb-3">
-              Your Order
+              {t("checkoutCard.title")}
             </h3>
             <CheckoutSlider />
             <CheckoutItemsList />
@@ -263,7 +266,7 @@ const Checkout = () => {
             onClick={form.handleSubmit(onSubmit)}
             type="submit"
           >
-            Continue to pay
+            {t("checkoutCard.cta")}
           </Button>
         </div>
         {isAuthModalOpen && <AuthWrapper />}

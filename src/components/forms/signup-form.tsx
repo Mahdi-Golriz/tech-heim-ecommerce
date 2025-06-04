@@ -1,7 +1,5 @@
 "use client";
 
-import { z } from "zod";
-
 import {
   Form,
   FormControl,
@@ -14,12 +12,15 @@ import { GoKey } from "react-icons/go";
 import { IoMailOutline } from "react-icons/io5";
 import { PiUserLight } from "react-icons/pi";
 import { SubmitButton } from "./submit-button";
-import useSignup, { SignUpSchema } from "@/hooks/useSignup";
+import useSignup from "@/hooks/useSignup";
+import { useTranslations } from "next-intl";
+import { SignUpSchema } from "@/validations/get-auth-schema";
 
 const SignUpForm = () => {
+  const t = useTranslations("authentication.signUp");
   const { signup, isSubmitting, error, form } = useSignup();
 
-  const onSubmit = (data: z.infer<typeof SignUpSchema>) => {
+  const onSubmit = (data: SignUpSchema) => {
     signup(data);
   };
 
@@ -77,7 +78,7 @@ const SignUpForm = () => {
         />
 
         <SubmitButton
-          text="Create Account"
+          text={t("title")}
           loadingText="Loading"
           className="w-full my-6"
           loading={isSubmitting}

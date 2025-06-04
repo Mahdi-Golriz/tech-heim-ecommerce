@@ -3,34 +3,24 @@ import useFetch from "./useFetch";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 
 import { setCookie } from "@/utils/cookie";
 import { SigninResponse } from "@/models/response-model";
 import useSyncCart from "./useSyncCart";
 import { useCheckoutStore } from "@/store/checkout-store";
 import { toast } from "sonner";
-
-export const SignUpSchema = z.object({
-  username: z.string().min(3).max(20, {
-    message: "Username must be between 3 and 20 characters",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address",
-  }),
-  password: z.string().min(6).max(100, {
-    message: "Password must be between 6 and 100 characters",
-  }),
-});
+import { getSignUpSchema, SignUpSchema } from "@/validations/get-auth-schema";
+import { useTranslations } from "next-intl";
 
 const useSignup = () => {
   const { createCart, fetchUserWithMergedCart } = useSyncCart();
-
+  const formT = useTranslations("validation.signUp");
+  const t = useTranslations("authentication.signUp");
   const { checkoutDetails } = useCheckoutStore();
   const prefilledEmail = checkoutDetails?.email || "";
 
-  const form = useForm<z.infer<typeof SignUpSchema>>({
-    resolver: zodResolver(SignUpSchema),
+  const form = useForm<SignUpSchema>({
+    resolver: zodResolver(getSignUpSchema(formT)),
     defaultValues: {
       username: "",
       email: prefilledEmail || "",
@@ -62,7 +52,7 @@ const useSignup = () => {
 
     // Merge the local store with backend cart and update the local stores with backend
     fetchUserWithMergedCart();
-    toast.success("Congratulation your account has been successfully created.");
+    toast.success(t("successfulSignUpToast"));
   };
 
   const {
@@ -78,7 +68,7 @@ const useSignup = () => {
     onSuccess: handleSuccessSignUp,
   });
 
-  const signup = async (userData: z.infer<typeof SignUpSchema>) => {
+  const signup = async (userData: SignUpSchema) => {
     await fetchData({ body: userData });
   };
 
