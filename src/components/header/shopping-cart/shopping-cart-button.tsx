@@ -11,33 +11,17 @@ import {
 } from "../../ui/dropdown";
 
 import { useCartStore } from "@/store/cart-store";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import ShoppingCartCard from "./shopping-cart-card";
 import ShoppingCartFooter from "./shopping-cart-footer";
+import { useTranslations } from "next-intl";
 
 const ShoppingCartButton = () => {
   const items = useCartStore((state) => state.items);
-  const [sideOffset, setSideOffset] = useState(70);
   const [open, setOpen] = useState(false);
   const { totalItems } = useCartStore();
-
-  useEffect(() => {
-    const updateSideOffset = () => {
-      if (window.innerWidth > 640) {
-        setSideOffset(30);
-      } else {
-        setSideOffset(70);
-      }
-    };
-
-    updateSideOffset();
-    window.addEventListener("resize", updateSideOffset);
-
-    return () => {
-      window.removeEventListener("resize", updateSideOffset);
-    };
-  });
+  const t = useTranslations("shoppingCart");
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -54,14 +38,15 @@ const ShoppingCartButton = () => {
 
       <DropdownMenuContent
         className="rounded-t-none bg-gray-50 w-screen h-screen border-none sm:w-[600px] sm:h-fit sm:max-h-[650px]"
-        sideOffset={sideOffset}
+        sideOffset={30}
         align="end"
       >
-        {/* Header - Cart Summary */}
         <div className="p-6">
-          <h3 className="font-medium">{totalItems} items</h3>
+          <h3 className="font-medium">
+            {totalItems} {t("header")}
+          </h3>
         </div>
-        {/* Items List */}
+
         <DropdownMenuGroup className="px-6 overflow-y-auto">
           {items.length > 0 ? (
             items.map((item) => (
@@ -76,7 +61,7 @@ const ShoppingCartButton = () => {
               </DropdownMenuItem>
             ))
           ) : (
-            <p className="text-center py-4 text-gray-500">Your cart is empty</p>
+            <p className="text-center py-4 text-gray-500">{t("emptyState")}</p>
           )}
         </DropdownMenuGroup>
         {items.length > 0 && (

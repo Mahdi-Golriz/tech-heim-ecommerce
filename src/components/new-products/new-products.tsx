@@ -6,20 +6,28 @@ import SectionHeader from "../section-header/section-header";
 import { Product } from "@/models/product-model";
 import useFetch from "@/hooks/useFetch";
 import { DataResponse } from "@/models/response-model";
+import { useTranslations } from "next-intl";
 
 const NewProducts = () => {
+  const t = useTranslations("home.newProducts.header");
   const { data: newProducts } = useFetch<DataResponse<Product[]>>({
     path: "/api/products",
     params: {
       populate: "*",
-      "filters[new_collection][$eq]": "true",
+      sort: "createdAt:desc",
       "pagination[pageSize]": "4",
     },
   });
 
   return (
     <>
-      <SectionHeader title="New Products" cta={{ text: "View all", url: "" }} />
+      <SectionHeader
+        title={t("title")}
+        cta={{
+          text: t("cta"),
+          url: "/products?sort=createdAt%3Adesc&page=1",
+        }}
+      />
       <div className="container mb-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {newProducts?.data.map((item) => (

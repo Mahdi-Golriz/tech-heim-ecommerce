@@ -7,8 +7,10 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { formatCardNumberWithSpacing, formatDate } from "@/utils/formatter";
+import { useTranslations } from "next-intl";
 
 const ProfileOrders = () => {
+  const t = useTranslations("profile.orders");
   const { data } = useFetch<User>({
     path: "/api/users/me",
     skipRequestIfNoToken: true,
@@ -32,7 +34,7 @@ const ProfileOrders = () => {
             <div className="p-6 bg-gradient-to-r from-gray-50 to-transparent">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold text-gray-900">
-                  Order #{order.documentId.slice(-8).toUpperCase()}
+                  {t("order")} #{order.documentId.slice(-8).toUpperCase()}
                 </h3>
                 <span className="text-lg font-bold text-primary">
                   ${order.totalPrice}
@@ -41,15 +43,15 @@ const ProfileOrders = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-x-10 lg:gap-x-20 text-sm [&>div]:flex [&>div]:justify-between [&>div>span:first-child]:font-medium [&>div>span:first-child]:text-gray-700 [&>div>span:last-child]:text-gray-600">
                 <div>
-                  <span>Placed on</span>
+                  <span>{t("orderData")}</span>
                   <span>{formatDate(order.createdAt)}</span>
                 </div>
                 <div>
-                  <span>Card</span>
+                  <span>{t("cardNumber")}</span>
                   <span>{formatCardNumberWithSpacing(order.cardNumber)}</span>
                 </div>
                 <div className="md:col-span-2">
-                  <span>Delivery</span>
+                  <span>{t("shipTo")}</span>
                   <span className="text-end">{order.deliveryAddress}</span>
                 </div>
               </div>
@@ -58,7 +60,7 @@ const ProfileOrders = () => {
             {/* Items Accordion */}
             <div className="border-t border-gray-100">
               <AccordionTrigger className="px-6 py-4 hover:bg-gray-50 text-sm font-medium text-gray-700">
-                View Items ({order.itemsDetails?.length || 0})
+                {t("viewItems")} ({order.itemsDetails?.length || 0})
               </AccordionTrigger>
               <AccordionContent className="px-6 pb-6 bg-gray-50/30">
                 <div className="space-y-4 pt-2">
@@ -73,8 +75,12 @@ const ProfileOrders = () => {
                         </div>
                         <div className="flex gap-4 text-sm text-gray-600">
                           <span>${item.itemPrice}</span>
-                          <span>Qty: {item.itemNum}</span>
-                          <span>Color: {item.itemColor}</span>
+                          <span>
+                            {t("quantity")} {item.itemNum}
+                          </span>
+                          <span>
+                            {t("color")} {item.itemColor}
+                          </span>
                         </div>
                       </div>
                     </div>

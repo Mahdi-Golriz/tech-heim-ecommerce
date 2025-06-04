@@ -39,7 +39,7 @@ const NewsletterSubscription = () => {
     if (!formData.email) return;
     console.log(formData);
     form.reset();
-    toast.success("Your email was subscribed");
+    toast.success(t("toast"));
   };
 
   return (
@@ -52,14 +52,15 @@ const NewsletterSubscription = () => {
             <FormItem>
               <FormLabel>{t("label")}</FormLabel>
               <FormControl>
-                <div className="w-full flex rounded-lg border-2 mt-3 px-3">
+                <div className="w-full flex justify-between rounded-lg border-2 mt-3 px-3">
                   <InputIcon
+                    parentClassName="w-full"
                     placeholder={t("placeholder")}
                     {...field}
                     autoComplete="off"
                     startIcon={PiUserLight}
                     color="white"
-                    className="bg-transparent border-none pl-9 focus-visible:ring-0 focus-visible:ring-offset-0 lg:w-64 text-white"
+                    className="w-full bg-transparent border-none pl-9 focus-visible:ring-0 focus-visible:ring-offset-0 lg:w-64 text-white"
                   />
                   <Button
                     variant="icon"

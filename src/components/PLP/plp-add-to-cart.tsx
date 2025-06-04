@@ -5,6 +5,7 @@ import Button from "../ui/button";
 import { Product } from "@/models/product-model";
 import { PiShoppingCartSimpleLight } from "react-icons/pi";
 import useCart from "@/hooks/useAddToCart";
+import { useTranslations } from "next-intl";
 
 interface PLPAddToCartProps {
   product: Product;
@@ -13,6 +14,7 @@ interface PLPAddToCartProps {
 
 const PLPAddToCart = ({ product, hasAddToCartButton }: PLPAddToCartProps) => {
   const { addToCart, isLoading } = useCart();
+  const t = useTranslations("products.cta");
   const defaultColor = product.color?.at(0) || "";
 
   // Add a handler that stops event propagation
@@ -26,15 +28,15 @@ const PLPAddToCart = ({ product, hasAddToCartButton }: PLPAddToCartProps) => {
     <Button
       variant="outline"
       className={cn(
-        "hidden w-fit mt-auto px-2 text-xs [&_svg]:size-4 lg:[&_svg]:size-6 lg:text-sm h-fit font-medium ",
+        "hidden w-fit mt-auto px-1 text-xs [&_svg]:size-4 lg:[&_svg]:size-6 lg:text-sm h-fit font-medium md:p-2",
         {
           "group-hover:flex": hasAddToCartButton,
         }
       )}
       onClick={handleAddToCart}
     >
-      <PiShoppingCartSimpleLight strokeWidth={8} />
-      {isLoading ? "Adding..." : "Add to Cart"}
+      <PiShoppingCartSimpleLight strokeWidth={8} className="hidden md:block" />
+      {isLoading ? t("addingToCart") : t("addToCart")}
     </Button>
   );
 };

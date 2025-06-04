@@ -1,4 +1,5 @@
 import { useCartStore } from "@/store/cart-store";
+import { useTranslations } from "next-intl";
 import { UseFormReturn } from "react-hook-form";
 
 interface CheckoutFormData {
@@ -14,27 +15,27 @@ interface CheckoutPaymentDetailsProps {
 const CheckoutPaymentDetails = ({ form }: CheckoutPaymentDetailsProps) => {
   const { discount, grandTotal, subtotalPrice } = useCartStore();
   const shippingCost = parseFloat(form.watch("shippingCost") || "0");
-
+  const t = useTranslations("checkout.checkoutCard.paymentDetails");
   return (
     <>
-      <h3 className="md:hidden mb-6 text-2xl font-medium">Payment Details</h3>
+      <h3 className="md:hidden mb-6 text-2xl font-medium">{t("title")}</h3>
       <ul className="flex flex-col gap-3 md:gap-2">
         <li className="flex justify-between text-gray-600">
-          <span>Subtotal</span>
+          <span>{t("subtotal")}</span>
           <span>$ {subtotalPrice.toFixed(2)}</span>
         </li>
         <li className="flex justify-between text-gray-600">
-          <span>Discount</span>
+          <span>{t("discount")}</span>
           <span>$ {discount.toFixed(2)}</span>
         </li>
         <li className="flex justify-between border-b-2 pb-3 text-gray-600">
-          <span>Shipment cost</span>
+          <span>{t("shipmentCost")}</span>
           <span>
             ${parseFloat(form.watch("shippingCost") || "0").toFixed(2)}
           </span>
         </li>
         <li className="flex justify-between font-medium">
-          <span>Grand total</span>
+          <span>{t("grandTotal")}</span>
           <span>$ {(grandTotal + shippingCost).toFixed(2)}</span>
         </li>
       </ul>

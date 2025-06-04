@@ -7,6 +7,7 @@ import useFetch from "@/hooks/useFetch";
 import { DataResponse } from "@/models/response-model";
 import { Category } from "@/models/categories-model";
 import PageLoader from "../ui/page-loader";
+import { useTranslations } from "next-intl";
 
 interface SimilarProductsProps {
   categoryId: string;
@@ -23,6 +24,8 @@ const SimilarProducts: FC<SimilarProductsProps> = ({
     params: { "populate[products][populate][0]": "product_images" },
   });
 
+  const t = useTranslations("products.pdp");
+
   const similarProducts = data?.data.products?.filter(
     (item) => item.documentId !== productId
   );
@@ -31,7 +34,7 @@ const SimilarProducts: FC<SimilarProductsProps> = ({
 
   return (
     <>
-      <SectionHeader title="Similar Products" />
+      <SectionHeader title={t("similarProducts")} />
       <div className="container py-10">
         <Swiper
           modules={[Autoplay, Navigation]}

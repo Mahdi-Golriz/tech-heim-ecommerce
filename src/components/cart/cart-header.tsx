@@ -1,9 +1,11 @@
 "use client";
 
 import { useCartStore } from "@/store/cart-store";
+import { useTranslations } from "next-intl";
 import { PiBasketLight } from "react-icons/pi";
 
 const CartHeader = () => {
+  const t = useTranslations("cart");
   const items = useCartStore((state) => state.items);
   return (
     <div className="flex flex-col justify-center items-center my-5">
@@ -11,7 +13,7 @@ const CartHeader = () => {
         <PiBasketLight size={32} color="blue" />
       </div>
       <span className="text-primary">
-        {items.length === 0 ? <p>Your Cart is Empty</p> : "Cart"}
+        {items.length === 0 ? <p>{t("emptyState")}</p> : "Cart"}
       </span>
     </div>
   );

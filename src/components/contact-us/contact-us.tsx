@@ -16,6 +16,8 @@ import Input from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import Button from "../ui/button";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
+import CustomBreadcrumb from "../custom-breadcrumb/custom-breadcrumb";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -30,6 +32,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const ContactUs = () => {
+  const t = useTranslations("contactUs");
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,105 +44,118 @@ const ContactUs = () => {
 
   const onSubmit = () => {
     form.reset();
-    toast.success("Your message was sent");
+    toast.success(t("form.toast"));
   };
 
   const items = [
-    { Icon: MapPin, title: "Office", text: "Hamburg, Germany" },
-    { Icon: Mail, title: "Email", text: "info@techhelm.com" },
-    { Icon: Phone, title: "Phone", text: "+49 123-4567" },
+    { Icon: MapPin, title: t("icons.office"), text: "Hamburg, Germany" },
+    { Icon: Mail, title: t("icons.email"), text: "info@techhelm.com" },
+    { Icon: Phone, title: t("icons.phone"), text: "+49 123-4567" },
+  ];
+
+  const links = [
+    { href: "/", title: "Home" },
+    {
+      href: "",
+      title: t("breadcrumb"),
+    },
   ];
 
   return (
-    <div className="py-12">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-        {items.map((item) => (
-          <div className="text-center" key={item.title}>
-            <div className="inline-flex items-center justify-center size-12 bg-primary-25 rounded-full mb-4">
-              <item.Icon className="size-6 text-primary" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {item.title}
-            </h3>
-            <p className="text-gray-600 text-sm">{item.text}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Message us</h2>
-          <p className="text-gray-600 leading-relaxed">
-            We&apos;re here to assist you every step of the way. Whether you
-            have a question, need technical support, or simply want to share
-            your feedback, our dedicated team is ready to listen and provide
-            prompt assistance.
-          </p>
-        </div>
-
-        <div>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        placeholder="* Your name"
-                        {...field}
-                        className="w-full"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="* Email"
-                        {...field}
-                        className="w-full"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="message"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Message"
-                        rows={6}
-                        {...field}
-                        className="w-full resize-vertical"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="flex justify-end">
-                <Button type="submit">Submit</Button>
+    <>
+      <CustomBreadcrumb links={links} />
+      <div className="py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {items.map((item) => (
+            <div className="text-center" key={item.title}>
+              <div className="inline-flex items-center justify-center size-12 bg-primary-25 rounded-full mb-4">
+                <item.Icon className="size-6 text-primary" />
               </div>
-            </form>
-          </Form>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {item.title}
+              </h3>
+              <p className="text-gray-600 text-sm">{item.text}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              {t("messageUs.title")}
+            </h2>
+            <p className="text-gray-600 leading-relaxed">
+              {t("messageUs.description")}
+            </p>
+          </div>
+
+          <div>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder={t("form.placeholders.name")}
+                          {...field}
+                          className="w-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder={t("form.placeholders.email")}
+                          {...field}
+                          className="w-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Textarea
+                          placeholder={t("form.placeholders.message")}
+                          rows={6}
+                          {...field}
+                          className="w-full resize-vertical"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="flex justify-end">
+                  <Button type="submit">{t("form.cta")}</Button>
+                </div>
+              </form>
+            </Form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -14,40 +14,40 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 
 const Hero = () => {
+  const t = useTranslations("home.hero");
   const slides = [
     {
       image: cameraImage,
-      text: "Capture life's perfect moments with professional-grade cameras and imaging gear.",
+      text: t("slides.cameraText"),
       href: "/products?page=1&categories=7",
     },
     {
       image: accessoriesImage,
-      text: "Complete your tech setup with premium accessories that enhance every experience.",
+      text: t("slides.accessoriesText"),
       href: "/products?page=1&categories=10",
     },
     {
       image: wearableImage,
-      text: "Stay connected and track your goals with smart wearables designed for modern life.",
+      text: t("slides.wearableText"),
       href: "/products?page=1&categories=5",
     },
     {
       image: gamingImage,
-      text: "Level up your gameplay with high-performance gaming gear and accessories.",
+      text: t("slides.gamingText"),
       href: "/products?page=1&categories=8",
     },
     {
       image: laptopsImage,
-      text: "Power through any task with cutting-edge laptops and desktop solutions.",
+      text: t("slides.laptopsText"),
       href: "/products?page=1&categories=3",
     },
     {
       image: phoneImage,
-      text: "Discover the latest smartphones that keep you connected to what matters most.",
+      text: t("slides.phoneText"),
       href: "/products?page=1&categories=2",
     },
   ];
 
-  const t = useTranslations("home.hero");
   return (
     <section className="container my-10">
       <Swiper

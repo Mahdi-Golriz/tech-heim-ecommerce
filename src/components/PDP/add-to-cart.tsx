@@ -2,6 +2,7 @@ import { PiSealPercentFill } from "react-icons/pi";
 import { FC } from "react";
 import AddToCartButton from "./add-to-cart-button";
 import { Product } from "@/models/product-model";
+import { useTranslations } from "next-intl";
 
 interface AddToCartProps {
   discountPercentage: number;
@@ -16,6 +17,7 @@ const AddToCart: FC<AddToCartProps> = ({
   selectedColor,
   product,
 }) => {
+  const t = useTranslations("products.pdp");
   const salePrice = discountPercentage
     ? price - (discountPercentage / 100) * price
     : null;
@@ -33,12 +35,12 @@ const AddToCart: FC<AddToCartProps> = ({
             <span className="font-medium">-{discountPercentage}%</span>
           </span>
           <p className="w-full text-center sm:text-start text-xl font-medium h-fit sm:px-5 lg:my-5">
-            last price: $ {salePrice}
+            {t("lastPrice")} {salePrice}
           </p>
         </div>
       ) : (
         <p className="w-full text-center text-xl font-medium h-fit sm:px-5 lg:my-5">
-          last price: $ {price}
+          {t("last price: $")} {price}
         </p>
       )}
     </div>

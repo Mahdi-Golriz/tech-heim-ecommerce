@@ -8,6 +8,7 @@ import ProductSorting from "./products-sorting";
 import ProductsFilter from "./products-filter";
 import ProductsPagination from "./products-pagination";
 import { FilterValues } from ".";
+import { useTranslations } from "next-intl";
 
 interface ClientInteractivityProps {
   initialFilters: FilterValues;
@@ -28,7 +29,7 @@ export default function ClientInteractivity({
 }: ClientInteractivityProps) {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const router = useRouter();
-
+  const t = useTranslations("products.plp.filters");
   const updateUrl = (params: UrlParams) => {
     const urlParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
@@ -83,7 +84,7 @@ export default function ClientInteractivity({
           onClick={toggleFilter}
         >
           <PiSlidersHorizontalLight />
-          <span>Filters</span>
+          <span>{t("title")}</span>
         </Button>
       </div>
       <div className="order-last col-span-full">

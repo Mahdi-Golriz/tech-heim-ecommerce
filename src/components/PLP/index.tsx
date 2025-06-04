@@ -7,6 +7,7 @@ import { Product } from "@/models/product-model";
 import { DataResponse } from "@/models/response-model";
 import PageLoader from "../ui/page-loader";
 import ClientInteractivity from "./client-interactivity";
+import { useTranslations } from "next-intl";
 
 export interface FilterValues {
   categories: string[];
@@ -22,11 +23,6 @@ interface ProductsProps {
   totalPages: number;
 }
 
-const breadcrumbLinks = [
-  { href: "/", title: "Home" },
-  { href: "/products", title: "Products" },
-];
-
 const Products = ({
   products,
   page,
@@ -34,12 +30,18 @@ const Products = ({
   filters,
   totalPages,
 }: ProductsProps) => {
+  const t = useTranslations("products.plp");
   const hasActiveFilters = filters
     ? filters.categories.length > 0 ||
       filters.priceRange[0] > 0 ||
       filters.priceRange[1] < 2000 ||
       filters.hasDiscount
     : false;
+
+  const breadcrumbLinks = [
+    { href: "/", title: "Home" },
+    { href: "/products", title: t("breadcrumb") },
+  ];
 
   return (
     <div className="container">
@@ -73,7 +75,7 @@ const Products = ({
             </div>
           ) : (
             <div className="col-span-full py-10 text-center text-gray-500">
-              No products match your current filters.
+              {t("emptyState")}
             </div>
           )}
         </div>

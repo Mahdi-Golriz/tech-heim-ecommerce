@@ -8,6 +8,7 @@ import { Product } from "@/models/product-model";
 import { CartItem } from "@/models/cart-model";
 import { useCallback } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 interface UseCartProps {
   product: Product;
@@ -18,7 +19,7 @@ interface UseCartProps {
 const useAddToCart = () => {
   const { items, addItem, setCart } = useCartStore();
   const { user, setUser } = useUserStore();
-
+  const t = useTranslations("products.toast");
   //TODO
   // Fetch for user cart
   const { fetchData: fetchUserCart } = useFetch({
@@ -29,7 +30,7 @@ const useAddToCart = () => {
     onSuccess: (userData: User) => {
       setUser(userData);
       if (userData.cart) setCart(userData.cart);
-      toast.success("Item has been added to your shopping basket");
+      toast.success(t("addedToCart"));
     },
     params: {
       "populate[cart][populate][items][populate][product][populate]":
@@ -104,7 +105,7 @@ const useAddToCart = () => {
       } else {
         // Update local state immediately for responsive UI for public users
         addItem(newItem);
-        toast.success("Item has been added to your shopping basket");
+        toast.success(t("addedToCart"));
       }
     },
     [user, items, fetchData, addItem, fetchUserCart]

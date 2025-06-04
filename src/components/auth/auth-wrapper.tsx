@@ -8,10 +8,12 @@ import GoogleProviderButton from "./google-provider-button";
 import useAuthModalStore from "@/store/auth-modal-store";
 import SignInForm from "../forms/signin-form";
 import SignUpForm from "../forms/signup-form";
+import { useTranslations } from "next-intl";
 
 export type AuthTabs = "signin" | "signup";
 
 const AuthWrapper = () => {
+  const t = useTranslations("authentication");
   const [activeTab, setActiveTab] = useState<AuthTabs>("signin");
   const { toggleAuthModal } = useAuthModalStore();
   const isSignup = activeTab === "signup";
@@ -23,11 +25,11 @@ const AuthWrapper = () => {
   const tabContent = (
     <Tabs value={activeTab} onValueChange={handleChangeTabs} className="w-full">
       <TabsList className="grid w-full grid-cols-2 ">
-        <TabsTrigger value="signin">Log in</TabsTrigger>
-        <TabsTrigger value="signup">Create account</TabsTrigger>
+        <TabsTrigger value="signin">{t("signIn.title")}</TabsTrigger>
+        <TabsTrigger value="signup">{t("signUp.title")}</TabsTrigger>
       </TabsList>
       <h3 className="text-xl font-medium mt-10 mb-6">
-        {isSignup ? "Create your account" : "Log in to Tech Heim"}
+        {isSignup ? t("signUp.subtitle") : t("signIn.subtitle")}
       </h3>
       <TabsContent value="signin" className="mt-4">
         {!isSignup && <SignInForm />}
@@ -41,10 +43,10 @@ const AuthWrapper = () => {
   const changeTabButton = (
     <div className="mb-6">
       <span className="text-gray-500">
-        {isSignup ? "Already have an account ?" : "Don’t have an account ?"}
+        {isSignup ? t("signUp.footer") : t("signIn.footer")}
       </span>
       <Button variant="link" onClick={handleChangeTabs}>
-        {isSignup ? "Sign In" : "Sign Up"}
+        {isSignup ? t("signIn.cta") : t("signUp.cta")}
       </Button>
     </div>
   );
@@ -67,7 +69,7 @@ const AuthWrapper = () => {
         <div>{tabContent}</div>
         <div className="flex items-center">
           <div className="flex-grow border-t border-gray-400"></div>
-          <span className="px-4 text-gray-600">Or Log In with</span>
+          <span className="px-4 text-gray-600">{t("signIn.header")}</span>
           <div className="flex-grow border-t border-gray-400"></div>
         </div>
         <GoogleProviderButton />
@@ -79,7 +81,7 @@ const AuthWrapper = () => {
           <div className="p-6">{tabContent}</div>
           <div className="flex items-center px-6">
             <div className="flex-grow border-t border-gray-400"></div>
-            <span className="px-4 text-gray-600">Or Log In with</span>
+            <span className="px-4 text-gray-600">{t("signIn.header")}</span>
             <div className="flex-grow border-t border-gray-400"></div>
           </div>
           <div className="px-6">

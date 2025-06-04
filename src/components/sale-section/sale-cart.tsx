@@ -23,7 +23,7 @@ const SaleCart: FC<Product> = ({
               ? process.env.NEXT_PUBLIC_API_URL + productImages[0].url
               : ""
           }
-          alt={title}
+          alt={title || ""}
           className="mx-auto h-4/5 object-scale-down object-center"
           width={300}
           height={300}

@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import Button from "../ui/button";
+import { useTranslations } from "next-intl";
 
 interface ProductColorSelectorProps {
   colors: string[];
@@ -12,9 +13,10 @@ const ProductColorSelector = ({
   setSelectedColor,
   selectedColor,
 }: ProductColorSelectorProps) => {
+  const t = useTranslations("products.pdp");
   return (
     <div className="py-4 border-b">
-      <h4>Select Color :</h4>
+      <h4>{t("selectColor")}</h4>
       <div className="flex gap-3 py-3">
         {colors.map((color) => (
           <Button

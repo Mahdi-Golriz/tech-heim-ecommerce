@@ -8,6 +8,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import faqImage from "@/assets/faq/hero-image.jpg";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface FAQItem {
   id: string;
@@ -22,104 +23,88 @@ interface TabData {
 }
 
 const FAQSection: React.FC = () => {
+  const t = useTranslations("faq");
   const tabsData: TabData[] = [
     {
       id: "trust-safety",
-      label: "Trust & Safety",
+      label: t("trust.title"),
       faqs: [
         {
           id: "trust-1",
-          question: "Is Tech Helm a secure platform for online shopping?",
-          answer:
-            "Yes, Tech Helm uses industry-standard SSL encryption and secure payment gateways to protect your personal and financial information. We also comply with PCI DSS standards for payment processing security.",
+          question: t("trust.questions.firstQuestion"),
+          answer: t("trust.answers.firstAnswer"),
         },
         {
           id: "trust-2",
-          question: "How do you protect my personal data?",
-          answer:
-            "We follow strict privacy policies and never share your personal information with third parties without your consent. All data is encrypted and stored on secure servers with regular security audits.",
+          question: t("trust.questions.secondQuestion"),
+          answer: t("trust.answers.secondAnswer"),
         },
         {
           id: "trust-3",
-          question:
-            "What should I do if I suspect fraudulent activity on my account?",
-          answer:
-            "If you notice any suspicious activity, immediately change your password and contact our security team through the support page. We monitor all accounts for unusual activity and will assist you promptly.",
+          question: t("trust.questions.thirdQuestion"),
+          answer: t("trust.answers.thirdAnswer"),
         },
         {
           id: "trust-4",
-          question: "Are the product reviews on Tech Helm authentic?",
-          answer:
-            "Yes, we have strict policies to ensure review authenticity. Only verified buyers can leave reviews, and we use advanced algorithms to detect and remove fake reviews to maintain trust in our community.",
+          question: t("trust.questions.fourthQuestion"),
+          answer: t("trust.answers.forthAnswer"),
         },
       ],
     },
     {
       id: "services",
-      label: "Services",
+      label: t("services.title"),
       faqs: [
         {
           id: "service-1",
-          question: "What services does Tech Helm offer?",
-          answer:
-            "Tech Helm offers a comprehensive range of services including product sales, technical support, installation services, extended warranties, and access to our tech magazine with expert reviews and tutorials.",
+          question: t("services.questions.firstQuestion"),
+          answer: t("services.answers.firstAnswer"),
         },
         {
           id: "service-2",
-          question: "Do you provide technical support after purchase?",
-          answer:
-            "Yes, we offer comprehensive technical support for all products purchased through Tech Helm. Our support team is available via phone, email, and live chat to help with setup, troubleshooting, and maintenance.",
+          question: t("services.questions.secondQuestion"),
+          answer: t("services.answers.secondAnswer"),
         },
         {
           id: "service-3",
-          question:
-            "Can I get installation services for my purchased products?",
-          answer:
-            "Absolutely! We offer professional installation services for eligible products. Our certified technicians can set up your equipment at your location. Installation fees vary by product and location.",
+          question: t("services.questions.thirdQuestion"),
+          answer: t("services.answers.thirdAnswer"),
         },
         {
           id: "service-4",
-          question: "How can I engage with the magazine content on Tech Helm?",
-          answer:
-            "You can actively engage with the magazine content by leaving comments and participating in the question-and-answer section. Feel free to share your thoughts, ask questions, and interact with fellow tech enthusiasts in the community.",
+          question: t("services.questions.fourthQuestion"),
+          answer: t("services.answers.forthAnswer"),
         },
       ],
     },
     {
       id: "billing",
-      label: "Billing",
+      label: t("billing.title"),
       faqs: [
         {
           id: "billing-1",
-          question:
-            "Can I purchase products from Tech Helm using installment payments?",
-          answer:
-            "Yes, Tech Helm offers the option to purchase products using both cash and installment payments. This allows you to choose the payment method that suits your needs and budget. We partner with several financing companies to provide flexible payment options.",
+          question: t("billing.questions.firstQuestion"),
+          answer: t("billing.answers.firstAnswer"),
         },
         {
           id: "billing-2",
-          question: "What payment methods do you accept?",
-          answer:
-            "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, bank transfers, and financing options. For high-value purchases, we also accept wire transfers and cryptocurrency payments.",
+          question: t("billing.questions.secondQuestion"),
+          answer: t("billing.answers.secondAnswer"),
         },
         {
           id: "billing-3",
-          question: "When will I be charged for my order?",
-          answer:
-            "For in-stock items, payment is processed immediately upon order confirmation. For pre-orders or back-ordered items, payment is processed when the item ships. Installment payments follow the agreed schedule.",
+          question: t("billing.questions.thirdQuestion"),
+          answer: t("billing.answers.thirdAnswer"),
         },
         {
           id: "billing-4",
-          question: "Can I get a refund if I'm not satisfied with my purchase?",
-          answer:
-            "Yes, we offer a 30-day return policy for most products in original condition. Refunds are processed within 5-7 business days after we receive the returned item. Some restrictions may apply for certain product categories.",
+          question: t("billing.questions.fourthQuestion"),
+          answer: t("billing.answers.forthAnswer"),
         },
         {
           id: "billing-5",
-          question:
-            "How can I get assistance with my purchase or any other inquiries?",
-          answer:
-            "If you need assistance with your purchase or have any questions, our dedicated customer support team is here to help. You can reach out to us through the contact page on our website, and we'll be happy to assist you promptly.",
+          question: t("billing.questions.fifthQuestion"),
+          answer: t("billing.answers.fifthAnswer"),
         },
       ],
     },
@@ -138,7 +123,7 @@ const FAQSection: React.FC = () => {
             />
             <div className="absolute top-2 right-2 bg-white/90 rounded-lg p-4 md:p-5 shadow-lg">
               <h1 className="text-base md:text-2xl lg:text-4xl font-bold text-gray-900">
-                Frequently Asked Questions
+                {t("title")}
               </h1>
             </div>
           </div>

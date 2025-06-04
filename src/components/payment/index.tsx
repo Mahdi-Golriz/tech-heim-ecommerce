@@ -5,7 +5,6 @@ import { useCartStore } from "@/store/cart-store";
 import { useCheckoutStore } from "@/store/checkout-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button, Input, InputIcon } from "@/components";
 import {
   Form,
@@ -23,13 +22,19 @@ import { useUserStore } from "@/store/user-store";
 import { useEffect, useRef } from "react";
 import useSuccessPayment from "@/hooks/useSuccessPayment";
 import { toast } from "sonner";
-import { PaymentSchema } from "@/validations/payment-schema";
+import {
+  getPaymentSchema,
+  PaymentSchema,
+} from "@/validations/get-payment-schema";
 import PaymentDetails from "./payment-details";
 import { formatCardNumber, formatExpirationDate } from "@/utils/formatter";
 import CheckoutItemsList from "../checkout/checkout-items-list";
 import PaymentHeader from "./payment-header";
+import { useTranslations } from "next-intl";
 
 const PaymentForm = () => {
+  const formT = useTranslations("validation.payment");
+  const t = useTranslations("payment");
   const router = useRouter();
   const { user } = useUserStore();
   const { items, clearCart, discount, subtotalPrice } = useCartStore();
@@ -48,7 +53,7 @@ const PaymentForm = () => {
   const shippingCost = checkoutDetails?.shippingCost || 0;
   const grandTotal = subtotalPrice - discount + shippingCost;
 
-  const form = useForm<z.infer<typeof PaymentSchema>>({
+  const form = useForm<PaymentSchema>({
     defaultValues: {
       cardNumber: "",
       nameOnCard: "",
@@ -56,15 +61,15 @@ const PaymentForm = () => {
       cvv: "",
       billingAddress: "",
     },
-    resolver: zodResolver(PaymentSchema),
+    resolver: zodResolver(getPaymentSchema(formT)),
   });
 
   const handleReturnToCheckout = () => {
     router.push("/checkout");
   };
 
-  const onSubmit = async (data: z.infer<typeof PaymentSchema>) => {
-    const toastId = toast.loading("Processing payment...");
+  const onSubmit = async (data: PaymentSchema) => {
+    const toastId = toast.loading(t("toast.processingPayment"));
     try {
       if (user)
         await successfulPayment({
@@ -75,7 +80,7 @@ const PaymentForm = () => {
           userId: user?.documentId,
         });
 
-      toast.success("Your order has been placed successfully.", {
+      toast.success(t("toast.successfulPayment"), {
         id: toastId,
       });
       router.push("/");
@@ -86,8 +91,8 @@ const PaymentForm = () => {
       clearCheckoutDetails();
     } catch (error) {
       console.error("Failed to process payment:", error);
-      toast.error("Payment processing failed", {
-        description: "Please check your payment details and try again.",
+      toast.error(t("toast.unsuccessfulPayment.title"), {
+        description: t("toast.unsuccessfulPayment.description"),
         duration: 1000,
       });
     }
@@ -104,10 +109,8 @@ const PaymentForm = () => {
     return (
       <div className="my-6 flex justify-center items-center min-h-[60vh]">
         <div className="text-center">
-          <h2 className="text-2xl font-medium mb-2">Loading...</h2>
-          <p className="text-gray-500">
-            Please wait while we prepare your payment details.
-          </p>
+          <h2 className="text-2xl font-medium mb-2">{t("loading.title")}</h2>
+          <p className="text-gray-500">{t("loading.text")}</p>
         </div>
       </div>
     );
@@ -119,7 +122,9 @@ const PaymentForm = () => {
       <div className="my-6 flex flex-col md:flex-row md:gap-5">
         <div className="md:w-3/5">
           <div className="md:border md:rounded-lg md:px-8 md:py-6">
-            <h2 className="text-xl font-medium mb-6">Payment Information</h2>
+            <h2 className="text-xl font-medium mb-6">
+              {t("formInputs.title")}
+            </h2>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -131,7 +136,7 @@ const PaymentForm = () => {
                   render={({ field }) => (
                     <FormItem className="mt-3">
                       <FormLabel className="text-base font-medium text-gray-700">
-                        Card Number
+                        {t("formInputs.cardNumberLabel")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -155,7 +160,7 @@ const PaymentForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-base font-medium text-gray-700">
-                        Name on Card
+                        {t("formInputs.cardNameLabel")}
                       </FormLabel>
                       <FormControl>
                         <Input {...field} type="text" placeholder="John Doe" />
@@ -171,7 +176,7 @@ const PaymentForm = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-base font-medium text-gray-700">
-                          Expiration Date
+                          {t("formInputs.expirationDate")}
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -223,7 +228,7 @@ const PaymentForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-base font-medium text-gray-700">
-                        Billing address
+                        {t("formInputs.billingAddress")}
                       </FormLabel>
                       <FormControl>
                         <InputIcon
@@ -232,6 +237,7 @@ const PaymentForm = () => {
                           endIcon={PiPencilSimpleLineDuotone}
                           color="blue"
                           variant="checkout"
+                          className="pr-10"
                         />
                       </FormControl>
                       <FormMessage />
@@ -245,7 +251,7 @@ const PaymentForm = () => {
                   className="flex items-center gap-2 text-primary border-primary hover:bg-primary/10"
                 >
                   <PiArrowsCounterClockwiseDuotone className="w-4 h-4" />
-                  Use same as shipping address
+                  {t("formInputs.useAddress")}
                 </Button>
               </form>
             </Form>
@@ -257,7 +263,7 @@ const PaymentForm = () => {
               className="text-primary my-2 px-0 ml-2"
               onClick={handleReturnToCheckout}
             >
-              Return to Checkout
+              {t("returnButton")}
             </Button>
           </div>
         </div>
@@ -265,7 +271,7 @@ const PaymentForm = () => {
         <div className="md:grow md:px-8 md:py-6 md:border md:rounded-lg">
           <div className="my-4">
             <h3 className="text-base font-medium text-gray-700 mb-3">
-              Your Order
+              {t("paymentCard.title")}
             </h3>
             <CheckoutItemsList />
           </div>
@@ -276,8 +282,8 @@ const PaymentForm = () => {
             type="submit"
           >
             {createOrderLoading || deleteItemsLoading
-              ? "Processing Payment..."
-              : "Complete Payment"}
+              ? t("paymentCard.paymentProcessing")
+              : t("paymentCard.cta")}
           </Button>
         </div>
       </div>

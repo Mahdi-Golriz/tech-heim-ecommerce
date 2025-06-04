@@ -5,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTranslations } from "next-intl";
 
 type ProductSortingProps = {
   sortBy: string;
@@ -12,19 +13,20 @@ type ProductSortingProps = {
 };
 
 const ProductsSorting = ({ sortBy, onSortChange }: ProductSortingProps) => {
+  const t = useTranslations("products.plp.sort");
   return (
     <div className="mb-3">
       <div>
         <Select value={sortBy} onValueChange={onSortChange}>
           <SelectTrigger className="w-[180px] border-none shadow-custom">
-            <SelectValue placeholder="Default Sort" />
+            <SelectValue placeholder={t("defaultSort")} />
           </SelectTrigger>
 
           <SelectContent className="bg-white">
-            <SelectItem value="default">Default Sort</SelectItem>
-            <SelectItem value="price:asc">Price: ascending</SelectItem>
-            <SelectItem value="price:desc">Price: descending </SelectItem>
-            <SelectItem value="createdAt:desc">New Arrivals</SelectItem>
+            <SelectItem value="default">{t("defaultSort")}</SelectItem>
+            <SelectItem value="price:asc">{t("priceAsc")}</SelectItem>
+            <SelectItem value="price:desc">{t("priceDesc")}</SelectItem>
+            <SelectItem value="createdAt:desc">{t("newArrivals")}</SelectItem>
           </SelectContent>
         </Select>
       </div>

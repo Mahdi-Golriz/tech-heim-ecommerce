@@ -4,9 +4,11 @@ import Image from "next/image";
 import { PiSealCheck, PiTruck } from "react-icons/pi";
 import { useCartStore } from "@/store/cart-store";
 import ActionButtons from "./cart-action-buttons";
+import { useTranslations } from "next-intl";
 
 const CartList = () => {
   const items = useCartStore((state) => state.items);
+  const t = useTranslations("cart.cartCard");
 
   return (
     <div className="md:w-2/3">
@@ -45,13 +47,13 @@ const CartList = () => {
               <div className="flex items-center gap-1 text-primary">
                 <PiSealCheck size={20} />
                 <span className="text-xs font-medium text-gray-500">
-                  Guaranteed
+                  {t("guarantee")}
                 </span>
               </div>
               <div className="flex items-center gap-1 text-primary">
                 <PiTruck size={20} />
                 <span className="text-xs font-medium text-gray-500">
-                  Free Delivery
+                  {t("delivery")}
                 </span>
               </div>
               <div className="flex flex-col md:flex-row md:justify-between md:items-center">

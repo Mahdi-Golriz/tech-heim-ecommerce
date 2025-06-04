@@ -7,8 +7,10 @@ import { useUserStore } from "@/store/user-store";
 import { useCartStore } from "@/store/cart-store";
 import { useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 const LogoutButton = () => {
+  const t = useTranslations("home.header.user");
   const router = useRouter();
   const setUser = useUserStore((state) => state.setUser);
   const clearCart = useCartStore((state) => state.clearCart);
@@ -17,7 +19,7 @@ const LogoutButton = () => {
     setUser(null);
     clearCart();
     router.push("/");
-    toast.info("You've been successfully signed out");
+    toast.info(t("logOutToast"));
   };
 
   return (
@@ -30,7 +32,7 @@ const LogoutButton = () => {
       <div className="p-2">
         <LogOut size={24} />
       </div>
-      Log out
+      {t("logOut")}
     </Button>
   );
 };

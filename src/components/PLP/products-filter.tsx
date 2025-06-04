@@ -16,6 +16,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import useFetch from "@/hooks/useFetch";
 import { Category } from "@/models/categories-model";
 import { DataResponse } from "@/models/response-model";
+import { useTranslations } from "next-intl";
 
 interface ProductsFilterProps {
   isVisible: boolean;
@@ -36,6 +37,7 @@ const ProductsFilter = ({
     path: "/api/categories",
   });
 
+  const t = useTranslations("products.plp.filters");
   const isOpenPriceRange =
     initialFilters.priceRange[0] !== 0 || initialFilters.priceRange[1] !== 2000;
 
@@ -132,13 +134,13 @@ const ProductsFilter = ({
       )}
     >
       <div className="flex items-center justify-between p-4">
-        <h3 className="text-xl font-medium">Filters</h3>
+        <h3 className="text-xl font-medium">{t("title")}</h3>
         <Button
           variant="outline"
           className="p-0 border-none h-fit"
           onClick={resetFilters}
         >
-          Clear all
+          {t("secondCta")}
         </Button>
       </div>
 
@@ -149,7 +151,7 @@ const ProductsFilter = ({
         defaultValue={isOpenCategories ? "categories" : ""}
       >
         <AccordionItem value="categories">
-          <AccordionTrigger>Category</AccordionTrigger>
+          <AccordionTrigger>{t("category")}</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-4">
               {categories?.data.map((category) => (
@@ -173,7 +175,7 @@ const ProductsFilter = ({
       </Accordion>
 
       <div className="flex items-center justify-between border-b p-4">
-        <label htmlFor="discount">Discount</label>
+        <label htmlFor="discount">{t("discount")}</label>
         <Switch
           id="discount"
           checked={filters.hasDiscount}
@@ -187,7 +189,7 @@ const ProductsFilter = ({
         defaultValue={isOpenPriceRange ? "price" : ""}
       >
         <AccordionItem value="price">
-          <AccordionTrigger>Price</AccordionTrigger>
+          <AccordionTrigger>{t("price")}</AccordionTrigger>
           <AccordionContent className="pt-2 mb-5">
             <div className="flex mb-6 justify-center gap-5 px-5">
               <Input
@@ -221,7 +223,7 @@ const ProductsFilter = ({
       </Accordion>
 
       <Button className="block my-5 mx-auto sm:hidden" onClick={applyFilters}>
-        Apply Filters
+        {t("firstCta")}
       </Button>
     </div>
   );

@@ -7,6 +7,7 @@ import {
   PaginationPrevious,
   PaginationEllipsis,
 } from "@/components/ui/pagination";
+import { useTranslations } from "next-intl";
 
 type ProductPaginationProps = {
   currentPage: number;
@@ -19,6 +20,7 @@ const ProductsPagination = ({
   onPageChange,
   totalPages,
 }: ProductPaginationProps) => {
+  const t = useTranslations("products.plp.pagination");
   const handlePageClick = (e: React.MouseEvent, page: number) => {
     e.preventDefault();
     onPageChange(page);
@@ -106,6 +108,7 @@ const ProductsPagination = ({
         {/* Previous button */}
         <PaginationItem>
           <PaginationPrevious
+            text={t("previous")}
             href="#"
             onClick={(e) => {
               if (currentPage > 1) {
@@ -124,6 +127,7 @@ const ProductsPagination = ({
         {/* Next button */}
         <PaginationItem>
           <PaginationNext
+            text={t("next")}
             href="#"
             onClick={(e) => {
               if (currentPage < totalPages) {

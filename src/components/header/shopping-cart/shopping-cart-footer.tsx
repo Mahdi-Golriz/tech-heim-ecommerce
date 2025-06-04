@@ -1,6 +1,7 @@
 import Button from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
 import { useCartStore } from "@/store/cart-store";
+import { useTranslations } from "next-intl";
 import { PiShoppingCartSimpleLight } from "react-icons/pi";
 
 interface ShoppingCartFooterProps {
@@ -10,6 +11,7 @@ interface ShoppingCartFooterProps {
 const ShoppingCartFooter = ({
   handleProceedToCart,
 }: ShoppingCartFooterProps) => {
+  const t = useTranslations("shoppingCart");
   const { grandTotal } = useCartStore();
   return (
     <>
@@ -17,7 +19,7 @@ const ShoppingCartFooter = ({
       <div className="px-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex flex-col px-4 w-fit">
-            <span className="font-medium ">Grand total</span>
+            <span className="font-medium ">{t("grandTotal")}</span>
             <span className="font-bold text-lg">${grandTotal.toFixed(2)}</span>
           </div>
 
@@ -27,7 +29,7 @@ const ShoppingCartFooter = ({
             onClick={handleProceedToCart}
           >
             <Link href="/cart" passHref className="h-12">
-              Proceed to Cart
+              {t("cta")}
               <PiShoppingCartSimpleLight />
             </Link>
           </Button>

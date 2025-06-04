@@ -18,8 +18,10 @@ import { useUserStore } from "@/store/user-store";
 import useAuthModalStore from "@/store/auth-modal-store";
 import { useEffect, useState } from "react";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 const UserButton = () => {
+  const t = useTranslations("home.header.user");
   const { isAuthModalOpen, toggleAuthModal } = useAuthModalStore();
   const user = useUserStore((state) => state.user);
   const [sideOffset, setSideOffset] = useState(70);
@@ -77,7 +79,7 @@ const UserButton = () => {
                 <div className="p-2">
                   <ShoppingBag />
                 </div>
-                <div className="flex items-center px-2">Orders</div>
+                <div className="flex items-center px-2">{t("orders")}</div>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
@@ -88,7 +90,7 @@ const UserButton = () => {
                 <div className="p-2">
                   <Heart />
                 </div>
-                <div className="flex items-center px-2">Wishlist</div>
+                <div className="flex items-center px-2">{t("wishlist")}</div>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
