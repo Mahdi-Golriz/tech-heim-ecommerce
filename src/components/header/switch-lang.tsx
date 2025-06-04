@@ -11,14 +11,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useSearchParams } from "next/navigation";
 
 const SwitchLang = () => {
   const router = useRouter();
   const pathname = usePathname();
   const currentLocale = useLocale();
+  const searchParams = useSearchParams();
 
   const handleLanguageChange = (newLocale: string) => {
-    router.replace(pathname, { locale: newLocale });
+    const queryString = searchParams.toString();
+    const href = queryString ? `${pathname}?${queryString}` : pathname;
+    router.replace(href, { locale: newLocale });
   };
 
   return (
