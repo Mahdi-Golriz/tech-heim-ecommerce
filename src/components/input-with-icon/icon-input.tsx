@@ -1,6 +1,7 @@
 import { ComponentProps } from "react";
 import Input from "../ui/input";
 import { cva, VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 const iconInputVariants = cva("", {
   variants: {
@@ -22,6 +23,7 @@ interface InputIconProps
   placeholder?: string;
   type?: string;
   color?: string;
+  parentClassName?: string;
 }
 
 const InputIcon = ({
@@ -31,10 +33,11 @@ const InputIcon = ({
   color = "gray",
   className,
   variant,
+  parentClassName,
   ...props
 }: InputIconProps) => {
   return (
-    <div className="relative align-bottom">
+    <div className={cn("relative align-bottom", parentClassName)}>
       {StartIcon && (
         <div className="absolute inset-y-0 start-0 flex items-center px-3">
           <StartIcon color={color} />
