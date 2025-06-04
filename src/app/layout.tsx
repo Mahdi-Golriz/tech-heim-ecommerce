@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-import { getMessages } from "next-intl/server";
-import { NextIntlClientProvider } from "next-intl";
-import UserInitializer from "@/components/user-initializer/userInitializer";
-import { Toaster } from "sonner";
 import "leaflet/dist/leaflet.css";
 import { Poppins } from "next/font/google";
 
@@ -27,19 +23,9 @@ const RootLayout = async ({ children, params }: Props) => {
   const resolvedParams = await params;
   const { locale } = resolvedParams;
 
-  // Providing all messages to the client
-  // side is the easiest way to get started
-  const messages = await getMessages();
-
   return (
     <html lang={locale} className={poppins.className}>
-      <body className="min-h-lvh">
-        <NextIntlClientProvider messages={messages}>
-          <UserInitializer />
-          {children}
-          <Toaster richColors />
-        </NextIntlClientProvider>
-      </body>
+      <body className="min-h-lvh">{children}</body>
     </html>
   );
 };

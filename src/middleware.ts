@@ -6,7 +6,6 @@ export function middleware(request: NextRequest) {
   const [, locale, ...secondPartArray] = request.nextUrl.pathname.split("/");
   const secondPart = secondPartArray.join("/");
 
-  //TODO: refactor redirect
   // If the locale is not one of the allowed locales, redirect to the default locale (en)
   if (!routing.locales.includes(locale as "en" | "de")) {
     return NextResponse.redirect(
