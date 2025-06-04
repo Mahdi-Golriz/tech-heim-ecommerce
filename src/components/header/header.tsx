@@ -12,8 +12,8 @@ const Header = () => {
 
   return (
     <section className="sm:shadow-sm sm:shadow-blue-300">
-      <header className="container flex flex-wrap items-center justify-between gap-3 sm:h-24">
-        <div className="flex w-full justify-between">
+      <header className="container sm:h-24">
+        <div className="flex w-full justify-between py-2 sm:px-4 sm:p-0">
           <Logo />
           <Navigation />
           <BurgerMenuButton />
@@ -22,17 +22,11 @@ const Header = () => {
               {t("title")}
             </Link>
           </Button>
-          <div className="flex items-center gap-2 sm:h-24">
+          <div className="flex items-center  sm:gap-2 gap-0 sm:h-24">
             <SwitchLang />
-            <Button variant="icon" size="icon" className="hidden sm:block">
-              <PiMagnifyingGlassLight />
-            </Button>
             <UserButton />
             <ShoppingCartButton />
           </div>
-        </div>
-        <div className="w-full relative sm:hidden">
-          <MobileSearchInput />
         </div>
       </header>
     </section>

@@ -68,7 +68,7 @@ const AddressMap = ({ onAddressSelected }: AddressMapProps): JSX.Element => {
   };
 
   return (
-    <div className="address-map-container">
+    <div>
       <form onSubmit={handleSubmit} className="mb-4">
         <div className="flex">
           <input
@@ -88,12 +88,12 @@ const AddressMap = ({ onAddressSelected }: AddressMapProps): JSX.Element => {
         </div>
       </form>
 
-      <div style={{ height: "400px", width: "100%" }}>
+      <div className="h-[300px] sm:h-[400px] md:h-[500px] w-full rounded overflow-hidden">
         <MapContainer
           center={defaultCenter}
           zoom={13}
-          style={{ height: "100%", width: "100%" }}
           ref={setMap}
+          className="size-full"
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

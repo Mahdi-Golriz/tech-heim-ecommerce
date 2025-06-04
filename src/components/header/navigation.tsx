@@ -17,7 +17,7 @@ const Navigation = () => {
       <ul className="flex h-full items-center lg:gap-12">
         {navLinks.map((item) => (
           <li key={item.href}>
-            <Button variant="link" asChild>
+            <Button variant="link" asChild className="sm:text-base md:text-lg">
               <Link href={item.href}>{item.title}</Link>
             </Button>
           </li>

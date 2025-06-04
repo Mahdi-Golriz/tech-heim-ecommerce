@@ -45,7 +45,7 @@ const WishlistButton = ({
       className={cn(
         "absolute p-0 [&_svg]:size-5 [&_svg]:text-blue-600",
         className,
-        relativePosition === "bottomRight" ? "bottom-4 right-3" : "top-1"
+        relativePosition === "bottomRight" ? "bottom-4 right-2" : "top-1"
       )}
     >
       {!!filled ? <PiHeartFill /> : <PiHeartLight />}
