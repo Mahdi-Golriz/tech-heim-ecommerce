@@ -6,13 +6,13 @@ export interface ProductImage {
 }
 
 export interface Product {
-  title?: string;
+  title: string;
   id?: number;
   documentId: string;
   description?: string;
   on_sale?: boolean;
   discount_percentage?: number;
-  price?: number;
+  price: number;
   product_images?: ProductImage[];
   colors?: string;
   color?: string[];

@@ -20,6 +20,7 @@ const useLocationToAddress = () => {
 
   const { fetchData, isLoading } = useFetch({
     autoFetch: false,
+    needToken: false,
     baseUrl: "https://nominatim.openstreetmap.org",
     onSuccess: (fetchedAddress: FetchedAddress | FetchedAddress[]) => {
       if (Array.isArray(fetchedAddress)) {
