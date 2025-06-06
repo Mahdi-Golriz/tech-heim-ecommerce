@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "http",
-        hostname: "localhost",
+        hostname: process.env.IMAGE_HOSTNAME || "localhost",
         port: "1337",
         pathname: "/uploads/**",
       },

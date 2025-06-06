@@ -8,6 +8,7 @@ import { Link } from "@/i18n/routing";
 import { Category } from "@/models/categories-model";
 import useFetch from "@/hooks/useFetch";
 import { DataResponse } from "@/models/response-model";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 const CategoryCard = ({ title, thumbnail, id }: Category) => (
   <Link
@@ -15,7 +16,7 @@ const CategoryCard = ({ title, thumbnail, id }: Category) => (
     className="block h-28 sm:h-36 lg:h-48 p-2 shadow-cart rounded-lg"
   >
     <Image
-      src={process.env.NEXT_PUBLIC_API_URL + thumbnail.url}
+      src={getImageUrl(thumbnail.url)}
       alt={title}
       width={300}
       height={300}
