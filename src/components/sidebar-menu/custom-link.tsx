@@ -1,7 +1,6 @@
 import { Button } from "@/components";
 import { Link } from "@/i18n/routing";
-import { cn } from "@/lib/utils";
-import { FC } from "react";
+import { cn } from "@/lib/cn";
 import { IconType } from "react-icons";
 
 interface CustomLinkProps {
@@ -12,13 +11,13 @@ interface CustomLinkProps {
   className?: string;
 }
 
-const CustomLink: FC<CustomLinkProps> = ({
+const CustomLink = ({
   Icon,
   title,
   href,
   onClick,
   className,
-}) => {
+}: CustomLinkProps) => {
   const isDisabled = !href || href === "#" || href === "";
   return (
     <li>

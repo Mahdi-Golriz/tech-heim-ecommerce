@@ -9,7 +9,7 @@ import {
   PiPhoneCallLight,
 } from "react-icons/pi";
 import CustomLink from "../sidebar-menu/custom-link";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 import { useState } from "react";
 import { IconType } from "react-icons";
 

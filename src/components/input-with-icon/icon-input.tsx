@@ -1,7 +1,7 @@
 import { ComponentProps } from "react";
 import Input from "../ui/input";
 import { cva, VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 
 const iconInputVariants = cva("", {
   variants: {

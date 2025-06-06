@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
-import { FC, ReactNode } from "react";
+import { cn } from "@/lib/cn";
+import { ReactNode } from "react";
 
 interface OverLayProps {
   onClick?: VoidFunction;
@@ -7,7 +7,7 @@ interface OverLayProps {
   children?: ReactNode;
 }
 
-const Overlay: FC<OverLayProps> = ({ onClick, className, children }) => {
+const Overlay = ({ onClick, className, children }: OverLayProps) => {
   return (
     <div
       className={cn(

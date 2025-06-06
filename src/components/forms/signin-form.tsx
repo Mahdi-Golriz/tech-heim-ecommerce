@@ -10,7 +10,7 @@ import {
 import InputIcon from "../input-with-icon/icon-input";
 import { GoKey } from "react-icons/go";
 import { PiUserLight } from "react-icons/pi";
-import { SubmitButton } from "./submit-button";
+import SubmitButton from "./submit-button";
 import useSignin from "@/hooks/useSignin";
 import { useTranslations } from "next-intl";
 import { SignInSchema } from "@/validations/get-auth-schema";

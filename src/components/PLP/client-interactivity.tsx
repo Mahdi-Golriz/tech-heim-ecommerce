@@ -7,9 +7,10 @@ import { PiSlidersHorizontalLight } from "react-icons/pi";
 import ProductSorting from "./products-sorting";
 import ProductsFilter from "./products-filter";
 import ProductsPagination from "./products-pagination";
-import { FilterValues } from ".";
+
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
+import { FilterValues } from ".";
 
 interface ClientInteractivityProps {
   initialFilters: FilterValues;
@@ -22,12 +23,12 @@ type UrlParams = {
   [key: string]: string | number | null | undefined | boolean;
 };
 
-export default function ClientInteractivity({
+const ClientInteractivity = ({
   initialFilters,
   sortBy,
   currentPage,
   totalPages,
-}: ClientInteractivityProps) {
+}: ClientInteractivityProps) => {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -102,4 +103,6 @@ export default function ClientInteractivity({
       </div>
     </>
   );
-}
+};
+
+export default ClientInteractivity;

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 import Button from "../ui/button";
 import { Product } from "@/models/product-model";
 import { PiShoppingCartSimpleLight } from "react-icons/pi";

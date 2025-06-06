@@ -2,7 +2,7 @@ import { Button } from "@/components";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
-export default async function NotFound() {
+const NotFound = async () => {
   const t = await getTranslations("NotFound");
 
   return (
@@ -19,4 +19,6 @@ export default async function NotFound() {
       </div>
     </div>
   );
-}
+};
+
+export default NotFound;

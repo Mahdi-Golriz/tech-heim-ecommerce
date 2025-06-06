@@ -1,4 +1,3 @@
-import { FC } from "react";
 import Button from "../ui/button";
 import {
   PiFacebookLogoLight,
@@ -6,7 +5,7 @@ import {
   PiTwitterLogoLight,
   PiYoutubeLogoLight,
 } from "react-icons/pi";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 
 interface SocialMediaIconsProps {
   className?: string;
@@ -19,7 +18,7 @@ const socialMedia = [
   PiYoutubeLogoLight,
 ];
 
-const SocialMediaIcons: FC<SocialMediaIconsProps> = ({ className }) => {
+const SocialMediaIcons = ({ className }: SocialMediaIconsProps) => {
   return (
     <div className={cn("[&_svg]:size-6", className)}>
       {socialMedia.map((Item, i) => (

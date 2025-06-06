@@ -3,13 +3,12 @@ import visaImage from "@/assets/footer/visa.svg";
 import paypalImage from "@/assets/footer/paypal.svg";
 import masterCordImage from "@/assets/footer/master-card.svg";
 import americanExpressImage from "@/assets/footer/american-express.svg";
-import { FC } from "react";
 
 interface PaymentMethodsProps {
   className?: string;
 }
 
-const PaymentMethods: FC<PaymentMethodsProps> = ({ className }) => {
+const PaymentMethods = ({ className }: PaymentMethodsProps) => {
   return (
     <div className={className}>
       <Image src={visaImage} alt="visa" />

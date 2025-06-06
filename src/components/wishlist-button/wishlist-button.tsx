@@ -3,7 +3,7 @@
 import { useUserStore } from "@/store/user-store";
 import Button from "../ui/button";
 import { PiHeartLight, PiHeartFill } from "react-icons/pi";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 import useWishlist from "@/hooks/useWishlist";
 
 interface WishlistButtonProps {

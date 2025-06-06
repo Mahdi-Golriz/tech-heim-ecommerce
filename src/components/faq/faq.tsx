@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Accordion,
   AccordionContent,
@@ -22,7 +21,7 @@ interface TabData {
   faqs: FAQItem[];
 }
 
-const FAQSection: React.FC = () => {
+const FAQSection = () => {
   const t = useTranslations("faq");
   const tabsData: TabData[] = [
     {

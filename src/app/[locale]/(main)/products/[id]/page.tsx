@@ -32,7 +32,8 @@ const getProduct = cache(async (productId: string): Promise<Product | null> => {
   }
 });
 
-// Generate static params
+// Generate static params (ISR)
+// Create the products Ids only for first page of PLP
 export const generateStaticParams = async () => {
   const productsResponse = await fetcher<DataResponse<Product[]>>({
     path: "/api/products",

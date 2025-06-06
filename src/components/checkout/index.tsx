@@ -13,7 +13,7 @@ import { PiPencilSimpleLineDuotone } from "react-icons/pi";
 import { useUserStore } from "@/store/user-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 import { Button, AuthWrapper, InputIcon } from "@/components";
 import "swiper/css";
 import { useRouter } from "@/i18n/routing";
@@ -106,7 +106,7 @@ const Checkout = () => {
   // Function to handle address selection from the map
   const handleAddressSelected = (addressData: AddressData) => {
     form.setValue("address", addressData.fullAddress);
-    // Optionally store coordinates in your checkout store
+    // store coordinates in your checkout store
     updateCheckoutDetails({
       ...checkoutDetails,
       address: addressData.fullAddress,

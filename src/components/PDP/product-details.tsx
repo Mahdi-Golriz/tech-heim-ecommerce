@@ -1,10 +1,8 @@
-import { FC } from "react";
-
 interface ProductDetailsProps {
   details: Record<string, string> | undefined;
 }
 
-const ProductSpecs: FC<ProductDetailsProps> = ({ details }) => {
+const ProductSpecs = ({ details }: ProductDetailsProps) => {
   return (
     <div className="my-3">
       <ul className="list-disc marker:text-gray-500 px-9">

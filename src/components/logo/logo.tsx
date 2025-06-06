@@ -1,14 +1,13 @@
 import LogoImage from "@/assets/logo.svg";
 import { Link } from "@/i18n/routing";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 import Image from "next/image";
-import { FC } from "react";
 
-interface Props {
+interface LogoProps {
   className?: string;
 }
 
-const Logo: FC<Props> = ({ className }) => {
+const Logo = ({ className }: LogoProps) => {
   return (
     <Link href="/" className="my-auto h-fit hidden sm:flex">
       <div className={cn("items-center", className)}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 
 import { Loader2 } from "lucide-react";
 import Button from "../ui/button";
@@ -22,12 +22,12 @@ interface SubmitButtonProps {
   loading?: boolean;
 }
 
-export function SubmitButton({
+const SubmitButton = ({
   text,
   loadingText,
   loading,
   className,
-}: Readonly<SubmitButtonProps>) {
+}: Readonly<SubmitButtonProps>) => {
   const { pending } = useFormStatus();
   // Use either the passed loading prop or the form status
   const isLoading = loading || pending;
@@ -42,4 +42,6 @@ export function SubmitButton({
       {isLoading ? <Loader text={loadingText} /> : text}
     </Button>
   );
-}
+};
+
+export default SubmitButton;

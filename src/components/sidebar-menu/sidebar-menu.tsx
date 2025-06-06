@@ -1,8 +1,8 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 import { Button, Overlay, Logo } from "@/components";
-import { FC, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   PiDeviceMobileCameraThin,
   PiLaptopLight,
@@ -34,7 +34,7 @@ interface ParentLink {
   links?: DirectLink[];
 }
 
-const SideBarMenu: FC<SideBarMenuProps> = ({ onClose, isOpen }) => {
+const SideBarMenu = ({ onClose, isOpen }: SideBarMenuProps) => {
   const t = useTranslations();
 
   const productLinks: DirectLink[] = useMemo(() => {

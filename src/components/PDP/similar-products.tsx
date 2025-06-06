@@ -2,7 +2,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SectionHeader from "../section-header/section-header";
 import { Autoplay, Navigation } from "swiper/modules";
 import ProductCard from "../new-products/product-cart";
-import { FC } from "react";
 import useFetch from "@/hooks/useFetch";
 import { DataResponse } from "@/models/response-model";
 import { Category } from "@/models/categories-model";
@@ -14,10 +13,7 @@ interface SimilarProductsProps {
   productId: string;
 }
 
-const SimilarProducts: FC<SimilarProductsProps> = ({
-  categoryId,
-  productId,
-}) => {
+const SimilarProducts = ({ categoryId, productId }: SimilarProductsProps) => {
   const { data, isLoading } = useFetch<DataResponse<Category>>({
     path: `/api/categories/${categoryId}`,
     autoFetch: !!categoryId,

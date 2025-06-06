@@ -1,13 +1,12 @@
 import { Product } from "@/models/product-model";
 import Image from "next/image";
-import { FC } from "react";
 
-const SaleCart: FC<Product> = ({
+const SaleCart = ({
   title,
   discount_percentage: discountPercentage,
   price: totalPrice,
   product_images: productImages,
-}) => {
+}: Product) => {
   const salePrice = discountPercentage
     ? totalPrice - (discountPercentage / 100) * totalPrice
     : null;
@@ -33,8 +32,10 @@ const SaleCart: FC<Product> = ({
         </figcaption>
       </figure>
       <div className="flex justify-between">
-        <span className="text-gray-500 line-through">${totalPrice}</span>
-        <span>${salePrice}</span>
+        <span className="text-gray-500 line-through">
+          ${totalPrice.toFixed(2)}
+        </span>
+        <span>${salePrice?.toFixed(2)}</span>
       </div>
     </div>
   );

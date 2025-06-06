@@ -6,7 +6,7 @@ import {
 } from "react-icons/pi";
 import CustomLink from "../sidebar-menu/custom-link";
 import { IconType } from "react-icons";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 
 interface FooterLinks {
   title: string;

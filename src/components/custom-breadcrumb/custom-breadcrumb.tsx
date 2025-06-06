@@ -6,7 +6,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Link } from "@/i18n/routing";
-import { FC, Fragment } from "react";
+import { Fragment } from "react";
 
 interface BreadcrumbLink {
   href: string;
@@ -17,7 +17,7 @@ interface CustomBreadcrumbProps {
   links: BreadcrumbLink[];
 }
 
-const CustomBreadcrumb: FC<CustomBreadcrumbProps> = ({ links }) => {
+const CustomBreadcrumb = ({ links }: CustomBreadcrumbProps) => {
   return (
     <Breadcrumb className="my-5 text-gray-600 py-3">
       <BreadcrumbList>

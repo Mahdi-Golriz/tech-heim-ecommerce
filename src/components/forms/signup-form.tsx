@@ -11,7 +11,7 @@ import InputIcon from "../input-with-icon/icon-input";
 import { GoKey } from "react-icons/go";
 import { IoMailOutline } from "react-icons/io5";
 import { PiUserLight } from "react-icons/pi";
-import { SubmitButton } from "./submit-button";
+import SubmitButton from "./submit-button";
 import useSignup from "@/hooks/useSignup";
 import { useTranslations } from "next-intl";
 import { SignUpSchema } from "@/validations/get-auth-schema";

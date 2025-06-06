@@ -1,8 +1,7 @@
 import Image from "next/image";
-import { FC } from "react";
 import { PiPlusBold, PiStarFill } from "react-icons/pi";
 import { Product } from "@/models/product-model";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 import { Link } from "@/i18n/routing";
 import PLPAddToCart from "../PLP/plp-add-to-cart";
 import WishlistButton from "../wishlist-button/wishlist-button";
@@ -15,11 +14,11 @@ interface ProductCartProps {
   wishlistButtonPosition: "topLeft" | "bottomRight";
 }
 
-const ProductCard: FC<ProductCartProps> = ({
+const ProductCard = ({
   product,
   hasAddToCartButton,
   wishlistButtonPosition,
-}) => {
+}: ProductCartProps) => {
   const {
     product_images: productImages,
     title,

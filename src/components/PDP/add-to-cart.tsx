@@ -1,5 +1,4 @@
 import { PiSealPercentFill } from "react-icons/pi";
-import { FC } from "react";
 import AddToCartButton from "./add-to-cart-button";
 import { Product } from "@/models/product-model";
 import { useTranslations } from "next-intl";
@@ -11,12 +10,12 @@ interface AddToCartProps {
   product: Product;
 }
 
-const AddToCart: FC<AddToCartProps> = ({
+const AddToCart = ({
   discountPercentage,
   price,
   selectedColor,
   product,
-}) => {
+}: AddToCartProps) => {
   const t = useTranslations("products.pdp");
   const salePrice = discountPercentage
     ? price - (discountPercentage / 100) * price

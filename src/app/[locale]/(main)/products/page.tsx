@@ -23,7 +23,7 @@ const PLPPage = async ({ searchParams }: PLPProps) => {
     Object.entries(queryParams).filter(([, value]) => value !== undefined)
   );
 
-  // Fetch products
+  // Fetch products (SSR)
   let products: DataResponse<Product[]> | null = null;
   try {
     products = await fetcher({

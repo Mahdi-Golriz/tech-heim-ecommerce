@@ -16,8 +16,6 @@ const useLocationToAddress = () => {
   const [address, setAddress] = useState<AddressData | null>(null);
   const [position, setPosition] = useState<[number, number] | null>(null);
 
-  //TODO: define functions
-
   const { fetchData, isLoading } = useFetch({
     autoFetch: false,
     needToken: false,

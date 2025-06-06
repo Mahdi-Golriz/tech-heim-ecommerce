@@ -13,12 +13,12 @@ export const metadata: Metadata = {
   description: "An awesome ecommerce site built with Next.js and Strapi",
 };
 
-interface Props {
+interface RootLayoutProps {
   children: React.ReactNode;
   params: { locale: string } | Promise<{ locale: string }>;
 }
 
-const RootLayout = async ({ children, params }: Props) => {
+const RootLayout = async ({ children, params }: RootLayoutProps) => {
   // Wait for the params to resolve
   const resolvedParams = await params;
   const { locale } = resolvedParams;

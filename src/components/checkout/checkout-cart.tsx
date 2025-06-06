@@ -19,7 +19,7 @@ const CheckoutCart = ({ color, quantity, src }: CheckoutProps) => {
       <p className="mb-2 px-1">x{quantity}</p>
       <div className="flex items-center gap-1">
         <span
-          className="size-3 rounded-full"
+          className="size-3 rounded-full border"
           style={{ backgroundColor: color }}
         />
         <span className="capitalize">{color}</span>

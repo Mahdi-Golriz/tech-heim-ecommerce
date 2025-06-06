@@ -1,7 +1,6 @@
-import { FC } from "react";
 import Button from "../ui/button";
 import { Link } from "@/i18n/routing";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 import { PiCaretRight } from "react-icons/pi";
 
 interface SectionHeaderProps {
@@ -13,7 +12,7 @@ interface SectionHeaderProps {
   };
 }
 
-const SectionHeader: FC<SectionHeaderProps> = ({ title, cta, className }) => {
+const SectionHeader = ({ title, cta, className }: SectionHeaderProps) => {
   return (
     <header className="container">
       <div

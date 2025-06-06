@@ -8,7 +8,7 @@ interface FeatureItem {
   text: string;
 }
 
-const AboutTechHelm = () => {
+const AboutUs = () => {
   const t = useTranslations("aboutUs");
   const features: FeatureItem[] = [
     { text: t("features.firstFeature") },
@@ -85,4 +85,4 @@ const AboutTechHelm = () => {
   );
 };
 
-export default AboutTechHelm;
+export default AboutUs;

@@ -1,4 +1,4 @@
-import AboutTechHelm from "@/components/about-us/about-us";
+import AboutUs from "@/components/about-us/about-us";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 const AboutUsPage = () => {
   return (
     <div className="container">
-      <AboutTechHelm />
+      <AboutUs />
     </div>
   );
 };
