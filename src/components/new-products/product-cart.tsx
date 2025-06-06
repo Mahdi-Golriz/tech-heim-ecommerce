@@ -89,12 +89,14 @@ const ProductCard: FC<ProductCartProps> = ({
             {salePrice ? (
               <>
                 <p className="text-[10px] lg:text-sm line-through font-normal text-gray-600">
-                  $ {totalPrice}
+                  $ {totalPrice.toFixed(2)}
                 </p>
-                <p className="text-xs lg:text-lg">$ {salePrice}</p>
+                <p className="text-xs lg:text-lg">$ {salePrice.toFixed(2)}</p>
               </>
             ) : (
-              <span className="text-xs lg:text-lg">$ {totalPrice}</span>
+              <span className="text-xs lg:text-lg">
+                $ {totalPrice.toFixed(2)}
+              </span>
             )}
           </div>
           <div className="h-full text-primary-500 font-medium flex gap-1 mb-0 items-end pb-1">

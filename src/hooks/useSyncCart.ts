@@ -53,6 +53,7 @@ const useSyncCart = () => {
     params: {
       "populate[cart][populate][items][populate][product][populate]":
         "product_images",
+      "populate[wishlists][populate][product][fields]": "documentId",
     },
     onSuccess: async (userData: User) => {
       // If user has local cart items and a backend cart, merge them

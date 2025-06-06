@@ -9,6 +9,7 @@ import ProductsFilter from "./products-filter";
 import ProductsPagination from "./products-pagination";
 import { FilterValues } from ".";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 
 interface ClientInteractivityProps {
   initialFilters: FilterValues;
@@ -29,12 +30,15 @@ export default function ClientInteractivity({
 }: ClientInteractivityProps) {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const t = useTranslations("products.plp.filters");
   const updateUrl = (params: UrlParams) => {
-    const urlParams = new URLSearchParams();
+    const urlParams = new URLSearchParams(searchParams.toString());
     Object.entries(params).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
+      if (value) {
         urlParams.set(key, String(value));
+      } else {
+        urlParams.delete(key);
       }
     });
     router.push(`/products?${urlParams.toString()}`, { scroll: false });

@@ -17,7 +17,7 @@ const ProductColorSelector = ({
   return (
     <div className="py-4 border-b">
       <h4>{t("selectColor")}</h4>
-      <div className="flex gap-3 py-3">
+      <div className="flex flex-wrap gap-3 py-3">
         {colors.map((color) => (
           <Button
             variant="outline"
