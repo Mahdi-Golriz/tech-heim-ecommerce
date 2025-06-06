@@ -3,10 +3,15 @@ import { Product } from "@/models/product-model";
 import { DataResponse } from "@/models/response-model";
 import fetcher from "@/utils/fetcher";
 import { parseProductsSearchParams } from "@/utils/parseProductsSearchParams";
+import { Metadata } from "next";
 
 interface PLPProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
+
+export const metadata: Metadata = {
+  title: "Tech Heim | Products",
+};
 
 const PLPPage = async ({ searchParams }: PLPProps) => {
   const resolvedSearchParams = await searchParams;

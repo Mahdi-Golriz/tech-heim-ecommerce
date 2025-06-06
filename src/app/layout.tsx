@@ -9,8 +9,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "My Ecommerce Site",
-  description: "An awesome ecommerce site built with Next.js",
+  title: "Tech Heim",
+  description: "An awesome ecommerce site built with Next.js and Strapi",
 };
 
 interface Props {

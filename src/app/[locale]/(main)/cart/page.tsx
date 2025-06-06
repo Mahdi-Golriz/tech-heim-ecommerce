@@ -1,4 +1,9 @@
 import { Cart } from "@/components";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Tech Heim | Shopping Cart",
+};
 
 const CartPage = () => {
   return (

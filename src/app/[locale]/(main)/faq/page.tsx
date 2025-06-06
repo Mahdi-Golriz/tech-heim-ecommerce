@@ -1,5 +1,10 @@
 import { CustomBreadcrumb } from "@/components";
 import FAQSection from "@/components/faq/faq";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Tech Heim | FAQ",
+};
 
 const links = [
   { href: "/", title: "Home" },

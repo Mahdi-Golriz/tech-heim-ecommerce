@@ -2,6 +2,7 @@ import ProductDetails from "@/components/PDP";
 import { Product } from "@/models/product-model";
 import { DataResponse } from "@/models/response-model";
 import fetcher from "@/utils/fetcher";
+import { cache } from "react";
 
 interface PDPPageProps {
   params: { id: string };
@@ -10,8 +11,15 @@ interface PDPPageProps {
 export const revalidate = 60;
 export const dynamicParams = true;
 
+export const generateMetadata = async ({ params }: PDPPageProps) => {
+  const product = await getProduct(params.id);
+  return {
+    title: `Tech Heim | ${product?.title}`,
+  };
+};
+
 // Fetch product data for a specific ID
-const getProduct = async (productId: string): Promise<Product | null> => {
+const getProduct = cache(async (productId: string): Promise<Product | null> => {
   try {
     const productResponse = await fetcher<DataResponse<Product>>({
       path: `/api/products/${productId}`,
@@ -22,7 +30,7 @@ const getProduct = async (productId: string): Promise<Product | null> => {
     console.error(`Error fetching product ${productId}:`, error);
     return null;
   }
-};
+});
 
 // Generate static params
 export const generateStaticParams = async () => {

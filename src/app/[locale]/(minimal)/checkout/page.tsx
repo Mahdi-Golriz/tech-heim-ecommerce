@@ -1,4 +1,9 @@
 import Checkout from "@/components/checkout";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Tech Heim | Checkout",
+};
 
 const CheckoutPage = () => {
   return (
