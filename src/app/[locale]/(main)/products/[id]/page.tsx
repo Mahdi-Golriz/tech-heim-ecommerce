@@ -5,14 +5,15 @@ import fetcher from "@/utils/fetcher";
 import { cache } from "react";
 
 interface PDPPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export const revalidate = 60;
 export const dynamicParams = true;
 
 export const generateMetadata = async ({ params }: PDPPageProps) => {
-  const product = await getProduct(params.id);
+  const { id } = await params;
+  const product = await getProduct(id);
   return {
     title: `Tech Heim | ${product?.title}`,
   };
@@ -50,7 +51,8 @@ export const generateStaticParams = async () => {
 };
 
 const PDPPage = async ({ params }: PDPPageProps) => {
-  const product = await getProduct(params.id);
+  const { id } = await params;
+  const product = await getProduct(id);
 
   if (!product) {
     return <div>Product not found</div>;
@@ -58,7 +60,7 @@ const PDPPage = async ({ params }: PDPPageProps) => {
 
   return (
     <div>
-      <ProductDetails product={product} productId={params.id} />
+      <ProductDetails product={product} productId={id} />
     </div>
   );
 };
