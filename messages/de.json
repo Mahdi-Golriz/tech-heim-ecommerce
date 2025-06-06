@@ -431,5 +431,10 @@
       "quantity": "Menge: ",
       "color": "Farbe: "
     }
+  },
+  "NotFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Seite nicht gefundenEs tut uns leid, die Seite, die Sie suchen, existiert nicht.",
+    "cta": "Zurück zur Startseite"
   }
 }
