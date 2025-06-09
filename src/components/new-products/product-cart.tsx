@@ -5,6 +5,7 @@ import { cn } from "@/lib/cn";
 import { Link } from "@/i18n/routing";
 import PLPAddToCart from "../PLP/plp-add-to-cart";
 import WishlistButton from "../wishlist-button/wishlist-button";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 interface ProductCartProps {
   product: Product;
@@ -39,11 +40,7 @@ const ProductCard = ({
       <div className="relative group flex flex-col gap-2 h-52 lg:h-80 px-2 pb-2 shadow-custom rounded">
         <figure className="custom-border-bottom h-2/3 shad py-3">
           <Image
-            src={
-              productImages
-                ? process.env.NEXT_PUBLIC_API_URL + productImages[0].url
-                : ""
-            }
+            src={productImages ? getImageUrl(productImages[0].url) : ""}
             alt={title}
             className="object-contain h-full mx-auto group-hover:scale-105 transition-all"
             width={300}

@@ -1,4 +1,5 @@
 import { ProductImage } from "@/models/product-model";
+import { getImageUrl } from "@/utils/getImageUrl";
 import Image from "next/image";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -21,7 +22,7 @@ const ProductImageSlider = ({
               <Image
                 fill
                 className="absolute object-scale-down"
-                src={process.env.NEXT_PUBLIC_API_URL + image.url}
+                src={getImageUrl(image.url)}
                 alt={image.name}
               />
             </div>

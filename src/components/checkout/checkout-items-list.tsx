@@ -1,4 +1,5 @@
 import { useCartStore } from "@/store/cart-store";
+import { getImageUrl } from "@/utils/getImageUrl";
 import Image from "next/image";
 
 const CheckoutItemsList = () => {
@@ -9,10 +10,7 @@ const CheckoutItemsList = () => {
         <li key={item.createdAt} className="flex p-1 gap-1 border-b">
           {item.product.product_images && (
             <Image
-              src={
-                process.env.NEXT_PUBLIC_API_URL +
-                item.product.product_images[0].url
-              }
+              src={getImageUrl(item.product.product_images[0].url)}
               alt={item.product.title}
               width={87}
               height={74}

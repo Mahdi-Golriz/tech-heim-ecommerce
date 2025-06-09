@@ -1,4 +1,5 @@
 import { Product } from "@/models/product-model";
+import { getImageUrl } from "@/utils/getImageUrl";
 import Image from "next/image";
 
 const SaleCart = ({
@@ -17,11 +18,7 @@ const SaleCart = ({
       </span>
       <figure className="h-5/6">
         <Image
-          src={
-            productImages
-              ? process.env.NEXT_PUBLIC_API_URL + productImages[0].url
-              : ""
-          }
+          src={productImages ? getImageUrl(productImages[0].url) : ""}
           alt={title || ""}
           className="mx-auto h-4/5 object-scale-down object-center"
           width={300}

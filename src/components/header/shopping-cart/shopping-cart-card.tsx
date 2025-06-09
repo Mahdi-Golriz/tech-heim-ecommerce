@@ -1,6 +1,7 @@
 import Button from "@/components/ui/button";
 import useCartActions from "@/hooks/useCartActions";
 import { CartItem } from "@/models/cart-model";
+import { getImageUrl } from "@/utils/getImageUrl";
 import Image from "next/image";
 import {
   PiMinusCircleLight,
@@ -20,8 +21,7 @@ const ShoppingCartCard = ({ item }: ShoppingCartCardProps) => {
         <Image
           src={
             item.product.product_images
-              ? process.env.NEXT_PUBLIC_API_URL +
-                item.product.product_images[0].url
+              ? getImageUrl(item.product.product_images[0].url)
               : ""
           }
           alt=""

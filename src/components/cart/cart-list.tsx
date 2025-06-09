@@ -5,6 +5,7 @@ import { PiSealCheck, PiTruck } from "react-icons/pi";
 import { useCartStore } from "@/store/cart-store";
 import ActionButtons from "./cart-action-buttons";
 import { useTranslations } from "next-intl";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 const CartList = () => {
   const items = useCartStore((state) => state.items);
@@ -22,8 +23,7 @@ const CartList = () => {
               <Image
                 src={
                   item.product.product_images
-                    ? process.env.NEXT_PUBLIC_API_URL +
-                      item.product.product_images[0].url
+                    ? getImageUrl(item.product.product_images[0].url)
                     : ""
                 }
                 alt=""

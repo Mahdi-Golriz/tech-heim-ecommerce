@@ -30,6 +30,8 @@ const SaleSection = () => {
     },
   });
 
+  console.log(saleProducts);
+
   return (
     <div className="container my-10">
       <div className="relative grid grid-cols-3 lg:grid-cols-5 py-4 w-full pl-2 lg:pt-11 lg:pb-0 bg-primary-500 rounded-lg overflow-hidden">
