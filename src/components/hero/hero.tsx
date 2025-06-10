@@ -19,32 +19,32 @@ const Hero = () => {
     {
       image: cameraImage,
       text: t("slides.cameraText"),
-      href: "/products?page=1&categories=7",
+      href: "/products?page=1&categories=4",
     },
     {
       image: accessoriesImage,
       text: t("slides.accessoriesText"),
-      href: "/products?page=1&categories=10",
+      href: "/products?page=1&categories=6",
     },
     {
       image: wearableImage,
       text: t("slides.wearableText"),
-      href: "/products?page=1&categories=5",
+      href: "/products?page=1&categories=3",
     },
     {
       image: gamingImage,
       text: t("slides.gamingText"),
-      href: "/products?page=1&categories=8",
+      href: "/products?page=1&categories=5",
     },
     {
       image: laptopsImage,
       text: t("slides.laptopsText"),
-      href: "/products?page=1&categories=3",
+      href: "/products?page=1&categories=2",
     },
     {
       image: phoneImage,
       text: t("slides.phoneText"),
-      href: "/products?page=1&categories=2",
+      href: "/products?page=1&categories=1",
     },
   ];
 

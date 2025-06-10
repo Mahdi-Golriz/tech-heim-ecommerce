@@ -8,7 +8,7 @@ interface PDPPageProps {
   params: Promise<{ id: string; locale: string }>;
 }
 
-export const revalidate = 60;
+export const revalidate = 3600;
 export const dynamicParams = true;
 
 export const generateMetadata = async ({ params }: PDPPageProps) => {

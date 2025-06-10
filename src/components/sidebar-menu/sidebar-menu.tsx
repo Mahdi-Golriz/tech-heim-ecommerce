@@ -42,32 +42,32 @@ const SideBarMenu = ({ onClose, isOpen }: SideBarMenuProps) => {
       {
         title: t("products.mobilePhones"),
         icon: PiDeviceMobileCameraThin,
-        href: "/products?page=1&categories=2",
+        href: "/products?page=1&categories=1",
       },
       {
         title: t("products.laptopsComputers"),
         icon: PiLaptopLight,
-        href: "/products?page=1&categories=3",
+        href: "/products?page=1&categories=2",
       },
       {
         title: t("products.wearables"),
         icon: PiWatchLight,
-        href: "/products?page=1&categories=5",
+        href: "/products?page=1&categories=3",
       },
       {
         title: t("products.cameras"),
         icon: PiCameraLight,
-        href: "/products?page=1&categories=7",
+        href: "/products?page=1&categories=4",
       },
       {
         title: t("products.gaming"),
         icon: PiGameControllerLight,
-        href: "/products?page=1&categories=8",
+        href: "/products?page=1&categories=5",
       },
       {
         title: t("products.accessories"),
         icon: PiMouseSimpleLight,
-        href: "/products?page=1&categories=10",
+        href: "/products?page=1&categories=6",
       },
     ];
   }, [t]);

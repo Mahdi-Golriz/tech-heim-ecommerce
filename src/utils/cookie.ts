@@ -13,20 +13,23 @@ interface CookieParams {
   config?: Partial<CookieConfig>;
 }
 
-const cookieDomain =
-  typeof window !== "undefined" ? window.location.hostname : undefined;
+const getDefaultCookieConfig = (): CookieConfig => {
+  const cookieDomain =
+    typeof window !== "undefined" ? window.location.hostname : undefined;
 
-const defaultCookieConfig: CookieConfig = {
-  maxAge: 60 * 60 * 24 * 7, // 1 week
-  path: "/",
-  ...(cookieDomain && { domain: cookieDomain }),
-  secure: process.env.NODE_ENV === "production",
+  return {
+    maxAge: 60 * 60 * 24 * 7,
+    path: "/",
+    ...(cookieDomain && { domain: cookieDomain }),
+    secure: process.env.NODE_ENV === "production",
+  };
 };
 
 const cookies = new Cookies(null, { path: "/" });
 
 export const setCookie = ({ key, value, config }: CookieParams) => {
-  cookies.set(key, value, { ...defaultCookieConfig, ...config });
+  const defaultConfig = getDefaultCookieConfig();
+  cookies.set(key, value, { ...defaultConfig, ...config });
 };
 
 export const getCookie = ({ key }: CookieParams) => {
@@ -34,5 +37,6 @@ export const getCookie = ({ key }: CookieParams) => {
 };
 
 export const removeCookie = ({ key }: CookieParams) => {
-  cookies.remove(key);
+  const { path, domain, secure } = getDefaultCookieConfig();
+  cookies.remove(key, { path, domain, secure });
 };
