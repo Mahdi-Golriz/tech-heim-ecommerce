@@ -36,6 +36,8 @@ const getProduct = cache(async (productId: string): Promise<Product | null> => {
 // Generate static params (ISR)
 // Create the products Ids only for first page of PLP
 export const generateStaticParams = async () => {
+  const locales = ["en", "de"];
+
   const productsResponse = await fetcher<DataResponse<Product[]>>({
     path: "/api/products",
     params: {
@@ -45,15 +47,17 @@ export const generateStaticParams = async () => {
     },
   });
 
-  return (productsResponse.data || []).map((product) => ({
-    id: product.documentId,
-  }));
+  return locales.flatMap((locale) =>
+    (productsResponse.data || []).map((product) => ({
+      id: product.documentId,
+      locale,
+    }))
+  );
 };
 
 const PDPPage = async ({ params }: PDPPageProps) => {
-  console.log(params);
   const resolvedParams = await params;
-  console.log(resolvedParams);
+
   const product = await getProduct(resolvedParams.id);
 
   if (!product) {
