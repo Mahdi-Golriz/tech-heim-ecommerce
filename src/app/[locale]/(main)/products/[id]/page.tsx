@@ -5,7 +5,7 @@ import fetcher from "@/utils/fetcher";
 import { cache } from "react";
 
 interface PDPPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; locale: string }>;
 }
 
 export const revalidate = 60;
@@ -51,8 +51,10 @@ export const generateStaticParams = async () => {
 };
 
 const PDPPage = async ({ params }: PDPPageProps) => {
-  const { id } = await params;
-  const product = await getProduct(id);
+  console.log(params);
+  const resolvedParams = await params;
+  console.log(resolvedParams);
+  const product = await getProduct(resolvedParams.id);
 
   if (!product) {
     return <div>Product not found</div>;
@@ -60,7 +62,7 @@ const PDPPage = async ({ params }: PDPPageProps) => {
 
   return (
     <div>
-      <ProductDetails product={product} productId={id} />
+      <ProductDetails product={product} productId={resolvedParams.id} />
     </div>
   );
 };
