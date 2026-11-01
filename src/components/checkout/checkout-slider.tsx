@@ -16,15 +16,11 @@ const CheckoutSlider = () => {
         className="bg-gray-100 rounded-lg "
       >
         {items.map((item) => (
-          <SwiperSlide key={item.createdAt} className="py-3 pl-3">
+          <SwiperSlide key={item.id} className="py-3 pl-3">
             <CheckoutCart
               color={item.color}
               quantity={item.quantity}
-              src={
-                item.product.product_images
-                  ? item.product.product_images[0].url
-                  : ""
-              }
+              src={item.product.image?.url ?? "/placeholder.svg"}
             />
           </SwiperSlide>
         ))}

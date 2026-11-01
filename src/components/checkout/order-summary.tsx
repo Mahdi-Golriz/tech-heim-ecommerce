@@ -1,21 +1,28 @@
-import { useCartStore } from "@/store/cart-store";
+"use client";
+
+import {
+  selectDiscount,
+  selectGrandTotal,
+  selectSubtotal,
+  useCartStore,
+} from "@/store/cart-store";
 import { useTranslations } from "next-intl";
-import { UseFormReturn } from "react-hook-form";
 
-interface CheckoutFormData {
-  email: string;
-  address: string;
-  shippingCost: string;
+interface OrderSummaryProps {
+  shippingCost: number;
+  /** Translation namespace holding title/subtotal/discount/shipmentCost/grandTotal */
+  namespace:
+    | "checkout.checkoutCard.paymentDetails"
+    | "payment.paymentCard.paymentDetails";
 }
 
-interface CheckoutPaymentDetailsProps {
-  form: UseFormReturn<CheckoutFormData>;
-}
+/** Totals shown on checkout and payment. Display only: the server recomputes them. */
+const OrderSummary = ({ shippingCost, namespace }: OrderSummaryProps) => {
+  const t = useTranslations(namespace);
+  const subtotalPrice = useCartStore(selectSubtotal);
+  const discount = useCartStore(selectDiscount);
+  const grandTotal = useCartStore(selectGrandTotal);
 
-const CheckoutPaymentDetails = ({ form }: CheckoutPaymentDetailsProps) => {
-  const { discount, grandTotal, subtotalPrice } = useCartStore();
-  const shippingCost = parseFloat(form.watch("shippingCost") || "0");
-  const t = useTranslations("checkout.checkoutCard.paymentDetails");
   return (
     <>
       <h3 className="md:hidden mb-6 text-2xl font-medium">{t("title")}</h3>
@@ -30,9 +37,7 @@ const CheckoutPaymentDetails = ({ form }: CheckoutPaymentDetailsProps) => {
         </li>
         <li className="flex justify-between border-b-2 pb-3 text-gray-600">
           <span>{t("shipmentCost")}</span>
-          <span>
-            ${parseFloat(form.watch("shippingCost") || "0").toFixed(2)}
-          </span>
+          <span>$ {shippingCost.toFixed(2)}</span>
         </li>
         <li className="flex justify-between font-medium">
           <span>{t("grandTotal")}</span>
@@ -43,4 +48,4 @@ const CheckoutPaymentDetails = ({ form }: CheckoutPaymentDetailsProps) => {
   );
 };
 
-export default CheckoutPaymentDetails;
+export default OrderSummary;

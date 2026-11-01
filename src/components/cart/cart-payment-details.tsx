@@ -1,13 +1,20 @@
 "use client";
 
-import { useCartStore } from "@/store/cart-store";
+import {
+  selectDiscount,
+  selectGrandTotal,
+  selectSubtotal,
+  useCartStore,
+} from "@/store/cart-store";
 import Button from "../ui/button";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 
 const CartPaymentDetails = () => {
   const t = useTranslations("cart");
-  const { subtotalPrice, grandTotal, discount } = useCartStore();
+  const subtotalPrice = useCartStore(selectSubtotal);
+  const discount = useCartStore(selectDiscount);
+  const grandTotal = useCartStore(selectGrandTotal);
   const items = useCartStore((state) => state.items);
 
   const isCartEmpty = items.length === 0;

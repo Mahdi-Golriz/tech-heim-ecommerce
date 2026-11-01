@@ -18,15 +18,17 @@ import {
   PiArrowsCounterClockwiseDuotone,
   PiPencilSimpleLineDuotone,
 } from "react-icons/pi";
-import { useUserStore } from "@/store/user-store";
-import { useEffect, useRef } from "react";
-import useSuccessPayment from "@/hooks/useSuccessPayment";
+import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import {
   getPaymentSchema,
+  PaymentFormValues,
   PaymentSchema,
 } from "@/validations/get-payment-schema";
-import PaymentDetails from "./payment-details";
+import { placeOrderAction } from "@/actions/order.actions";
+import useActionError from "@/hooks/useActionError";
+import useStoreHydrated from "@/hooks/useStoreHydrated";
+import OrderSummary from "../checkout/order-summary";
 import { formatCardNumber, formatExpirationDate } from "@/utils/formatter";
 import CheckoutItemsList from "../checkout/checkout-items-list";
 import PaymentHeader from "./payment-header";
@@ -36,24 +38,22 @@ const PaymentForm = () => {
   const formT = useTranslations("validation.payment");
   const t = useTranslations("payment");
   const router = useRouter();
-  const { user } = useUserStore();
-  const { items, clearCart, discount, subtotalPrice } = useCartStore();
+  const actionError = useActionError();
+  const items = useCartStore((s) => s.items);
+  const clearCart = useCartStore((s) => s.clear);
   const { checkoutDetails, clearCheckoutDetails } = useCheckoutStore();
-  const skipRedirect = useRef(false);
-
-  const { successfulPayment, createOrderLoading, deleteItemsLoading } =
-    useSuccessPayment();
+  // After a successful order the checkout store is cleared; don't bounce to /checkout
+  const [orderPlaced, setOrderPlaced] = useState(false);
+  const [isProcessing, startTransition] = useTransition();
+  const checkoutHydrated = useStoreHydrated(useCheckoutStore);
 
   useEffect(() => {
-    if (!checkoutDetails && !skipRedirect.current) {
+    if (checkoutHydrated && !checkoutDetails && !orderPlaced) {
       router.push("/checkout");
     }
-  }, [checkoutDetails, router]);
+  }, [checkoutHydrated, checkoutDetails, orderPlaced, router]);
 
-  const shippingCost = checkoutDetails?.shippingCost || 0;
-  const grandTotal = subtotalPrice - discount + shippingCost;
-
-  const form = useForm<PaymentSchema>({
+  const form = useForm<PaymentFormValues, unknown, PaymentSchema>({
     defaultValues: {
       cardNumber: "",
       nameOnCard: "",
@@ -68,34 +68,33 @@ const PaymentForm = () => {
     router.push("/checkout");
   };
 
-  const onSubmit = async (data: PaymentSchema) => {
+  const onSubmit = (data: PaymentSchema) => {
+    if (!checkoutDetails?.shippingMethod) return;
+    const { shippingMethod, address } = checkoutDetails;
     const toastId = toast.loading(t("toast.processingPayment"));
-    try {
-      if (user)
-        await successfulPayment({
-          items,
-          cardNumber: data.cardNumber,
-          deliveryAddress: checkoutDetails?.address || "",
-          totalPrice: grandTotal,
-          userId: user?.documentId,
-        });
 
-      toast.success(t("toast.successfulPayment"), {
-        id: toastId,
+    startTransition(async () => {
+      // Totals are recomputed by the database from catalog prices
+      const result = await placeOrderAction({
+        payment: data,
+        shippingMethod: shippingMethod.code,
+        deliveryAddress: address,
       });
-      router.push("/");
 
-      // Clear cart after successful payment
-      skipRedirect.current = true;
+      if (!result.ok) {
+        toast.error(t("toast.unsuccessfulPayment.title"), {
+          id: toastId,
+          description: actionError(result.error),
+        });
+        return;
+      }
+
+      toast.success(t("toast.successfulPayment"), { id: toastId });
+      setOrderPlaced(true);
       clearCart();
       clearCheckoutDetails();
-    } catch (error) {
-      console.error("Failed to process payment:", error);
-      toast.error(t("toast.unsuccessfulPayment.title"), {
-        description: t("toast.unsuccessfulPayment.description"),
-        duration: 1000,
-      });
-    }
+      router.replace("/profile?tab=orders");
+    });
   };
 
   const copyShippingAddress = () => {
@@ -104,7 +103,8 @@ const PaymentForm = () => {
     }
   };
 
-  if (!user || items.length === 0) {
+  // Wait for the cart (hydrated client-side) and the checkout step
+  if (items.length === 0 || !checkoutDetails) {
     //   If required data not available, show loading
     return (
       <div className="my-6 flex justify-center items-center min-h-[60vh]">
@@ -275,13 +275,17 @@ const PaymentForm = () => {
             </h3>
             <CheckoutItemsList />
           </div>
-          <PaymentDetails />
+          <OrderSummary
+            shippingCost={checkoutDetails.shippingMethod?.price ?? 0}
+            namespace="payment.paymentCard.paymentDetails"
+          />
           <Button
             className="w-full mt-5"
             onClick={form.handleSubmit(onSubmit)}
             type="submit"
+            disabled={isProcessing}
           >
-            {createOrderLoading || deleteItemsLoading
+            {isProcessing
               ? t("paymentCard.paymentProcessing")
               : t("paymentCard.cta")}
           </Button>

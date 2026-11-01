@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "../../ui/dropdown";
 
-import { useCartStore } from "@/store/cart-store";
+import { selectTotalItems, useCartStore } from "@/store/cart-store";
 import { useState } from "react";
 
 import ShoppingCartCard from "./shopping-cart-card";
@@ -20,7 +20,7 @@ import { useTranslations } from "next-intl";
 const ShoppingCartButton = () => {
   const items = useCartStore((state) => state.items);
   const [open, setOpen] = useState(false);
-  const { totalItems } = useCartStore();
+  const totalItems = useCartStore(selectTotalItems);
   const t = useTranslations("shoppingCart");
 
   return (
@@ -54,7 +54,7 @@ const ShoppingCartButton = () => {
                 onSelect={(e) => {
                   e.preventDefault();
                 }}
-                key={item.createdAt}
+                key={item.id}
                 className="shadow-custom rounded-lg p-2 cursor-default mb-3 bg-white"
               >
                 <ShoppingCartCard item={item} />

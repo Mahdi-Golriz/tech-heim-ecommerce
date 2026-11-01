@@ -5,7 +5,7 @@ import { PiSealCheck, PiTruck } from "react-icons/pi";
 import { useCartStore } from "@/store/cart-store";
 import ActionButtons from "./cart-action-buttons";
 import { useTranslations } from "next-intl";
-import { getImageUrl } from "@/utils/getImageUrl";
+import CartLinePrice from "./cart-line-price";
 
 const CartList = () => {
   const items = useCartStore((state) => state.items);
@@ -16,18 +16,15 @@ const CartList = () => {
       {items.map((item) => (
         <div
           className="shadow-custom rounded-lg p-2 cursor-default mb-3 bg-white"
-          key={item.createdAt}
+          key={item.id}
         >
           <div className="flex w-full">
             <div className="relative w-44 h-auto">
               <Image
-                src={
-                  item.product.product_images
-                    ? getImageUrl(item.product.product_images[0].url)
-                    : ""
-                }
-                alt=""
+                src={item.product.image?.url ?? "/placeholder.svg"}
+                alt={item.product.title}
                 fill
+                sizes="176px"
                 className="absolute object-scale-down p-2"
               />
             </div>
@@ -58,26 +55,11 @@ const CartList = () => {
               </div>
               <div className="flex flex-col md:flex-row md:justify-between md:items-center">
                 <div className="flex gap-3 items-center">
-                  {item.product.discount_percentage ? (
-                    <>
-                      <p className="text-xs lg:text-sm line-through font-normal text-gray-600">
-                        $ {(item.product.price * item.quantity).toFixed(2)}
-                      </p>
-                      <p className="text-base lg:text-lg">
-                        ${" "}
-                        {(
-                          (item.product.price -
-                            (item.product.discount_percentage / 100) *
-                              item.product.price) *
-                          item.quantity
-                        ).toFixed(2)}
-                      </p>
-                    </>
-                  ) : (
-                    <span className="text-xs lg:text-lg">
-                      $ {(item.product.price * item.quantity).toFixed(2)}
-                    </span>
-                  )}
+                  <CartLinePrice
+                    item={item}
+                    className="text-base lg:text-lg"
+                    originalClassName="text-xs lg:text-sm font-normal text-gray-600"
+                  />
                 </div>
                 <ActionButtons item={item} />
               </div>

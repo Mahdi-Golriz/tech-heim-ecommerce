@@ -1,6 +1,6 @@
 import Button from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
-import { useCartStore } from "@/store/cart-store";
+import { selectGrandTotal, useCartStore } from "@/store/cart-store";
 import { useTranslations } from "next-intl";
 import { PiShoppingCartSimpleLight } from "react-icons/pi";
 
@@ -12,7 +12,7 @@ const ShoppingCartFooter = ({
   handleProceedToCart,
 }: ShoppingCartFooterProps) => {
   const t = useTranslations("shoppingCart");
-  const { grandTotal } = useCartStore();
+  const grandTotal = useCartStore(selectGrandTotal);
   return (
     <>
       {/* Footer - Total and Checkout Button */}

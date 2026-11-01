@@ -1,4 +1,6 @@
-import useCartActions from "@/hooks/useCartActions";
+"use client";
+
+import useCart from "@/hooks/useCart";
 import Button from "../ui/button";
 import {
   PiMinusCircleLight,
@@ -11,24 +13,24 @@ interface ActionButtonsProps {
   item: CartItem;
 }
 
+const Spinner = () => (
+  <div className="size-6 relative flex justify-center items-center">
+    <div className="rounded-full border-2 border-t-gray-600 animate-spin size-full"></div>
+  </div>
+);
+
 const CartActionButtons = ({ item }: ActionButtonsProps) => {
-  const { handleChangeItemQuantity, actionLoading, refreshCartLoading } =
-    useCartActions();
+  const { setQuantity, removeItem, isPending } = useCart();
+
   return (
     <div className="mt-auto flex justify-between items-center">
       <div className="flex items-center gap-2">
         <Button
           variant="icon"
           className="p-0"
-          onClick={() =>
-            handleChangeItemQuantity({
-              deleteItem: true,
-              color: item.color,
-              productId: item.product.documentId,
-              itemQuantity: item.quantity,
-              itemId: item.documentId,
-            })
-          }
+          aria-label="Remove"
+          disabled={isPending}
+          onClick={() => removeItem(item)}
         >
           <PiTrashSimpleLight color="red" />
         </Button>
@@ -36,25 +38,11 @@ const CartActionButtons = ({ item }: ActionButtonsProps) => {
           <Button
             variant="icon"
             className="p-0 h-fit"
-            disabled={item.quantity === 1}
-            onClick={() => {
-              handleChangeItemQuantity({
-                color: item.color,
-                productId: item.product.documentId,
-                deleteItem: item.quantity === 1,
-                itemQuantity: item.quantity,
-                changeRate: -1,
-                itemId: item.documentId,
-              });
-            }}
+            aria-label="Decrease quantity"
+            disabled={item.quantity === 1 || isPending}
+            onClick={() => setQuantity(item, item.quantity - 1)}
           >
-            {actionLoading || refreshCartLoading ? (
-              <div className="size-6 relative flex justify-center items-center">
-                <div className="rounded-full border-2 border-t-gray-600 animate-spin size-full"></div>
-              </div>
-            ) : (
-              <PiMinusCircleLight />
-            )}
+            {isPending ? <Spinner /> : <PiMinusCircleLight />}
           </Button>
 
           <span>{item.quantity}</span>
@@ -62,23 +50,11 @@ const CartActionButtons = ({ item }: ActionButtonsProps) => {
           <Button
             variant="icon"
             className="p-0 h-fit"
-            onClick={() =>
-              handleChangeItemQuantity({
-                color: item.color,
-                productId: item.product.documentId,
-                itemId: item.documentId,
-                itemQuantity: item.quantity,
-                changeRate: 1,
-              })
-            }
+            aria-label="Increase quantity"
+            disabled={isPending}
+            onClick={() => setQuantity(item, item.quantity + 1)}
           >
-            {actionLoading || refreshCartLoading ? (
-              <div className="size-6 relative flex justify-center items-center">
-                <div className="rounded-full border-2 border-t-gray-600 animate-spin size-full"></div>
-              </div>
-            ) : (
-              <PiPlusCircleLight />
-            )}
+            {isPending ? <Spinner /> : <PiPlusCircleLight />}
           </Button>
         </div>
       </div>

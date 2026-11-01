@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { useCheckoutStore } from "@/store/checkout-store";
 import useAuthModalStore from "@/store/auth-modal-store";
 import CheckoutSlider from "./checkout-slider";
-import CheckoutPaymentDetails from "./checkout-payment-details";
+import OrderSummary from "./order-summary";
 import CheckoutItemsList from "./checkout-items-list";
 import CheckoutHeader from "./checkout-header";
 import AddressMapModal, { AddressData } from "../map/map-modal";
@@ -31,9 +31,10 @@ import {
   CheckoutSchema,
   getCheckoutSchema,
 } from "@/validations/get-checkout-schema";
+import { ShippingMethod } from "@/models/order-model";
 
 interface FormInputItems {
-  name: "email" | "address" | "shippingCost";
+  name: "email" | "address";
   label: string;
   placeholder: string;
   disabled?: boolean;
@@ -41,11 +42,18 @@ interface FormInputItems {
 
 interface FormRadioGroupItems {
   value: string;
+  price: number;
   label: string;
   text: string;
 }
 
-const Checkout = () => {
+interface CheckoutProps {
+  shippingMethods: ShippingMethod[];
+}
+
+type ShippingCode = "free" | "regular" | "express";
+
+const Checkout = ({ shippingMethods }: CheckoutProps) => {
   const router = useRouter();
   const formT = useTranslations("validation.checkout");
   const t = useTranslations("checkout");
@@ -63,7 +71,8 @@ const Checkout = () => {
     defaultValues: {
       email: user?.email || "",
       address: checkoutDetails?.address || "",
-      shippingCost: "0",
+      shippingMethod:
+        checkoutDetails?.shippingMethod?.code ?? shippingMethods[0]?.code ?? "",
     },
   });
 
@@ -78,16 +87,19 @@ const Checkout = () => {
   useEffect(() => {
     if (user && shouldRedirectToPayment) {
       // If they logged in and we were waiting to redirect
+      // The page unmounts on navigation, so the flag doesn't need resetting
       router.push("/payment");
-      setShouldRedirectToPayment(false);
     }
   }, [user, shouldRedirectToPayment, router]);
+
+  const selectedCode = useWatch({ control: form.control, name: "shippingMethod" });
+  const selectedMethod = shippingMethods.find((m) => m.code === selectedCode);
 
   const onSubmit = (data: CheckoutSchema) => {
     updateCheckoutDetails({
       email: data.email,
       address: data.address,
-      shippingCost: parseFloat(data.shippingCost),
+      shippingMethod: shippingMethods.find((m) => m.code === data.shippingMethod),
     });
     if (!user) {
       // Set flag to redirect after successful login
@@ -127,23 +139,14 @@ const Checkout = () => {
     },
   ];
 
-  const formRadioGroupItems: FormRadioGroupItems[] = [
-    {
-      value: "0",
-      label: t("formInputs.shippingMethod.free.label"),
-      text: t("formInputs.shippingMethod.free.text"),
-    },
-    {
-      value: "7.5",
-      label: t("formInputs.shippingMethod.regular.label"),
-      text: t("formInputs.shippingMethod.regular.text"),
-    },
-    {
-      value: "22.5",
-      label: t("formInputs.shippingMethod.express.label"),
-      text: t("formInputs.shippingMethod.express.text"),
-    },
-  ];
+  const formRadioGroupItems: FormRadioGroupItems[] = shippingMethods.map(
+    ({ code, price }) => ({
+      value: code,
+      price,
+      label: t(`formInputs.shippingMethod.${code as ShippingCode}.label`),
+      text: t(`formInputs.shippingMethod.${code as ShippingCode}.text`),
+    })
+  );
 
   return (
     <>
@@ -194,7 +197,7 @@ const Checkout = () => {
                 ))}
                 <FormField
                   control={form.control}
-                  name="shippingCost"
+                  name="shippingMethod"
                   render={({ field }) => (
                     <FormItem className="mt-3">
                       <FormLabel className="text-base font-medium text-gray-700">
@@ -227,7 +230,7 @@ const Checkout = () => {
                                 </FormLabel>
                                 <div className="flex justify-between text-xs">
                                   <span>{item.text}</span>
-                                  <span>${item.value}</span>
+                                  <span>${item.price.toFixed(2)}</span>
                                 </div>
                               </div>
                             </FormItem>
@@ -260,7 +263,10 @@ const Checkout = () => {
             <CheckoutSlider />
             <CheckoutItemsList />
           </div>
-          <CheckoutPaymentDetails form={form} />
+          <OrderSummary
+            shippingCost={selectedMethod?.price ?? 0}
+            namespace="checkout.checkoutCard.paymentDetails"
+          />
           <Button
             className="w-full mt-5"
             onClick={form.handleSubmit(onSubmit)}

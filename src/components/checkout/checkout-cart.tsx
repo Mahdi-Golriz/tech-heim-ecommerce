@@ -1,4 +1,3 @@
-import { getImageUrl } from "@/utils/getImageUrl";
 import Image from "next/image";
 
 interface CheckoutProps {
@@ -11,7 +10,7 @@ const CheckoutCart = ({ color, quantity, src }: CheckoutProps) => {
   return (
     <div className="p-2 rounded-lg bg-white text-gray-500">
       <Image
-        src={getImageUrl(src)}
+        src={src}
         alt={src}
         width={300}
         height={300}
