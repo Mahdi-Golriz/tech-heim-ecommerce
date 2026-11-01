@@ -1,34 +1,13 @@
-import { Product } from "./product-model";
+import type { ProductSummary } from "./product-model";
 
 export interface CartItem {
-  id: number;
-  documentId: string;
-  quantity: number;
+  /** DB row id for signed-in users, `${productId}:${color}` for guests. */
+  id: string;
+  productId: string;
   color: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-  product: Product;
+  quantity: number;
+  product: ProductSummary;
 }
 
-export interface Cart {
-  id: number;
-  documentId: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-  items: CartItem[];
-}
-
-export type CartStore = {
-  items: CartItem[];
-  subtotalPrice: number;
-  discount: number;
-  grandTotal: number;
-  totalItems: number;
-  setCart: (cart: Cart) => void;
-  addItem: (newItem: CartItem) => void;
-  removeItem: (documentId: string, color: string) => void;
-  updateQuantity: (documentId: string, color: string, quantity: number) => void;
-  clearCart: () => void;
-};
+export const guestCartItemId = (productId: string, color: string) =>
+  `${productId}:${color}`;

@@ -1,16 +1,11 @@
 import { z } from "zod";
+import type { Translate } from "./types";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const getCheckoutSchema = (t: any) => {
-  return z.object({
-    email: z.string().email({
-      message: t?.("email-invalid"),
-    }),
-    address: z.string().min(1, {
-      message: t?.("address-required"),
-    }),
-    shippingCost: z.string(),
+export const getCheckoutSchema = (t?: Translate) =>
+  z.object({
+    email: z.email({ error: t?.("email-invalid") }),
+    address: z.string().trim().min(1, { error: t?.("address-required") }),
+    shippingMethod: z.string().min(1),
   });
-};
 
 export type CheckoutSchema = z.infer<ReturnType<typeof getCheckoutSchema>>;
