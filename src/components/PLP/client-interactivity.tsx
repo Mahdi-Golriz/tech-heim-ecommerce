@@ -1,29 +1,33 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "@/i18n/routing";
+import { usePathname, useRouter } from "@/i18n/routing";
 import { Button } from "@/components";
 import { PiSlidersHorizontalLight } from "react-icons/pi";
 import ProductSorting from "./products-sorting";
 import ProductsFilter from "./products-filter";
 import ProductsPagination from "./products-pagination";
-
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { FilterValues } from ".";
+import { Category } from "@/models/category-model";
+import {
+  FilterValues,
+  PRICE_RANGE,
+  ProductSort,
+} from "@/validations/products-search-params.schema";
 
 interface ClientInteractivityProps {
+  categories: Category[];
   initialFilters: FilterValues;
-  sortBy: string;
+  sortBy?: ProductSort;
   currentPage: number;
   totalPages: number;
 }
 
-type UrlParams = {
-  [key: string]: string | number | null | undefined | boolean;
-};
+type UrlParams = Record<string, string | number | boolean | null>;
 
 const ClientInteractivity = ({
+  categories,
   initialFilters,
   sortBy,
   currentPage,
@@ -31,35 +35,38 @@ const ClientInteractivity = ({
 }: ClientInteractivityProps) => {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const t = useTranslations("products.plp.filters");
+
+  // The URL is the state: the server page re-renders with the new params
   const updateUrl = (params: UrlParams) => {
     const urlParams = new URLSearchParams(searchParams.toString());
     Object.entries(params).forEach(([key, value]) => {
-      if (value) {
-        urlParams.set(key, String(value));
-      } else {
-        urlParams.delete(key);
-      }
+      if (value === null || value === false || value === "") urlParams.delete(key);
+      else urlParams.set(key, String(value));
     });
-    router.push(`/products?${urlParams.toString()}`, { scroll: false });
+    if (urlParams.get("page") === "1") urlParams.delete("page");
+    const query = urlParams.toString();
+    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
   };
 
   const handleFilterChange = (newFilters: FilterValues) => {
     updateUrl({
-      page: 1,
+      page: null,
       categories: newFilters.categories.length
         ? newFilters.categories.join(",")
         : null,
-      minPrice: newFilters.priceRange[0] > 0 ? newFilters.priceRange[0] : null,
+      minPrice:
+        newFilters.priceRange[0] > PRICE_RANGE.min ? newFilters.priceRange[0] : null,
       maxPrice:
-        newFilters.priceRange[1] < 2000 ? newFilters.priceRange[1] : null,
-      hasDiscount: newFilters.hasDiscount ? true : null,
+        newFilters.priceRange[1] < PRICE_RANGE.max ? newFilters.priceRange[1] : null,
+      onSale: newFilters.onSale,
     });
   };
 
   const handleSortChange = (field: string) => {
-    updateUrl({ sort: field === "default" ? "" : field, page: 1 });
+    updateUrl({ sort: field === "default" ? null : field, page: null });
   };
 
   const handlePageChange = (newPage: number) => {
@@ -75,6 +82,8 @@ const ClientInteractivity = ({
     <>
       <div className="sm:row-span-2">
         <ProductsFilter
+          key={JSON.stringify(initialFilters)}
+          categories={categories}
           isVisible={isFilterVisible}
           onClose={toggleFilter}
           initialFilters={initialFilters}
@@ -82,7 +91,7 @@ const ClientInteractivity = ({
         />
       </div>
       <div className="flex justify-between col-span-2 lg:col-span-3 sm:h-fit sm:justify-end">
-        <ProductSorting sortBy={sortBy} onSortChange={handleSortChange} />
+        <ProductSorting sortBy={sortBy ?? "default"} onSortChange={handleSortChange} />
         <Button
           variant="outline"
           className="border-none shadow-custom text-black sm:hidden"

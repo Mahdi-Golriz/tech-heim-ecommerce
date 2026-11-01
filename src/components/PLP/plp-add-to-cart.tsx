@@ -2,26 +2,26 @@
 
 import { cn } from "@/lib/cn";
 import Button from "../ui/button";
-import { Product } from "@/models/product-model";
+import { ProductSummary } from "@/models/product-model";
 import { PiShoppingCartSimpleLight } from "react-icons/pi";
-import useCart from "@/hooks/useAddToCart";
+import useCart from "@/hooks/useCart";
 import { useTranslations } from "next-intl";
 
 interface PLPAddToCartProps {
-  product: Product;
+  product: ProductSummary;
   hasAddToCartButton: boolean;
 }
 
 const PLPAddToCart = ({ product, hasAddToCartButton }: PLPAddToCartProps) => {
-  const { addToCart, isLoading } = useCart();
+  const { addToCart, isPending } = useCart();
   const t = useTranslations("products.cta");
-  const defaultColor = product.color?.at(0) || "";
+  const defaultColor = product.colors[0] ?? "";
 
-  // Add a handler that stops event propagation
   const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent the default link behavior
-    e.stopPropagation(); // Stop the event from bubbling up to parent elements
-    addToCart({ product, quantity: 1, color: defaultColor });
+    // The button sits inside a product <Link>
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(product, defaultColor);
   };
 
   return (
@@ -34,9 +34,10 @@ const PLPAddToCart = ({ product, hasAddToCartButton }: PLPAddToCartProps) => {
         }
       )}
       onClick={handleAddToCart}
+      disabled={isPending || !defaultColor}
     >
       <PiShoppingCartSimpleLight strokeWidth={8} className="hidden md:block" />
-      {isLoading ? t("addingToCart") : t("addToCart")}
+      {isPending ? t("addingToCart") : t("addToCart")}
     </Button>
   );
 };

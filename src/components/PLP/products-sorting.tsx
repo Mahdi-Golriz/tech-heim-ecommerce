@@ -24,9 +24,9 @@ const ProductsSorting = ({ sortBy, onSortChange }: ProductSortingProps) => {
 
           <SelectContent className="bg-white">
             <SelectItem value="default">{t("defaultSort")}</SelectItem>
-            <SelectItem value="price:asc">{t("priceAsc")}</SelectItem>
-            <SelectItem value="price:desc">{t("priceDesc")}</SelectItem>
-            <SelectItem value="createdAt:desc">{t("newArrivals")}</SelectItem>
+            <SelectItem value="price_asc">{t("priceAsc")}</SelectItem>
+            <SelectItem value="price_desc">{t("priceDesc")}</SelectItem>
+            <SelectItem value="newest">{t("newArrivals")}</SelectItem>
           </SelectContent>
         </Select>
       </div>

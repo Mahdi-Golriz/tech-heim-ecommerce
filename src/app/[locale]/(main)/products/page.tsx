@@ -1,53 +1,35 @@
-import { Products } from "@/components";
-import { Product } from "@/models/product-model";
-import { DataResponse } from "@/models/response-model";
-import fetcher from "@/utils/fetcher";
-import { parseProductsSearchParams } from "@/utils/parseProductsSearchParams";
 import { Metadata } from "next";
-
-interface PLPProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
+import { setRequestLocale } from "next-intl/server";
+import { Products } from "@/components";
+import { getCategories, getProducts } from "@/data/catalog";
+import {
+  parseProductsSearchParams,
+  toFilterValues,
+} from "@/validations/products-search-params.schema";
 
 export const metadata: Metadata = {
   title: "Tech Heim | Products",
 };
 
-const PLPPage = async ({ searchParams }: PLPProps) => {
-  const resolvedSearchParams = await searchParams;
+// Dynamic per search params; results are cached in the data layer
+const PLPPage = async ({ params, searchParams }: PageProps<"/[locale]/products">) => {
+  const { locale } = await params;
+  setRequestLocale(locale);
 
-  const parsedParams = parseProductsSearchParams(resolvedSearchParams);
-  const { page, sortBy, filters, queryParams } = parsedParams;
-
-  const cleanedQueryParams = Object.fromEntries(
-    Object.entries(queryParams).filter(([, value]) => value !== undefined)
-  );
-
-  // Fetch products (SSR)
-  let products: DataResponse<Product[]> | null = null;
-  try {
-    products = await fetcher({
-      path: "/api/products",
-      params: {
-        populate: "*",
-        ...cleanedQueryParams,
-      },
-    });
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    return null;
-  }
+  const parsed = parseProductsSearchParams(await searchParams);
+  const [result, categories] = await Promise.all([
+    getProducts(parsed),
+    getCategories(),
+  ]);
 
   return (
-    <div>
-      <Products
-        products={products}
-        page={page}
-        sortBy={sortBy}
-        filters={filters}
-        totalPages={products?.meta?.pagination?.pageCount || 1}
-      />
-    </div>
+    <Products
+      result={result}
+      categories={categories}
+      filters={toFilterValues(parsed)}
+      sort={parsed.sort}
+      query={parsed.q}
+    />
   );
 };
 

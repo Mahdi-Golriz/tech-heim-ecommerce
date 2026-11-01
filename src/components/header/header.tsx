@@ -1,11 +1,12 @@
 import { Link } from "@/i18n/routing";
-import { PiMagnifyingGlassLight } from "react-icons/pi";
-import { Input, Button, Logo, BurgerMenuButton } from "@/components";
+import { Suspense } from "react";
+import { Button, Logo, BurgerMenuButton } from "@/components";
 import Navigation from "./navigation";
 import { useTranslations } from "next-intl";
 import SwitchLang from "./switch-lang";
 import UserButton from "./user-button";
 import ShoppingCartButton from "./shopping-cart/shopping-cart-button";
+import SearchBar from "./search-bar";
 
 const Header = () => {
   const t = useTranslations("home.header");
@@ -22,6 +23,10 @@ const Header = () => {
               {t("title")}
             </Link>
           </Button>
+          {/* useSearchParams needs a Suspense boundary on static pages */}
+          <Suspense>
+            <SearchBar className="hidden md:block self-center w-56 lg:w-72" />
+          </Suspense>
           <div className="flex items-center  sm:gap-2 gap-0 sm:h-24">
             <SwitchLang />
             <UserButton />
@@ -30,20 +35,6 @@ const Header = () => {
         </div>
       </header>
     </section>
-  );
-};
-
-export const MobileSearchInput = () => {
-  return (
-    <>
-      <div className="absolute inset-y-0 end-0 flex items-center pointer-events-none px-4">
-        <PiMagnifyingGlassLight color="grey" />
-      </div>
-      <Input
-        className="border-none bg-gray-100"
-        placeholder="What can we help you to find ?"
-      />
-    </>
   );
 };
 

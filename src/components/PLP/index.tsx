@@ -1,42 +1,27 @@
-"use client";
-
 import ProductCard from "@/components/new-products/product-cart";
 import { CustomBreadcrumb } from "@/components";
 import ActiveFiltersDisplay from "./active-filters-display";
-import { Product } from "@/models/product-model";
-import { DataResponse } from "@/models/response-model";
-import PageLoader from "../ui/page-loader";
+import { Paginated, ProductSummary } from "@/models/product-model";
+import { Category } from "@/models/category-model";
 import ClientInteractivity from "./client-interactivity";
 import { useTranslations } from "next-intl";
-
-export interface FilterValues {
-  categories: string[];
-  priceRange: [number, number];
-  hasDiscount: boolean;
-}
+import {
+  FilterValues,
+  ProductSort,
+  hasActiveFilters,
+} from "@/validations/products-search-params.schema";
 
 interface ProductsProps {
-  products: DataResponse<Product[]> | null;
-  page: number;
-  sortBy: string;
+  result: Paginated<ProductSummary>;
+  categories: Category[];
   filters: FilterValues;
-  totalPages: number;
+  sort?: ProductSort;
+  query?: string;
 }
 
-const Products = ({
-  products,
-  page,
-  sortBy,
-  filters,
-  totalPages,
-}: ProductsProps) => {
+const Products = ({ result, categories, filters, sort, query }: ProductsProps) => {
   const t = useTranslations("products.plp");
-  const hasActiveFilters = filters
-    ? filters.categories.length > 0 ||
-      filters.priceRange[0] > 0 ||
-      filters.priceRange[1] < 2000 ||
-      filters.hasDiscount
-    : false;
+  const showActiveFilters = hasActiveFilters(filters) || !!query;
 
   const breadcrumbLinks = [
     { href: "/", title: "Home" },
@@ -46,25 +31,33 @@ const Products = ({
   return (
     <div className="container">
       <CustomBreadcrumb links={breadcrumbLinks} />
+      {query && (
+        <h1 className="text-xl font-medium mt-2">
+          {t("searchResults", { query, count: result.total })}
+        </h1>
+      )}
       <div className="w-full min-h-10">
-        {hasActiveFilters && filters && (
-          <ActiveFiltersDisplay filters={filters} />
+        {showActiveFilters && (
+          <ActiveFiltersDisplay
+            filters={filters}
+            query={query}
+            categories={categories}
+          />
         )}
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 mb-4 lg:grid-cols-4 lg:gap-6 gap-4">
         <ClientInteractivity
+          categories={categories}
           initialFilters={filters}
-          sortBy={sortBy}
-          currentPage={page}
-          totalPages={totalPages}
+          sortBy={sort}
+          currentPage={result.page}
+          totalPages={result.totalPages}
         />
         <div className="lg:col-span-3 col-span-2 min-h-screen">
-          {!products ? (
-            <PageLoader fullPage />
-          ) : products.data.length > 0 ? (
+          {result.items.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {products.data.map((product) => (
+              {result.items.map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}

@@ -11,17 +11,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useSearchParams } from "next/navigation";
 
 const SwitchLang = () => {
   const router = useRouter();
   const pathname = usePathname();
   const currentLocale = useLocale();
-  const searchParams = useSearchParams();
 
   const handleLanguageChange = (newLocale: string) => {
-    const queryString = searchParams.toString();
-    const href = queryString ? `${pathname}?${queryString}` : pathname;
+    // Read at click time instead of useSearchParams, which would opt the
+    // header out of static rendering
+    const href = `${pathname}${window.location.search}`;
     router.replace(href, { locale: newLocale });
   };
 
