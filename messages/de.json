@@ -13,6 +13,11 @@
         "wishlist": "Wunschliste",
         "logOut": "Abmelden",
         "logOutToast": "Du wurdest erfolgreich abgemeldet"
+      },
+      "search": {
+        "label": "Produkte suchen",
+        "placeholder": "Wonach suchst du?",
+        "submit": "Suchen"
       }
     },
     "hero": {
@@ -91,6 +96,14 @@
       "pagination": {
         "next": "Nächste",
         "previous": "Zurück"
+      },
+      "searchResults": "Ergebnisse für „{query}“ ({count})",
+      "activeFilters": {
+        "title": "Aktive Filter:",
+        "search": "Suche: {query}",
+        "categories": "Kategorien: {list}",
+        "price": "Preis: {min} - {max}",
+        "onSale": "Nur reduziert"
       }
     },
     "pdp": {
@@ -245,7 +258,8 @@
       "subtitle": "Ihr Konto erstellen",
       "footer": "Sie haben bereits ein Konto ?",
       "cta": "Registrieren",
-      "successfulSignUpToast": "Herzlichen Glückwunsch, Ihr Konto wurde erfolgreich erstellt."
+      "successfulSignUpToast": "Herzlichen Glückwunsch, Ihr Konto wurde erfolgreich erstellt.",
+      "confirmationSent": "Fast geschafft! Bitte bestätige deine E-Mail-Adresse über den Link in deinem Postfach und melde dich dann an."
     }
   },
   "validation": {
@@ -279,16 +293,12 @@
       "fullName-minLength": "Der vollständige Name muss mindestens 2 Zeichen lang sein.",
       "fullName-maxLength": "Der vollständige Name darf maximal 50 Zeichen lang sein.",
       "fullName-pattern": "Der vollständige Name darf nur Buchstaben und Leerzeichen enthalten.",
-
       "email-invalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-
       "phoneNumber-minLength": "Die Telefonnummer muss mindestens 10 Ziffern enthalten.",
       "phoneNumber-maxLength": "Die Telefonnummer darf maximal 15 Ziffern enthalten.",
       "phoneNumber-pattern": "Bitte geben Sie eine gültige Telefonnummer ein.",
-
       "address-minLength": "Die Adresse muss mindestens 5 Zeichen lang sein.",
       "address-maxLength": "Die Adresse darf maximal 100 Zeichen lang sein.",
-
       "postalCode-minLength": "Die Postleitzahl muss mindestens 3 Zeichen lang sein.",
       "postalCode-maxLength": "Die Postleitzahl darf maximal 10 Zeichen lang sein.",
       "postalCode-pattern": "Bitte geben Sie eine gültige Postleitzahl ein."
@@ -419,7 +429,8 @@
         "confirmLabel": "Änderungen bestätigen",
         "confirmDescription": "Möchten Sie Ihr Konto wirklich aktualisieren?",
         "saveAction": "Änderungen speichern",
-        "cancelAction": "Abbrechen"
+        "cancelAction": "Abbrechen",
+        "success": "Profil erfolgreich aktualisiert!"
       }
     },
     "orders": {
@@ -429,12 +440,30 @@
       "shipTo": "Lieferung",
       "viewItems": "Artikel anzeigen",
       "quantity": "Menge: ",
-      "color": "Farbe: "
+      "color": "Farbe: ",
+      "emptyState": "Du hast noch keine Bestellungen aufgegeben."
+    },
+    "wishlist": {
+      "emptyState": "Deine Wunschliste ist leer."
     }
   },
   "NotFound": {
     "title": "Seite nicht gefunden",
     "description": "Seite nicht gefundenEs tut uns leid, die Seite, die Sie suchen, existiert nicht.",
     "cta": "Zurück zur Startseite"
+  },
+  "errors": {
+    "VALIDATION": "Bitte überprüfe deine Eingaben.",
+    "NOT_AUTHENTICATED": "Bitte melde dich an, um fortzufahren.",
+    "INVALID_CREDENTIALS": "E-Mail oder Passwort ist ungültig.",
+    "EMAIL_TAKEN": "Mit dieser E-Mail existiert bereits ein Konto.",
+    "CART_EMPTY": "Dein Warenkorb ist leer.",
+    "INVALID_PRODUCT": "Dieses Produkt ist in dieser Farbe nicht mehr verfügbar.",
+    "INVALID_SHIPPING_METHOD": "Bitte wähle eine gültige Versandart.",
+    "UNKNOWN": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+  },
+  "wishlist": {
+    "added": "Artikel wurde zu deiner Wunschliste hinzugefügt",
+    "removed": "Artikel wurde von deiner Wunschliste entfernt"
   }
 }

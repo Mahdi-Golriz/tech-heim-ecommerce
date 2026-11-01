@@ -13,6 +13,11 @@
         "wishlist": "Wishlist",
         "logOut": "Log out",
         "logOutToast": "You've been successfully signed out"
+      },
+      "search": {
+        "label": "Search products",
+        "placeholder": "What can we help you to find?",
+        "submit": "Search"
       }
     },
     "hero": {
@@ -42,7 +47,10 @@
       }
     },
     "newProducts": {
-      "header": { "title": "New Products", "cta": "View all" }
+      "header": {
+        "title": "New Products",
+        "cta": "View all"
+      }
     }
   },
   "burgerMenu": {
@@ -88,6 +96,14 @@
       "pagination": {
         "next": "Next",
         "previous": "Previous"
+      },
+      "searchResults": "Results for “{query}” ({count})",
+      "activeFilters": {
+        "title": "Active filters:",
+        "search": "Search: {query}",
+        "categories": "Categories: {list}",
+        "price": "Price: {min} - {max}",
+        "onSale": "Discount only"
       }
     },
     "pdp": {
@@ -242,7 +258,8 @@
       "subtitle": "Create your account",
       "footer": "Already have an account ?",
       "cta": "Sign Up",
-      "successfulSignUpToast": "Congratulation your account has been successfully created."
+      "successfulSignUpToast": "Congratulation your account has been successfully created.",
+      "confirmationSent": "Almost there! Check your inbox and confirm your email address, then sign in."
     }
   },
   "validation": {
@@ -276,16 +293,12 @@
       "fullName-minLength": "Full name must be at least 2 characters",
       "fullName-maxLength": "Full name must not exceed 50 characters",
       "fullName-pattern": "Full name should only contain letters and spaces",
-
       "email-invalid": "Please enter a valid email address",
-
       "phoneNumber-minLength": "Phone number must be at least 10 digits",
       "phoneNumber-maxLength": "Phone number must not exceed 15 digits",
       "phoneNumber-pattern": "Please enter a valid phone number",
-
       "address-minLength": "Address must be at least 5 characters",
       "address-maxLength": "Address must not exceed 100 characters",
-
       "postalCode-minLength": "Postal code must be at least 3 characters",
       "postalCode-maxLength": "Postal code must not exceed 10 characters",
       "postalCode-pattern": "Please enter a valid postal code"
@@ -416,7 +429,8 @@
         "confirmLabel": "Confirm Changes",
         "confirmDescription": "Are you sure you want to update your account?",
         "saveAction": "Save Changes",
-        "cancelAction": "Cancel"
+        "cancelAction": "Cancel",
+        "success": "Profile updated successfully!"
       }
     },
     "orders": {
@@ -426,12 +440,30 @@
       "shipTo": "Delivery",
       "viewItems": "View Items",
       "quantity": "Qty: ",
-      "color": "Color: "
+      "color": "Color: ",
+      "emptyState": "You haven't placed any orders yet."
+    },
+    "wishlist": {
+      "emptyState": "Your wishlist is empty."
     }
   },
   "NotFound": {
     "title": "Page Not Found",
     "description": "Sorry, The page you are looking for does not exist.",
     "cta": "Go Back Home"
+  },
+  "errors": {
+    "VALIDATION": "Please check the entered data.",
+    "NOT_AUTHENTICATED": "Please sign in to continue.",
+    "INVALID_CREDENTIALS": "Invalid email or password.",
+    "EMAIL_TAKEN": "An account with this email already exists.",
+    "CART_EMPTY": "Your cart is empty.",
+    "INVALID_PRODUCT": "This product is no longer available in that color.",
+    "INVALID_SHIPPING_METHOD": "Please choose a valid shipping method.",
+    "UNKNOWN": "Something went wrong. Please try again."
+  },
+  "wishlist": {
+    "added": "Item was successfully added to your wishlist",
+    "removed": "Item was successfully removed from your wishlist"
   }
 }

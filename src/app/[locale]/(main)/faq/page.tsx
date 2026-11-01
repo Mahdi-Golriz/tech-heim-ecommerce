@@ -1,3 +1,4 @@
+import { setRequestLocale } from "next-intl/server";
 import { CustomBreadcrumb } from "@/components";
 import FAQSection from "@/components/faq/faq";
 import { Metadata } from "next";
@@ -14,7 +15,10 @@ const links = [
   },
 ];
 
-const FaqPage = () => {
+const FaqPage = async ({ params }: PageProps<"/[locale]/faq">) => {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   return (
     <div className="container">
       <CustomBreadcrumb links={links} />
