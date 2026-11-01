@@ -16,7 +16,7 @@ const Logo = ({ className }: LogoProps) => {
           alt="Tech Heim Logo"
           width={56}
           height={63}
-          className="sm:h-12 lg:h-16 lg:w-14"
+          className="w-auto sm:h-12 lg:h-16"
         />
       </div>
     </Link>

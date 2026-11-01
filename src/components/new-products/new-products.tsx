@@ -1,36 +1,23 @@
-"use client";
-
 import ProductCard from "./product-cart";
 import SectionHeader from "../section-header/section-header";
+import { getTranslations } from "next-intl/server";
+import { getNewProducts } from "@/data/catalog";
 
-import { Product } from "@/models/product-model";
-import useFetch from "@/hooks/useFetch";
-import { DataResponse } from "@/models/response-model";
-import { useTranslations } from "next-intl";
-
-const NewProducts = () => {
-  const t = useTranslations("home.newProducts.header");
-  const { data: newProducts } = useFetch<DataResponse<Product[]>>({
-    path: "/api/products",
-    params: {
-      populate: "*",
-      sort: "createdAt:desc",
-      "pagination[pageSize]": "4",
-    },
-  });
+const NewProducts = async () => {
+  const [t, newProducts] = await Promise.all([
+    getTranslations("home.newProducts.header"),
+    getNewProducts(),
+  ]);
 
   return (
     <>
       <SectionHeader
         title={t("title")}
-        cta={{
-          text: t("cta"),
-          url: "/products?sort=createdAt%3Adesc&page=1",
-        }}
+        cta={{ text: t("cta"), url: "/products?sort=newest" }}
       />
       <div className="container mb-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {newProducts?.data.map((item) => (
+          {newProducts.map((item) => (
             <ProductCard
               product={item}
               key={item.id}

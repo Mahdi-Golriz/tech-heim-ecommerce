@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/cn";
 import { Button, Overlay, Logo } from "@/components";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import {
   PiDeviceMobileCameraThin,
   PiLaptopLight,
@@ -16,6 +16,7 @@ import {
 import { useTranslations } from "next-intl";
 import { IconType } from "react-icons";
 import CustomLink from "./custom-link";
+import SearchBar from "../header/search-bar";
 
 interface SideBarMenuProps {
   onClose: VoidFunction;
@@ -42,32 +43,32 @@ const SideBarMenu = ({ onClose, isOpen }: SideBarMenuProps) => {
       {
         title: t("products.mobilePhones"),
         icon: PiDeviceMobileCameraThin,
-        href: "/products?page=1&categories=1",
+        href: "/products?categories=mobile-phones",
       },
       {
         title: t("products.laptopsComputers"),
         icon: PiLaptopLight,
-        href: "/products?page=1&categories=2",
+        href: "/products?categories=laptops",
       },
       {
         title: t("products.wearables"),
         icon: PiWatchLight,
-        href: "/products?page=1&categories=3",
+        href: "/products?categories=wearables",
       },
       {
         title: t("products.cameras"),
         icon: PiCameraLight,
-        href: "/products?page=1&categories=4",
+        href: "/products?categories=cameras",
       },
       {
         title: t("products.gaming"),
         icon: PiGameControllerLight,
-        href: "/products?page=1&categories=5",
+        href: "/products?categories=gaming",
       },
       {
         title: t("products.accessories"),
         icon: PiMouseSimpleLight,
-        href: "/products?page=1&categories=6",
+        href: "/products?categories=accessories",
       },
     ];
   }, [t]);
@@ -115,6 +116,9 @@ const SideBarMenu = ({ onClose, isOpen }: SideBarMenuProps) => {
             <PiXCircleLight />
           </Button>
         </div>
+        <Suspense>
+          <SearchBar className="mb-4" onSubmit={handleCloseClick} />
+        </Suspense>
         <ul>
           {mainLinks.map((item) =>
             item.links ? (

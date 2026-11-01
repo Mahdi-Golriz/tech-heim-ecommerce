@@ -1,14 +1,13 @@
 import Image from "next/image";
 import { PiPlusBold, PiStarFill } from "react-icons/pi";
-import { Product } from "@/models/product-model";
+import { ProductSummary } from "@/models/product-model";
 import { cn } from "@/lib/cn";
 import { Link } from "@/i18n/routing";
 import PLPAddToCart from "../PLP/plp-add-to-cart";
 import WishlistButton from "../wishlist-button/wishlist-button";
-import { getImageUrl } from "@/utils/getImageUrl";
 
 interface ProductCartProps {
-  product: Product;
+  product: ProductSummary;
   hasAddToCartButton: boolean;
   plpCard?: boolean;
   newProductCard?: boolean;
@@ -21,42 +20,39 @@ const ProductCard = ({
   wishlistButtonPosition,
 }: ProductCartProps) => {
   const {
-    product_images: productImages,
+    image,
     title,
-    colors: colorVariant,
+    colors,
     price: totalPrice,
-    discount_percentage: discountPercentage,
+    finalPrice,
+    discountPercentage,
     rate,
-    documentId,
+    slug,
   } = product;
-  const salePrice = discountPercentage
-    ? totalPrice - (discountPercentage / 100) * totalPrice
-    : null;
-
-  const colorVariantArray = colorVariant?.split(" ");
+  const salePrice = discountPercentage ? finalPrice : null;
 
   return (
-    <Link href={`/products/${documentId}`}>
+    <Link href={`/products/${slug}`}>
       <div className="relative group flex flex-col gap-2 h-52 lg:h-80 px-2 pb-2 shadow-custom rounded">
         <figure className="custom-border-bottom h-2/3 shad py-3">
           <Image
-            src={productImages ? getImageUrl(productImages[0].url) : ""}
+            src={image?.url ?? "/placeholder.svg"}
             alt={title}
-            className="object-contain h-full mx-auto group-hover:scale-105 transition-all"
+            className="object-contain h-full w-full mx-auto group-hover:scale-105 transition-all"
             width={300}
             height={300}
           />
           <div className="absolute -right-1 top-1/3 group-hover:opacity-0">
-            {colorVariantArray ? (
+            {colors.length ? (
               <>
-                {colorVariantArray.map((color) => (
+                {colors.slice(0, 3).map((color) => (
                   <span
                     key={color}
                     className="block size-3 rounded-full border mb-1"
                     style={{ backgroundColor: color }}
                   />
                 ))}
-                {colorVariantArray.length > 3 && (
+                {colors.length > 3 && (
                   <PiPlusBold
                     size={9}
                     className="mx-auto"
@@ -107,7 +103,7 @@ const ProductCard = ({
         <WishlistButton
           className="group-hover:opacity-100 h-fit opacity-0"
           relativePosition={wishlistButtonPosition}
-          productId={product.documentId}
+          productId={product.id}
         />
       </div>
     </Link>

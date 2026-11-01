@@ -1,6 +1,5 @@
 "use client";
 
-import { useUserStore } from "@/store/user-store";
 import Button from "../ui/button";
 import { PiHeartLight, PiHeartFill } from "react-icons/pi";
 import { cn } from "@/lib/cn";
@@ -17,38 +16,30 @@ const WishlistButton = ({
   className,
   productId,
 }: WishlistButtonProps) => {
-  const user = useUserStore((state) => state.user);
-  const { handleAddToWishList } = useWishlist();
-
-  const filled = user?.wishlists?.some(
-    (item) => item.product.documentId === productId
-  );
-
-  if (!user) return null;
+  // Guests see the button too; clicking it opens the sign-in modal
+  const { isWishlisted, toggle, isPending } = useWishlist(productId);
 
   const handleClick = (e: React.MouseEvent) => {
-    // Prevent both propagation and default behavior
+    // The button sits inside a product <Link>
     e.preventDefault();
     e.stopPropagation();
-
-    handleAddToWishList({
-      productId,
-      userId: user.documentId,
-      wishlist: user.wishlists,
-    });
+    toggle();
   };
 
   return (
     <Button
       variant="icon"
       onClick={handleClick}
+      disabled={isPending}
+      aria-pressed={isWishlisted}
+      aria-label="Wishlist"
       className={cn(
         "absolute p-0 [&_svg]:size-5 [&_svg]:text-blue-600",
         className,
         relativePosition === "bottomRight" ? "bottom-4 right-2" : "top-1"
       )}
     >
-      {!!filled ? <PiHeartFill /> : <PiHeartLight />}
+      {isWishlisted ? <PiHeartFill /> : <PiHeartLight />}
     </Button>
   );
 };

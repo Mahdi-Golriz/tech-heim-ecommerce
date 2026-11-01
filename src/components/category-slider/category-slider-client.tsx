@@ -1,0 +1,56 @@
+"use client";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { Autoplay } from "swiper/modules";
+import Image from "next/image";
+import { Link } from "@/i18n/routing";
+import { Category } from "@/models/category-model";
+
+const CategoryCard = ({ title, thumbnailUrl, slug }: Category) => (
+  <Link
+    href={`/products?categories=${slug}`}
+    className="block h-28 sm:h-36 lg:h-48 p-2 shadow-cart rounded-lg"
+  >
+    <Image
+      src={thumbnailUrl}
+      alt={title}
+      width={300}
+      height={300}
+      className="mx-auto h-3/4 w-full object-scale-down object-center"
+    />
+    <p className="text-center text-xs my-2 sm:text-base whitespace-nowrap truncate">
+      {title}
+    </p>
+  </Link>
+);
+
+interface CategorySliderProps {
+  categories: Category[];
+}
+
+const CategorySliderClient = ({ categories }: CategorySliderProps) => {
+  return (
+    <div className="my-10 pl-4 sm:container ">
+      <Swiper
+        modules={[Autoplay]}
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        grabCursor
+        breakpoints={{
+          320: { slidesPerView: 3.5, spaceBetween: 0 },
+          640: { slidesPerView: 4, spaceBetween: 12 },
+          1024: { slidesPerView: 5, spaceBetween: 12 },
+          1280: { slidesPerView: 6, spaceBetween: 12 },
+        }}
+      >
+        {categories.map((category) => (
+          <SwiperSlide key={category.id} className="p-2">
+            <CategoryCard {...category} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
+  );
+};
+
+export default CategorySliderClient;
