@@ -1,8 +1,12 @@
-import useChangePersonalData from "@/hooks/useChangePersonalData";
+"use client";
+
+import { useTransition } from "react";
 import { useUserStore } from "@/store/user-store";
+import { updateProfileAction } from "@/actions/profile.actions";
+import useActionError from "@/hooks/useActionError";
+import { Profile } from "@/models/user-model";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import {
@@ -25,6 +29,7 @@ import Button from "../ui/button";
 import { useTranslations } from "next-intl";
 import {
   getPersonalDataSchema,
+  PersonalDataFormValues,
   PersonalDataSchema,
 } from "@/validations/get-personal-data-schema";
 
@@ -36,34 +41,39 @@ interface FormItem {
   disabled?: boolean;
 }
 
-const ProfileForm = () => {
-  const user = useUserStore((state) => state.user);
-  const { handleChangePersonalData } = useChangePersonalData();
+interface ProfileFormProps {
+  email: string;
+  profile: Profile | null;
+}
+
+const ProfileForm = ({ email, profile }: ProfileFormProps) => {
+  const setProfile = useUserStore((state) => state.setProfile);
+  const actionError = useActionError();
+  const [isSaving, startTransition] = useTransition();
   const formT = useTranslations("validation.profile");
   const t = useTranslations("profile.personalData");
-  const form = useForm<PersonalDataSchema>({
+  const form = useForm<PersonalDataFormValues, unknown, PersonalDataSchema>({
     resolver: zodResolver(getPersonalDataSchema(formT)),
     defaultValues: {
-      fullName: "",
-      address: "",
-      email: "",
-      phoneNumber: "",
-      postalCode: "",
+      fullName: profile?.fullName ?? profile?.username ?? "",
+      address: profile?.address ?? "",
+      email,
+      phoneNumber: profile?.phoneNumber ?? "",
+      postalCode: profile?.postalCode ?? "",
     },
   });
 
-  // Reset form when user data becomes available
-  useEffect(() => {
-    if (user) {
-      form.reset({
-        fullName: user.fullName ?? user.username ?? "",
-        address: user.address ?? "",
-        email: user.email ?? "",
-        phoneNumber: user.phoneNumber ?? "",
-        postalCode: user.postalCode ?? "",
-      });
-    }
-  }, [user, form]);
+  const save = (formData: PersonalDataSchema) =>
+    startTransition(async () => {
+      const result = await updateProfileAction(formData);
+      if (!result.ok) {
+        toast.error(actionError(result.error));
+        return;
+      }
+      setProfile(result.data);
+      form.reset(form.getValues());
+      toast.success(t("toast.success"));
+    });
 
   const formItems: FormItem[] = [
     {
@@ -106,12 +116,7 @@ const ProfileForm = () => {
       description: t("toast.confirmDescription"),
       action: {
         label: t("toast.saveAction"),
-        onClick: async () => {
-          if (user?.documentId) {
-            await handleChangePersonalData(formData, user.id);
-            form.reset(form.getValues());
-          }
-        },
+        onClick: () => save(formData),
       },
       position: "top-center",
       cancel: {
@@ -155,7 +160,7 @@ const ProfileForm = () => {
           type="submit"
           variant="default"
           className="mt-5 sm:col-span-full sm:w-fit"
-          disabled={!form.formState.isDirty}
+          disabled={!form.formState.isDirty || isSaving}
         >
           {t("cta")}
         </Button>

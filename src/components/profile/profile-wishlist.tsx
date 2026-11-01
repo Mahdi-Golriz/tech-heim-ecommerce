@@ -1,37 +1,39 @@
-import useFetch from "@/hooks/useFetch";
-import { User } from "@/models/user-model";
+"use client";
+
+import { useTranslations } from "next-intl";
 import ProductCard from "../new-products/product-cart";
+import { ProductSummary } from "@/models/product-model";
 import { useUserStore } from "@/store/user-store";
 
-const ProfileWishlist = () => {
-  const user = useUserStore((state) => state.user);
+interface ProfileWishlistProps {
+  products: ProductSummary[];
+}
 
-  const { data } = useFetch<User>({
-    path: "/api/users/me",
-    skipRequestIfNoToken: true,
-    params: {
-      "populate[wishlists][populate][product][populate]": "product_images",
-    },
+const ProfileWishlist = ({ products }: ProfileWishlistProps) => {
+  const t = useTranslations("profile.wishlist");
+  const status = useUserStore((s) => s.status);
+  const wishlistIds = useUserStore((s) => s.wishlistIds);
 
-    dependencies: [user],
-  });
+  // Hide items the user un-hearts on this page without a refetch
+  const visible =
+    status === "authenticated"
+      ? products.filter((product) => wishlistIds.includes(product.id))
+      : products;
 
-  const wishlistProducts = data?.wishlists.map((item) => item.product);
+  if (!visible.length) {
+    return <p className="my-10 text-gray-500">{t("emptyState")}</p>;
+  }
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-10">
-      {wishlistProducts ? (
-        wishlistProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            hasAddToCartButton
-            wishlistButtonPosition="bottomRight"
-          />
-        ))
-      ) : (
-        <p>Is loading...</p>
-      )}
+      {visible.map((product) => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          hasAddToCartButton
+          wishlistButtonPosition="bottomRight"
+        />
+      ))}
     </div>
   );
 };

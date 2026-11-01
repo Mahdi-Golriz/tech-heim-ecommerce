@@ -1,5 +1,4 @@
-import useFetch from "@/hooks/useFetch";
-import { User } from "@/models/user-model";
+import { Order } from "@/models/order-model";
 import {
   Accordion,
   AccordionContent,
@@ -9,24 +8,23 @@ import {
 import { formatCardNumberWithSpacing, formatDate } from "@/utils/formatter";
 import { useTranslations } from "next-intl";
 
-const ProfileOrders = () => {
-  const t = useTranslations("profile.orders");
-  const { data } = useFetch<User>({
-    path: "/api/users/me",
-    skipRequestIfNoToken: true,
-    params: {
-      populate: "orders",
-    },
-  });
+interface ProfileOrdersProps {
+  orders: Order[];
+}
 
-  const orders = data?.orders;
+const ProfileOrders = ({ orders }: ProfileOrdersProps) => {
+  const t = useTranslations("profile.orders");
+
+  if (!orders.length) {
+    return <p className="my-10 text-gray-500">{t("emptyState")}</p>;
+  }
 
   return (
     <div className="space-y-4">
       <Accordion type="multiple" className="w-full space-y-4 my-10">
-        {orders?.map((order, index) => (
+        {orders.map((order, index) => (
           <AccordionItem
-            key={order.documentId}
+            key={order.id}
             value={`order-${index}`}
             className="border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 bg-white overflow-hidden"
           >
@@ -34,10 +32,10 @@ const ProfileOrders = () => {
             <div className="p-6 bg-gradient-to-r from-gray-50 to-transparent">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold text-gray-900">
-                  {t("order")} #{order.documentId.slice(-8).toUpperCase()}
+                  {t("order")} #{order.number}
                 </h3>
                 <span className="text-lg font-bold text-primary">
-                  ${order.totalPrice}
+                  ${order.total.toFixed(2)}
                 </span>
               </div>
 
@@ -48,7 +46,7 @@ const ProfileOrders = () => {
                 </div>
                 <div>
                   <span>{t("cardNumber")}</span>
-                  <span>{formatCardNumberWithSpacing(order.cardNumber)}</span>
+                  <span>{formatCardNumberWithSpacing(order.cardLast4)}</span>
                 </div>
                 <div className="md:col-span-2">
                   <span>{t("shipTo")}</span>
@@ -60,26 +58,26 @@ const ProfileOrders = () => {
             {/* Items Accordion */}
             <div className="border-t border-gray-100">
               <AccordionTrigger className="px-6 py-4 hover:bg-gray-50 text-sm font-medium text-gray-700">
-                {t("viewItems")} ({order.itemsDetails?.length || 0})
+                {t("viewItems")} ({order.items.length})
               </AccordionTrigger>
               <AccordionContent className="px-6 pb-6 bg-gray-50/30">
                 <div className="space-y-4 pt-2">
-                  {order.itemsDetails.map((item, i) => (
+                  {order.items.map((item) => (
                     <div
-                      key={i}
+                      key={item.id}
                       className="border-l-4 border-primary pl-4 py-2 bg-white rounded-r-md"
                     >
                       <div className="space-y-1">
                         <div className="font-semibold text-gray-900">
-                          {item.itemTitle}
+                          {item.title}
                         </div>
                         <div className="flex gap-4 text-sm text-gray-600">
-                          <span>${item.itemPrice}</span>
+                          <span>${item.unitPrice.toFixed(2)}</span>
                           <span>
-                            {t("quantity")} {item.itemNum}
+                            {t("quantity")} {item.quantity}
                           </span>
                           <span>
-                            {t("color")} {item.itemColor}
+                            {t("color")} {item.color}
                           </span>
                         </div>
                       </div>
