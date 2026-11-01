@@ -67,7 +67,7 @@ const SignInForm = () => {
           loading={isLoading}
         />
         {error ? (
-          <p className="text-red-500 text-sm pb-4">{error.message}</p>
+          <p className="text-red-500 text-sm pb-4">{error}</p>
         ) : (
           <p className="h-9 pb-4"></p>
         )}

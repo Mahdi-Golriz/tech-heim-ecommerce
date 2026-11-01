@@ -24,6 +24,7 @@ const UserButton = () => {
   const t = useTranslations("home.header.user");
   const { isAuthModalOpen, toggleAuthModal } = useAuthModalStore();
   const user = useUserStore((state) => state.user);
+  const profile = useUserStore((state) => state.profile);
   const [sideOffset, setSideOffset] = useState(70);
   useEffect(() => {
     const updateSideOffset = () => {
@@ -40,7 +41,7 @@ const UserButton = () => {
     return () => {
       window.removeEventListener("resize", updateSideOffset);
     };
-  });
+  }, []);
   // If user is authenticated, show dropdown
   if (user) {
     return (
@@ -66,7 +67,9 @@ const UserButton = () => {
                   <User size="50" />
                 </div>
                 <div className="flex flex-col px-2">
-                  <span className="text-primary">{user.username}</span>
+                  <span className="text-primary">
+                    {profile?.fullName || profile?.username}
+                  </span>
                   <span className="text-xs">{user.email}</span>
                 </div>
               </Link>

@@ -2,24 +2,26 @@
 
 import { LogOut } from "lucide-react";
 import Button from "../ui/button";
-import { removeCookie } from "@/utils/cookie";
-import { useUserStore } from "@/store/user-store";
-import { useCartStore } from "@/store/cart-store";
 import { useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { createClient } from "@/lib/supabase/client";
+import { signOut } from "@/services/auth.service";
 
 const LogoutButton = () => {
   const t = useTranslations("home.header.user");
   const router = useRouter();
-  const setUser = useUserStore((state) => state.setUser);
-  const clearCart = useCartStore((state) => state.clearCart);
-  const handleClick = () => {
-    removeCookie({ key: "jwt" });
-    setUser(null);
-    clearCart();
-    router.push("/");
-    toast.info(t("logOutToast"));
+
+  const handleClick = async () => {
+    try {
+      // SessionInitializer resets the user and cart stores on SIGNED_OUT
+      await signOut(createClient());
+      router.push("/");
+      router.refresh();
+      toast.info(t("logOutToast"));
+    } catch (error) {
+      console.error("Sign out failed:", error);
+    }
   };
 
   return (

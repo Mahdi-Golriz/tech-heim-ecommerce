@@ -18,7 +18,15 @@ import { SignUpSchema } from "@/validations/get-auth-schema";
 
 const SignUpForm = () => {
   const t = useTranslations("authentication.signUp");
-  const { signup, isSubmitting, error, form } = useSignup();
+  const { signup, isSubmitting, error, confirmationSent, form } = useSignup();
+
+  if (confirmationSent) {
+    return (
+      <p className="text-primary py-10" role="status">
+        {t("confirmationSent")}
+      </p>
+    );
+  }
 
   const onSubmit = (data: SignUpSchema) => {
     signup(data);
@@ -84,7 +92,7 @@ const SignUpForm = () => {
           loading={isSubmitting}
         />
         {error ? (
-          <p className="text-red-500 text-sm pb-4">{error.message}</p>
+          <p className="text-red-500 text-sm pb-4">{error}</p>
         ) : (
           <p className="h-9 pb-4"></p>
         )}
