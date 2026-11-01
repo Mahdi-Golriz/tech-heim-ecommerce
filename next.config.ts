@@ -1,17 +1,22 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
-const withNextIntel = createNextIntlPlugin();
+const withNextIntl = createNextIntlPlugin();
 
-/** @type {import('next').NextConfig} */
+const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
+  : "*.supabase.co";
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: process.env.IMAGE_HOSTNAME || "localhost",
+        protocol: "https",
+        hostname: supabaseHost,
+        pathname: "/storage/v1/object/public/**",
       },
     ],
   },
 };
 
-export default withNextIntel(nextConfig);
+export default withNextIntl(nextConfig);
