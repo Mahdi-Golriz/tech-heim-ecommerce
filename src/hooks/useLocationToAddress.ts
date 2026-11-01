@@ -1,7 +1,6 @@
 "use client";
 
 import { AddressData } from "@/components/map/map-modal";
-import useFetch from "./useFetch";
 import { useCallback, useState } from "react";
 
 type InputType = [number, number] | string;
@@ -12,65 +11,42 @@ interface FetchedAddress {
   lon: string;
 }
 
+const NOMINATIM_URL = "https://nominatim.openstreetmap.org";
+
 const useLocationToAddress = () => {
   const [address, setAddress] = useState<AddressData | null>(null);
   const [position, setPosition] = useState<[number, number] | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { fetchData, isLoading } = useFetch({
-    autoFetch: false,
-    needToken: false,
-    baseUrl: "https://nominatim.openstreetmap.org",
-    onSuccess: (fetchedAddress: FetchedAddress | FetchedAddress[]) => {
-      if (Array.isArray(fetchedAddress)) {
-        const firstAddress = fetchedAddress[0];
-        setAddress({
-          fullAddress: firstAddress.display_name,
-          coordinates: [Number(firstAddress.lat), Number(firstAddress.lon)],
-        });
-        setPosition([Number(firstAddress.lat), Number(firstAddress.lon)]);
-      } else {
-        setAddress({
-          fullAddress: fetchedAddress.display_name,
-          coordinates: [Number(fetchedAddress.lat), Number(fetchedAddress.lon)],
-        });
-        setPosition([Number(fetchedAddress.lat), Number(fetchedAddress.lon)]);
-      }
-    },
-  });
+  const getLocationDetails = useCallback(async (input: InputType) => {
+    if (!input) return;
 
-  const getLocationDetails = useCallback(
-    async (input: InputType): Promise<void> => {
-      if (!input) return;
+    // Coordinates → reverse geocoding; text → search
+    const url = Array.isArray(input)
+      ? `${NOMINATIM_URL}/reverse?format=json&lat=${input[0]}&lon=${input[1]}&zoom=18&addressdetails=1`
+      : `${NOMINATIM_URL}/search?format=json&q=${encodeURIComponent(input.trim())}`;
 
-      // Case: Coordinate input
-      if (Array.isArray(input)) {
-        const [lat, lon] = input;
+    if (!Array.isArray(input) && !input.trim()) return;
 
-        await fetchData({
-          path: `/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`,
-        });
-      }
+    setIsLoading(true);
+    try {
+      const res = await fetch(url, { headers: { Accept: "application/json" } });
+      if (!res.ok) throw new Error(res.statusText);
+      const json: FetchedAddress | FetchedAddress[] = await res.json();
+      const result = Array.isArray(json) ? json[0] : json;
+      if (!result) return;
 
-      // Case: Address input (string)
-      else {
-        const query = input.trim();
-        if (!query) return;
+      const coordinates: [number, number] = [Number(result.lat), Number(result.lon)];
+      setAddress({ fullAddress: result.display_name, coordinates });
+      setPosition(coordinates);
+    } catch (error) {
+      console.error("Geocoding failed:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-        await fetchData({
-          path: `/search?format=json&q=${encodeURIComponent(query)}`,
-        });
-      }
-    },
-    [fetchData]
-  );
-
-  return {
-    getLocationDetails,
-    position,
-    setPosition,
-    isLoading,
-    address,
-  };
+  return { getLocationDetails, position, setPosition, isLoading, address };
 };
 
 export default useLocationToAddress;

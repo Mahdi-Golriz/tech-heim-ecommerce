@@ -1,20 +1,32 @@
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
+import type { ShippingMethod } from "@/models/order-model";
 
 export interface CheckoutDetails {
   email?: string;
   address: string;
-  shippingCost?: number;
+  shippingMethod?: ShippingMethod;
 }
 
-export type CheckoutStore = {
+interface CheckoutState {
   checkoutDetails: CheckoutDetails | null;
   updateCheckoutDetails: (details: CheckoutDetails) => void;
   clearCheckoutDetails: () => void;
-};
+}
 
-export const useCheckoutStore = create<CheckoutStore>((set) => ({
-  checkoutDetails: null,
-  updateCheckoutDetails: (details: CheckoutDetails) =>
-    set({ checkoutDetails: details }),
-  clearCheckoutDetails: () => set({ checkoutDetails: null }),
-}));
+// sessionStorage: survives a reload of /payment but not a new tab/session
+export const useCheckoutStore = create<CheckoutState>()(
+  persist(
+    (set) => ({
+      checkoutDetails: null,
+      updateCheckoutDetails: (details) => set({ checkoutDetails: details }),
+      clearCheckoutDetails: () => set({ checkoutDetails: null }),
+    }),
+    {
+      name: "checkout-details",
+      storage: createJSONStorage(() => sessionStorage),
+      // Rehydrated by SessionInitializer after mount to avoid SSR mismatches
+      skipHydration: true,
+    }
+  )
+);

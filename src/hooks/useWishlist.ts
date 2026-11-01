@@ -1,84 +1,47 @@
-import { User, Wishlist } from "@/models/user-model";
-import useFetch from "./useFetch";
-import { useUserStore } from "@/store/user-store";
-import { useState } from "react";
+"use client";
+
+import { useTransition } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useUserStore } from "@/store/user-store";
+import useAuthModalStore from "@/store/auth-modal-store";
+import { toggleWishlistAction } from "@/actions/wishlist.actions";
+import useActionError from "./useActionError";
 
-interface HandleAddToWishList {
-  productId: string;
-  userId: string;
-  wishlist: Wishlist[];
-}
+const useWishlist = (productId: string) => {
+  const t = useTranslations("wishlist");
+  const actionError = useActionError();
+  const isAuthenticated = useUserStore((s) => s.status === "authenticated");
+  const isWishlisted = useUserStore((s) => s.wishlistIds.includes(productId));
+  const openAuthModal = useAuthModalStore((s) => s.openAuthModal);
+  const [isPending, startTransition] = useTransition();
 
-type AddedToWishlist = "added" | "removed";
-
-const useWishlist = () => {
-  const setUser = useUserStore((state) => state.setUser);
-  const [addedToWishlist, setAddedToWishlist] =
-    useState<AddedToWishlist>("removed");
-
-  // Fetch for user cart
-  const { fetchData: fetchUserWishlist } = useFetch({
-    path: "/api/users/me",
-    autoFetch: false,
-    skipRequestIfNoToken: true,
-    onSuccess: (userData: User) => {
-      setUser(userData);
-    },
-    params: {
-      "populate[wishlists][populate][product][fields]": "documentId",
-    },
-  });
-
-  const { fetchData: addToWishlist } = useFetch({
-    autoFetch: false,
-    skipRequestIfNoToken: true,
-    onSuccess: () => {
-      setAddedToWishlist("added");
-      toast.success("Item was successfully added to your wishlist");
-    },
-  });
-
-  const { fetchData: removeFormWishlist } = useFetch({
-    autoFetch: false,
-    skipRequestIfNoToken: true,
-    onSuccess: () => {
-      setAddedToWishlist("removed");
-      toast.info("Item was successfully removed from your wishlist");
-    },
-  });
-
-  const handleAddToWishList = async ({
-    productId,
-    userId,
-    wishlist,
-  }: HandleAddToWishList) => {
-    const AvailableItem = wishlist?.find(
-      (item) => item.product.documentId === productId
-    );
-
-    if (!!AvailableItem) {
-      await removeFormWishlist({
-        method: "DELETE",
-        path: `/api/wishlists/${AvailableItem.documentId}`,
-      });
-    } else {
-      await addToWishlist({
-        method: "POST",
-        path: "/api/wishlists",
-        body: {
-          data: {
-            user: userId,
-            product: productId,
-          },
-        },
-      });
+  const toggle = () => {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
     }
 
-    fetchUserWishlist();
+    const { wishlistIds: snapshot, setWishlistIds } = useUserStore.getState();
+    const adding = !snapshot.includes(productId);
+    setWishlistIds(
+      adding ? [...snapshot, productId] : snapshot.filter((id) => id !== productId)
+    );
+
+    startTransition(async () => {
+      const result = await toggleWishlistAction(productId);
+      if (result.ok) {
+        setWishlistIds(result.data);
+        if (adding) toast.success(t("added"));
+        else toast.info(t("removed"));
+      } else {
+        setWishlistIds(snapshot);
+        toast.error(actionError(result.error));
+      }
+    });
   };
 
-  return { handleAddToWishList, addedToWishlist };
+  return { isWishlisted, toggle, isPending };
 };
 
 export default useWishlist;

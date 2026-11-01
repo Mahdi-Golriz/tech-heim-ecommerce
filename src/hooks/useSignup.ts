@@ -1,84 +1,57 @@
-import { useEffect } from "react";
-import useFetch from "./useFetch";
+"use client";
 
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { setCookie } from "@/utils/cookie";
-import { SigninResponse } from "@/models/response-model";
-import useSyncCart from "./useSyncCart";
-import { useCheckoutStore } from "@/store/checkout-store";
-import { toast } from "sonner";
-import { getSignUpSchema, SignUpSchema } from "@/validations/get-auth-schema";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+import { createClient } from "@/lib/supabase/client";
+import { toActionError } from "@/lib/errors";
+import { signUp } from "@/services/auth.service";
+import { useCheckoutStore } from "@/store/checkout-store";
+import useAuthModalStore from "@/store/auth-modal-store";
+import { getSignUpSchema, SignUpSchema } from "@/validations/get-auth-schema";
+import useActionError from "./useActionError";
 
 const useSignup = () => {
-  const { createCart, fetchUserWithMergedCart } = useSyncCart();
   const formT = useTranslations("validation.signUp");
   const t = useTranslations("authentication.signUp");
-  const { checkoutDetails } = useCheckoutStore();
-  const prefilledEmail = checkoutDetails?.email || "";
+  const actionError = useActionError();
+  const closeAuthModal = useAuthModalStore((s) => s.closeAuthModal);
+  const prefilledEmail = useCheckoutStore((s) => s.checkoutDetails?.email) || "";
+  const [error, setError] = useState<string | null>(null);
+  const [confirmationSent, setConfirmationSent] = useState(false);
+  const [isSubmitting, startTransition] = useTransition();
 
   const form = useForm<SignUpSchema>({
     resolver: zodResolver(getSignUpSchema(formT)),
-    defaultValues: {
-      username: "",
-      email: prefilledEmail || "",
-      password: "",
-    },
+    defaultValues: { username: "", email: prefilledEmail, password: "" },
   });
 
-  // Update email field when prefilledEmail prop changes
   useEffect(() => {
-    if (prefilledEmail) {
-      form.setValue("email", prefilledEmail);
-    }
+    if (prefilledEmail) form.setValue("email", prefilledEmail);
   }, [prefilledEmail, form]);
 
-  const handleSuccessSignUp = async (response: SigninResponse) => {
-    form.reset();
-
-    setCookie({ key: "jwt", value: response?.jwt });
-
-    // Create cart after sign up
-    // It should be done by backend! but here, backend is Strapi
-    await createCart({
-      body: {
-        data: {
-          user: response.user.documentId,
-        },
-      },
+  const signup = (data: SignUpSchema) => {
+    setError(null);
+    startTransition(async () => {
+      try {
+        // Profile row is created by the handle_new_user DB trigger
+        const { needsConfirmation } = await signUp(createClient(), data);
+        form.reset();
+        if (needsConfirmation) {
+          setConfirmationSent(true);
+          return;
+        }
+        closeAuthModal();
+        toast.success(t("successfulSignUpToast"));
+      } catch (err) {
+        setError(actionError(toActionError(err)));
+      }
     });
-
-    // Merge the local store with backend cart and update the local stores with backend
-    fetchUserWithMergedCart();
-    toast.success(t("successfulSignUpToast"));
   };
 
-  const {
-    data,
-    isLoading: isSubmitting,
-    error,
-    fetchData,
-  } = useFetch<SigninResponse>({
-    needToken: false,
-    path: "/api/auth/local/register",
-    method: "POST",
-    autoFetch: false,
-    onSuccess: handleSuccessSignUp,
-  });
-
-  const signup = async (userData: SignUpSchema) => {
-    await fetchData({ body: userData });
-  };
-
-  return {
-    signup,
-    isSubmitting,
-    data,
-    error,
-    form,
-  };
+  return { signup, isSubmitting, error, confirmationSent, form };
 };
 
 export default useSignup;

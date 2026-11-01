@@ -1,31 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
-// Hook that returns true if the current viewport matches the provided media query
-
+// Returns true if the current viewport matches the provided media query (false on the server)
 const useMediaQuery = (query: string): boolean => {
-  // Default to false for SSR
-  const [matches, setMatches] = useState(false);
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      const mediaQuery = window.matchMedia(query);
+      mediaQuery.addEventListener("change", onChange);
+      return () => mediaQuery.removeEventListener("change", onChange);
+    },
+    [query]
+  );
 
-  useEffect(() => {
-    // Check if we're in the browser
-    if (typeof window === "undefined") return;
-    const mediaQuery = window.matchMedia(query);
-
-    setMatches(mediaQuery.matches);
-
-    const handler = (event: MediaQueryListEvent) => {
-      setMatches(event.matches);
-    };
-    mediaQuery.addEventListener("change", handler);
-
-    return () => {
-      mediaQuery.removeEventListener("change", handler);
-    };
-  }, [query]);
-
-  return matches;
+  return useSyncExternalStore(
+    subscribe,
+    () => window.matchMedia(query).matches,
+    () => false
+  );
 };
 
 export default useMediaQuery;

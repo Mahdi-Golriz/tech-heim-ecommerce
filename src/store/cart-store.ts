@@ -1,86 +1,84 @@
-import { CartStore } from "@/models/cart-model";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { guestCartItemId, type CartItem } from "@/models/cart-model";
+import type { ProductSummary } from "@/models/product-model";
 
-export const useCartStore = create<CartStore>()(
+interface CartState {
+  items: CartItem[];
+  /** Replace the whole cart (server is the source of truth when signed in). */
+  setItems: (items: CartItem[]) => void;
+  addItem: (product: ProductSummary, color: string, quantity: number) => void;
+  /** Quantity <= 0 removes the line. */
+  setQuantity: (itemId: string, quantity: number) => void;
+  clear: () => void;
+}
+
+export const useCartStore = create<CartState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       items: [],
-      discount: 0,
-      grandTotal: 0,
-      totalItems: 0,
-      subtotalPrice: 0,
 
-      addItem: (newItem) => {
-        const { items } = get();
-        const existingItemIndex = items.findIndex(
-          (item) =>
-            item.product.documentId === newItem.product.documentId &&
-            item.color === newItem.color
-        );
+      setItems: (items) => set({ items }),
 
-        if (existingItemIndex >= 0) {
-          const updatedItems = [...items];
-          updatedItems[existingItemIndex].quantity += newItem.quantity;
-          set({ items: updatedItems });
-        } else {
-          set({ items: [...items, newItem] });
-        }
-      },
+      addItem: (product, color, quantity) =>
+        set(({ items }) => {
+          const existing = items.find(
+            (item) => item.productId === product.id && item.color === color
+          );
+          if (existing) {
+            return {
+              items: items.map((item) =>
+                item === existing
+                  ? { ...item, quantity: item.quantity + quantity }
+                  : item
+              ),
+            };
+          }
+          return {
+            items: [
+              ...items,
+              {
+                id: guestCartItemId(product.id, color),
+                productId: product.id,
+                color,
+                quantity,
+                product,
+              },
+            ],
+          };
+        }),
 
-      setCart: (cart) => {
-        const items = cart?.items || [];
-        set({ items });
-      },
+      setQuantity: (itemId, quantity) =>
+        set(({ items }) => ({
+          items:
+            quantity <= 0
+              ? items.filter((item) => item.id !== itemId)
+              : items.map((item) =>
+                  item.id === itemId ? { ...item, quantity } : item
+                ),
+        })),
 
-      removeItem: (documentId: string, color: string) => {
-        const { items } = get();
-        const updatedItems = items.filter(
-          (item) =>
-            item.product.documentId !== documentId || item.color !== color
-        );
-
-        set({ items: updatedItems });
-      },
-
-      updateQuantity: (documentId: string, color: string, quantity: number) => {
-        const { items } = get();
-        const itemIndex = items.findIndex(
-          (item) =>
-            item.product.documentId === documentId && item.color === color
-        );
-        const updatedItems = [...items];
-        updatedItems[itemIndex].quantity += quantity;
-        set({ items: updatedItems });
-      },
-
-      clearCart: () => {
-        set({ items: [] });
-      },
+      clear: () => set({ items: [] }),
     }),
-    { name: "cart-storage" }
+    {
+      name: "cart-storage",
+      version: 2,
+      // v1 held Strapi-shaped items; start fresh instead of crashing on them
+      migrate: () => ({ items: [] }),
+      // Rehydrated by SessionInitializer after mount to avoid SSR mismatches
+      skipHydration: true,
+    }
   )
 );
 
-// Derived states: Automatically update with items change
-useCartStore.subscribe((state) => {
-  state.totalItems = state.items.reduce(
-    (totalNumber, item) => totalNumber + item.quantity,
-    0
-  );
+// Derived values as selectors, so components re-render when they change.
+export const selectTotalItems = (s: CartState) =>
+  s.items.reduce((total, item) => total + item.quantity, 0);
 
-  state.subtotalPrice = state.items.reduce(
-    (total, item) => total + item.product.price * item.quantity,
-    0
-  );
+export const selectSubtotal = (s: CartState) =>
+  s.items.reduce((total, item) => total + item.product.price * item.quantity, 0);
 
-  state.discount = state.items.reduce(
-    (total, item) =>
-      total +
-      ((item.product.price * (item.product.discount_percentage || 0)) / 100) *
-        item.quantity,
-    0
-  );
+export const selectGrandTotal = (s: CartState) =>
+  s.items.reduce((total, item) => total + item.product.finalPrice * item.quantity, 0);
 
-  state.grandTotal = state.subtotalPrice - state.discount;
-});
+export const selectDiscount = (s: CartState) => selectSubtotal(s) - selectGrandTotal(s);
