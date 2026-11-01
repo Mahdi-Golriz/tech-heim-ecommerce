@@ -2,31 +2,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SectionHeader from "../section-header/section-header";
 import { Autoplay, Navigation } from "swiper/modules";
 import ProductCard from "../new-products/product-cart";
-import useFetch from "@/hooks/useFetch";
-import { DataResponse } from "@/models/response-model";
-import { Category } from "@/models/categories-model";
-import PageLoader from "../ui/page-loader";
+import { ProductSummary } from "@/models/product-model";
 import { useTranslations } from "next-intl";
 
 interface SimilarProductsProps {
-  categoryId: string;
-  productId: string;
+  products: ProductSummary[];
 }
 
-const SimilarProducts = ({ categoryId, productId }: SimilarProductsProps) => {
-  const { data, isLoading } = useFetch<DataResponse<Category>>({
-    path: `/api/categories/${categoryId}`,
-    autoFetch: !!categoryId,
-    params: { "populate[products][populate][0]": "product_images" },
-  });
-
+const SimilarProducts = ({ products }: SimilarProductsProps) => {
   const t = useTranslations("products.pdp");
-
-  const similarProducts = data?.data.products?.filter(
-    (item) => item.documentId !== productId
-  );
-
-  if (isLoading) return <PageLoader />;
 
   return (
     <>
@@ -35,7 +19,7 @@ const SimilarProducts = ({ categoryId, productId }: SimilarProductsProps) => {
         <Swiper
           modules={[Autoplay, Navigation]}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
-          loop
+          loop={products.length > 4}
           navigation
           grabCursor
           breakpoints={{
@@ -45,7 +29,7 @@ const SimilarProducts = ({ categoryId, productId }: SimilarProductsProps) => {
             1280: { slidesPerView: 5, spaceBetween: 10 },
           }}
         >
-          {similarProducts?.slice(0, 6).map((product) => (
+          {products.map((product) => (
             <SwiperSlide key={product.id} className="p-2">
               <ProductCard
                 product={product}
