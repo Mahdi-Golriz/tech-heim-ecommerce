@@ -1,24 +1,13 @@
-import { Button } from "@/components";
-import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
-const NotFound = async () => {
-  const t = await getTranslations("NotFound");
+// Fallback for requests that never reach a [locale] segment.
+const GlobalNotFound = () => (
+  <html lang="en">
+    <body style={{ fontFamily: "sans-serif", textAlign: "center", paddingTop: "20vh" }}>
+      <h1>404 – Page not found</h1>
+      <Link href="/">Go to the homepage</Link>
+    </body>
+  </html>
+);
 
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-6xl font-bold text-gray-900 mb-4">404</h1>
-        <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-          {t("title")}
-        </h2>
-        <p className="text-gray-600 mb-8">{t("description")}</p>
-        <Button asChild>
-          <Link href="/">{t("cta")}</Link>
-        </Button>
-      </div>
-    </div>
-  );
-};
-
-export default NotFound;
+export default GlobalNotFound;

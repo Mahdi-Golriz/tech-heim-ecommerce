@@ -1,11 +1,11 @@
+import { setRequestLocale } from "next-intl/server";
 import { Header, Footer } from "@/components";
 
-interface MainLayoutProps {
-  children: React.ReactNode;
-}
-
 // With header and footer
-const MainLayout = ({ children }: MainLayoutProps) => {
+const MainLayout = async ({ children, params }: LayoutProps<"/[locale]">) => {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
