@@ -251,7 +251,8 @@
       "header": "Or Log In with",
       "footer": "Don’t have an account ?",
       "cta": "Sign In",
-      "successfulLoginToast": "You have been successfully logged in."
+      "successfulLoginToast": "You have been successfully logged in.",
+      "demoCta": "Continue with demo account"
     },
     "signUp": {
       "title": "Create account",
@@ -384,7 +385,8 @@
       "cardNameLabel": "Name on Card",
       "expirationDate": "Expiration Date",
       "billingAddress": "Billing address",
-      "useAddress": "Use same as shipping address"
+      "useAddress": "Use same as shipping address",
+      "demoFill": "Fill with test card"
     },
     "returnButton": "Return to Checkout",
     "paymentCard": {

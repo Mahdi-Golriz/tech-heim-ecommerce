@@ -11,13 +11,14 @@ import InputIcon from "../input-with-icon/icon-input";
 import { GoKey } from "react-icons/go";
 import { PiUserLight } from "react-icons/pi";
 import SubmitButton from "./submit-button";
+import Button from "../ui/button";
 import useSignin from "@/hooks/useSignin";
 import { useTranslations } from "next-intl";
 import { SignInSchema } from "@/validations/get-auth-schema";
 
 const SignInForm = () => {
   const t = useTranslations("authentication.signIn");
-  const { signin, isLoading, error, form } = useSignin();
+  const { signin, signinAsDemo, isLoading, error, form } = useSignin();
 
   const onSubmit = (data: SignInSchema) => {
     signin(data);
@@ -63,9 +64,18 @@ const SignInForm = () => {
         <SubmitButton
           text={t("title")}
           loadingText="Loading"
-          className="w-full my-6"
+          className="w-full mt-6 mb-3"
           loading={isLoading}
         />
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full mb-6"
+          disabled={isLoading}
+          onClick={signinAsDemo}
+        >
+          {t("demoCta")}
+        </Button>
         {error ? (
           <p className="text-red-500 text-sm pb-4">{error}</p>
         ) : (

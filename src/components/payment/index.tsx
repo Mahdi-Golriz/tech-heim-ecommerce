@@ -32,6 +32,7 @@ import OrderSummary from "../checkout/order-summary";
 import { formatCardNumber, formatExpirationDate } from "@/utils/formatter";
 import CheckoutItemsList from "../checkout/checkout-items-list";
 import PaymentHeader from "./payment-header";
+import { DEMO_PAYMENT } from "@/lib/demo-data";
 import { useTranslations } from "next-intl";
 
 const PaymentForm = () => {
@@ -103,6 +104,13 @@ const PaymentForm = () => {
     }
   };
 
+  const fillDemoPayment = () => {
+    form.reset({
+      ...DEMO_PAYMENT,
+      billingAddress: checkoutDetails?.address ?? "",
+    });
+  };
+
   // Wait for the cart (hydrated client-side) and the checkout step
   if (items.length === 0 || !checkoutDetails) {
     //   If required data not available, show loading
@@ -122,9 +130,18 @@ const PaymentForm = () => {
       <div className="my-6 flex flex-col md:flex-row md:gap-5">
         <div className="md:w-3/5">
           <div className="md:border md:rounded-lg md:px-8 md:py-6">
-            <h2 className="text-xl font-medium mb-6">
-              {t("formInputs.title")}
-            </h2>
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+              <h2 className="text-xl font-medium">{t("formInputs.title")}</h2>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={fillDemoPayment}
+                className="text-sm"
+              >
+                {t("formInputs.demoFill")}
+              </Button>
+            </div>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}

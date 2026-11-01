@@ -251,7 +251,8 @@
       "header": "Oder anmelden mit",
       "footer": "Sie haben noch kein Konto ?",
       "cta": "sich anmelden",
-      "successfulLoginToast": "Sie haben sich erfolgreich eingeloggt"
+      "successfulLoginToast": "Sie haben sich erfolgreich eingeloggt",
+      "demoCta": "Mit Demo-Konto fortfahren"
     },
     "signUp": {
       "title": "Konto erstellen",
@@ -384,7 +385,8 @@
       "cardNameLabel": "Name auf der Karte",
       "expirationDate": "Ablaufdatum",
       "billingAddress": "Rechnungsadresse",
-      "useAddress": "Gleich wie Versandadresse verwenden"
+      "useAddress": "Gleich wie Versandadresse verwenden",
+      "demoFill": "Mit Testkarte ausfüllen"
     },
     "returnButton": "Zurück zur Kasse",
     "paymentCard": {

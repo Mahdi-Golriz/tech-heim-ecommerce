@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
+import { DEMO_USER } from "@/lib/demo-data";
 import { toActionError } from "@/lib/errors";
 import { signIn } from "@/services/auth.service";
 import { useCheckoutStore } from "@/store/checkout-store";
@@ -47,7 +48,9 @@ const useSignin = () => {
     });
   };
 
-  return { signin, isLoading, error, form };
+  const signinAsDemo = () => signin(DEMO_USER);
+
+  return { signin, signinAsDemo, isLoading, error, form };
 };
 
 export default useSignin;
